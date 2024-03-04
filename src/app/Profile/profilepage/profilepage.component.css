@@ -1,0 +1,95 @@
+.postimg{
+    background-color: grey;
+    border: 3px solid white; 
+    cursor: pointer;
+}
+
+.highlightimage{
+    width: 88px;
+    height: 88px;
+    border-radius: 50%; 
+    border: 1px solid grey;
+    margin-top: 29px;
+    cursor: pointer;
+}
+.highlightname{
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 13px;
+}
+.editandview{
+    margin-right: 16px;
+    background-color: #e4e4e4;
+    padding: 5px 11px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+}
+.follow{
+    margin-right: 16px;
+    background-color: rgb(0 149 246);
+    padding: 6px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    color: white;
+
+}
+.follow:hover{
+    background-color:rgb(17, 100, 224) ;
+}
+
+    
+.editandview:hover{
+    background-color: rgb(186, 186, 186);
+}
+
+.settinglinks{
+    text-align: center;
+    padding: 13px;
+    border-bottom: 1px solid rgb(218, 218, 218);
+    cursor: pointer;
+}
+.settinglinks2{
+    text-align: center;
+    padding: 13px;
+    border-bottom: 1px solid rgb(218, 218, 218);
+    cursor: pointer;
+}
+.settinglinks1{
+    padding: 14px;
+    cursor: pointer;
+}
+.settinglinkslast1{
+    padding: 14px;
+    cursor: pointer;
+    
+}
+.settinglinkslast1:hover{
+    background-color: rgb(228, 228, 228);
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+}
+
+.settinglinks:hover{
+   background-color: rgb(228, 228, 228);
+}
+.settinglinks1:hover{
+    background-color: rgb(236, 236, 236);
+ }
+.settinglinkslast{
+    text-align: center;
+    padding: 13px;
+    cursor: pointer;
+}
+.settinglinkslast:hover{
+  
+   background-color: rgb(228, 228, 228);
+}
+.modal-body{
+    padding: 0px !important;
+}
+

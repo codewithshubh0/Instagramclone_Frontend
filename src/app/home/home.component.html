@@ -1,0 +1,242 @@
+<div >
+    <div class="row" [ngStyle]="{'backgroundColor':isdark?'black':'white','color':isdark?'white':'black'}">
+       
+      <div style="height: 100vh; border: 1px solid #c9c8c8;position: fixed;border-top: none;" class="col-2">
+        <img  [ngStyle]="{'filter':isdark?'invert(1)':'none'}" style="height: 35px;margin-top: 40px;margin-bottom: 22px;margin-left: 18px;" src="../../assets/loginlogo.png"/>
+        <div style="width: 97%;margin: 10px auto;height: 100vh;margin-left: 10px">
+            <div [ngStyle]="{'backgroundColor':homeoptionselected && !Searchpageselected?isdark?'#282828':'rgb(233, 233, 233)':'','fontWeight':homeoptionselected && !Searchpageselected?'bold':'','color':homeoptionselected?isdark?'white':'':''}" class="menu" (click)="showhomepage()"><i class="fa-solid fa-house menuicon"></i><span>Home</span></div>
+            <div (click)="showsearch()" [ngStyle]="{'backgroundColor':Searchpageselected?isdark?'#282828':'rgb(233, 233, 233)':'','fontWeight':Searchpageselected?'bold':''}" class="menu"><i class="fa-solid fa-magnifying-glass menuicon"></i><span>Search
+             
+            </span></div>
+            <div [ngStyle]="{'backgroundColor':isdark?'black':''}" *ngIf="showsearchbox" class="dropdown-contentsearch">
+               <div [ngStyle]="{'backgroundColor':isdark?'black':''}" class="innerdropdown">
+                 <div style="font-size: 24px;font-weight: 600;" class="moremenu">Search</div>
+                 <div class="moremenu"><input (keyup)="filterUser($event)" (keydown)="filterUser($event)" class="searchinput" type="text" placeholder="Search"/></div>
+                 <div class="moremenu" *ngFor="let user of Allusersfilter">
+                  <div (click)="openuserprofile(user.userid)">
+                      <img [src]="user.imgurl" class="profilepicmenu2"><span>{{user.username}}</span>
+                  </div>
+                 </div>
+               </div>
+            </div>
+            <div class="menu"><i class="fa-regular fa-compass menuicon"></i><span>Explore</span></div>
+            <div class="menu"><i class="fa-solid fa-clapperboard menuicon"></i><span>Reels</span></div>
+            <div class="menu"><i class="fa-brands fa-facebook-messenger menuicon"></i><span>Messages</span></div>
+            <div class="menu"><i class="fa-regular fa-heart menuicon"></i><span>Notifications</span></div>
+            <div class="menu"><i class="fa-regular fa-square-plus menuicon"></i><span>Create</span></div>
+            <div [ngStyle]="{'backgroundColor':profilepageselected && !Searchpageselected?isdark?'#282828':'rgb(233, 233, 233)':'','fontWeight':profilepageselected && !Searchpageselected?'bold':''}" class="menu" (click)="showprofilepage()"><img [ngStyle]="{'border':profilepageselected?'2px solid black':'none'}" [src]="profilepicurl" class="profilepicmenu"><span>Profile</span></div>
+            
+            <div #moreoption class="menu" style="margin-top: 48px;" (click)="showmore()"><i #moreoption1 class="fa-solid fa-bars menuicon"></i><span #moreoption2 class="more">More
+               <div #moremenus [ngStyle]="{'backgroundColor':isdark?'black':''}" *ngIf="showmoredropdown" class="dropdown-content">
+                  <div [ngStyle]="{'backgroundColor':isdark?'black':''}" style="padding-top: 1px ;width: 253px;height: 443px;border-radius: 13px;box-shadow: 1px 1px 13px #c6c5c5;">
+                    <div class="moremenu">Settings</div>
+                    <div class="moremenu">Your activity</div>
+                    <div class="moremenu">Saved</div>
+                    <div (click)="showswitchappearance()" class="moremenu">Switch appearance</div>
+                    <div class="moremenu">Report a problem</div>
+                    <div class="moremenu">Switch accounts</div> 
+                    <div (click)="logout()" class="moremenu">Log out</div>
+                  </div>
+               </div>
+               <div #backopt [ngStyle]="{'backgroundColor':isdark?'black':''}" *ngIf="switchappearance" class="dropdown-content1">
+                  <div [ngStyle]="{'backgroundColor':isdark?'black':''}" style="padding-top: 1px ;width: 253px;height: 107px;border-radius: 13px;box-shadow: 1px 1px 13px #c6c5c5;">
+                    <div  class="moremenu1" (click)="back()"><i   class="fa-light fa-less-than"></i><span style="margin-left: 15px;">Switch appearance</span>
+                     <span *ngIf="!isdark">
+                     <i style="float: right;margin-right: 5px;margin-top: 3px;font-size: 22px;" class="fa-regular fa-moon fa-flip-horizontal"></i>
+                    </span>
+                    <span *ngIf="isdark">
+                     <i style="float: right;margin-right: 5px;margin-top: 3px;font-size: 22px;" class="fa-regular fa-sun"></i>
+                    </span>
+               </div>
+                    <div (click)="changemode()" class="moremenu2">{{mode}}</div>
+                  </div>
+               </div>
+            </span></div>
+        </div> 
+      </div>
+   
+      <div *ngIf="homeoptionselected" style="height: 200vh;margin-left: 250px;" class="col-6">
+         <div style=" margin-top: 29px;">
+            <div class="postbox">
+                <div class="row userdetail">
+                  <div class="inneruserdetail">
+                   <span><img [src]="defaultpicurl" class="postsimage"></span>
+                   <span>UserName</span>
+                   <span>.Timestamp</span>
+                   <span>.follow</span>
+                  </div>
+                </div>
+                <div class="row post">
+                   <img src="../../assets/post1.jpg"/>
+                </div>
+                <div class="row likesandcomment">
+                  <div class="innerlikesandcomment">
+                    <span  (click)="like()" *ngIf="!liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+                    <span (click)="like()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
+                    <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
+                    <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
+                    <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
+                    <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;" class="fa-solid fa-bookmark menuiconpost"></i></span>
+                    
+                   </div>
+                   <p>n likes</p>
+                   <p>Captions</p>
+                   <input class="commentinput" type="text" placeholder="Add a comment" />
+                </div>
+               
+            </div>
+
+
+            <div class="postbox">
+               <div class="row userdetail">
+                 <div class="inneruserdetail">
+                  <span><i class="fa-solid fa-user menuiconpost"></i></span>
+                  <span>UserName</span>
+                  <span>.Timestamp</span>
+                  <span>.follow</span>
+                 </div>
+               </div>
+               <div class="row post">
+                  <img src="../../assets/post2.jpg"/>
+               </div>
+               <div class="row likesandcomment">
+                 <div class="innerlikesandcomment">
+                   <span  (click)="like()" *ngIf="!liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+                   <span (click)="like()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
+                   <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
+                   <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
+                   <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
+                   <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;" class="fa-solid fa-bookmark menuiconpost"></i></span>
+                   
+                  </div>
+                  <p>n likes</p>
+                  <p>Captions</p>
+                  <input class="commentinput" type="text" placeholder="Add a comment" />
+               </div>
+              
+           </div>
+
+            
+           <div class="postbox">
+            <div class="row userdetail">
+              <div class="inneruserdetail">
+               <span><i class="fa-solid fa-user menuiconpost"></i></span>
+               <span>UserName</span>
+               <span>.Timestamp</span>
+               <span>.follow</span>
+              </div>
+            </div>
+            <div class="row post">
+               <img src="../../assets/post3.jpg"/>
+            </div>
+            <div class="row likesandcomment">
+              <div class="innerlikesandcomment">
+                <span  (click)="like()" *ngIf="!liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+                <span (click)="like()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
+                <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
+                <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
+                <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
+                <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;" class="fa-solid fa-bookmark menuiconpost"></i></span>
+                
+               </div>
+               <p>n likes</p>
+               <p>Captions</p>
+               <input class="commentinput" type="text" placeholder="Add a comment" />
+            </div>
+           
+        </div>
+
+            
+        <div class="postbox">
+         <div class="row userdetail">
+           <div class="inneruserdetail">
+            <span><i class="fa-solid fa-user menuiconpost"></i></span>
+            <span>UserName</span>
+            <span>.Timestamp</span>
+            <span>.follow</span>
+           </div>
+         </div>
+         <div class="row post">
+            <img src="../../assets/post4.jpg"/>
+         </div>
+         <div class="row likesandcomment">
+           <div class="innerlikesandcomment">
+             <span  (click)="like()" *ngIf="!liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+             <span (click)="like()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
+             <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
+             <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
+             <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
+             <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;" class="fa-solid fa-bookmark menuiconpost"></i></span>
+             
+            </div>
+            <p>n likes</p>
+            <p>Captions</p>
+            <input class="commentinput" type="text" placeholder="Add a comment" />
+         </div>
+        
+     </div>
+
+            
+     <div class="postbox">
+      <div class="row userdetail">
+        <div class="inneruserdetail">
+         <span><i class="fa-solid fa-user menuiconpost"></i></span>
+         <span>UserName</span>
+         <span>.Timestamp</span>
+         <span>.follow</span>
+        </div>
+      </div>
+      <div class="row post">
+         <img src="../../assets/post5.jpg"/>
+      </div>
+      <div class="row likesandcomment">
+        <div class="innerlikesandcomment">
+          <span  (click)="like()" *ngIf="!liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+          <span (click)="like()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
+          <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
+          <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
+          <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
+          <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;" class="fa-solid fa-bookmark menuiconpost"></i></span>
+          
+         </div>
+         <p>n likes</p>
+         <p>Captions</p>
+         <input class="commentinput" type="text" placeholder="Add a comment" />
+      </div>
+     
+  </div>
+         </div>
+      </div>
+      <div *ngIf="homeoptionselected" style="height: 100vh;" class="col-4">        
+         <div style="margin-top: 27px;margin-left: 73px;font-size: 13px;">
+            <div class="suggestionaccount" style="margin-bottom: 30px;margin-left: -9px;"><img [src]="profilepicurl" class="profilepicmenu2"><span>{{AccountName}}</span><span class="followlink">Switch</span></div>
+            <div style="width: 73%;margin-bottom: 4px; ">
+               <span style="font-size: 14px;font-weight: 500; color: grey;">Suggested for you</span>
+               <span style="float: right;font-weight: bold;">See All</span>
+            </div>
+            <div class="suggestionaccount" (click)="openuserprofile(user.userid)" *ngFor="let user of Allusers"><img [src]="user.imgurl" class="profilepicmenu2"><span>{{user.username}}</span><span class="followlink">Follow</span></div>
+         </div>
+      </div>
+
+      <div *ngIf="profilepageselected" style="margin-left: 250px;" class="col">
+         <app-profilepage></app-profilepage>
+      </div>
+      <div *ngIf="profilepageforsearch" style="margin-left: 250px;" class="col">
+         <app-profilepage></app-profilepage>
+      </div>
+    </div>
+</div>
+
+
+
+<!-- for responsive navbar menu  -->
+<!-- <nav class="navbar fixed-bottom navbar-expand-lg bg-primary navbar-dark">
+   <div class="container-fluid">
+     <a class="navbar-brand" href="#">Brand</a>
+     <a class="navbar-brand" href="#">Brand</a>
+     <a class="navbar-brand" href="#">Brand</a>
+     <a class="navbar-brand" href="#">Brand</a>
+     <a class="navbar-brand" href="#">Brand</a>
+     <a class="navbar-brand" href="#">Brand</a>
+   </div>
+ </nav> -->

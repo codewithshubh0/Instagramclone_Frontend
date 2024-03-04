@@ -1,0 +1,124 @@
+<div style="margin-top: 23px;width: 65%;margin: 0 auto;">
+    <div class="row" style="height: 30vh;">
+        <div class="col-3" >
+           <img  data-bs-toggle="modal" data-bs-target="#profilepicmodal" [src]="profileimgurl" style="width: 150px;height: 150px;border-radius: 50%;margin-top: 29px;cursor: pointer;" />
+          </div>
+        <div class="col">
+            <div style="display: flex;margin-left: 48px;margin-top: 32px;">
+                <div style="margin-right: 16px;font-size: 19px;">{{AccountName}}</div>
+                <div class="editandview" *ngIf="!isfromSearch">Edit profile</div>
+                <div (click)="followActivity()" class="follow" *ngIf="isfromSearch && !isfollowing">Follow</div>
+                <div data-bs-toggle="modal" data-bs-target="#unfollowmodel" class="follow" *ngIf="isfromSearch && isfollowing">Following</div>
+                <div class="editandview">View archive</div>
+                <div data-bs-toggle="modal" data-bs-target="#settingsModal" ><img src="../../../assets/settings.png" style="width: 33px;height: 28px;margin-left: -7px;cursor: pointer;"/></div>
+            </div>
+            <div style="display: flex;margin-left: 48px;margin-top: 16px;">
+                <div style="margin-right: 16px;"><span style="font-weight: bold;">{{post}}</span> Posts</div>
+                <div style="margin-right: 16px;"><span style="font-weight: bold;">{{follower}}</span> Followers</div>
+                <div style="margin-right: 16px;"><span style="font-weight: bold;">{{following}}</span> Following</div>
+            </div>
+            <div style="margin-left: 48px;margin-top: 16px;">
+                <div style="margin-right: 16px;">{{bio}}</div>
+                <div style="margin-right: 16px;">{{bio}}</div>
+                <div style="margin-right: 16px;">{{bio}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="width: 74%;margin: 0 auto;">
+    <div class="row" style="height: 28vh;border-bottom: 1px solid #d7d6d6;">
+        <div class="col-2" style="width: 12%;">
+           <!-- <img src="../../../assets/post1.jpg" style="width: 100px;height: 100px;border-radius: 50%;margin-top: 29px" /> -->
+           <div class="highlightimage"></div>
+           <p class="highlightname">Highlight1</p>
+        </div>
+        <div class="col-2" style="width: 12%;">
+            <!-- <img src="../../../assets/post1.jpg" style="width: 100px;height: 100px;border-radius: 50%;margin-top: 29px" /> -->
+           <div class="highlightimage"></div>
+           <p class="highlightname">Highlight2</p>
+         </div>
+         <div class="col-2" style="width: 12%;">
+           <!-- <img src="../../../assets/post1.jpg" style="width: 100px;height: 100px;border-radius: 50%;margin-top: 29px" /> -->
+           <div class="highlightimage"></div>
+           <p class="highlightname">Highlight3</p>
+         </div>
+    </div>
+</div>
+
+<div style="margin-top: 23px;width: 74%;margin: 58px auto;">
+    <div class="row" style="height: 42vh;">
+         <div class="col-4 postimg"></div>
+         <div class="col-4 postimg"></div>
+         <div class="col-4 postimg"></div>
+    </div>
+    <div class="row" style="height: 42vh;">
+         <div class="col-4 postimg"></div>
+         <div class="col-4 postimg"></div>
+         <div class="col-4 postimg"></div>
+   </div>
+   <div class="row" style="height: 42vh;">
+        <div class="col-4 postimg"></div>
+        <div class="col-4 postimg"></div>
+        <div class="col-4 postimg"></div>
+    </div>
+</div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="width: 432px; margin: auto;border-radius: 18px ">
+        <div class="modal-body">
+          <div style="height: 356px;">
+             <div class="settinglinks">Apps and Websites</div>
+             <div  class="settinglinks">QR Code</div>
+             <div  class="settinglinks">Notifications</div>
+             <div  class="settinglinks">Settings and privacy</div>
+             <div  class="settinglinks">Supervision</div>
+             <div (click)="logout()" data-bs-dismiss="modal"  class="settinglinks">Log Out</div>
+             <div  class="settinglinkslast">Cancel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="unfollowmodel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="width: 432px; margin: auto;border-radius: 18px ">
+        <div class="modal-body">
+          <div style="height: 356px;">
+            <div class="settinglinks2" style="height: 98px;">
+              <img [src]="profileimgurl" style="width: 55px;height: 55px;border-radius: 50%;cursor: pointer;" />
+              <p>{{AccountName}}</p>
+            </div>
+             <div class="settinglinks1">Add to close friend list</div>
+             <div  class="settinglinks1">Add to favorites</div>
+             <div  class="settinglinks1">Mute</div>
+             <div  class="settinglinks1">Restrict</div>
+             <div data-bs-dismiss="modal"  class="settinglinkslast1">Unfollow</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="profilepicmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="width: 432px; margin: auto;border-radius: 18px ">
+        <div class="modal-body">
+          <div style="height: 236px;">
+             <div style="padding: 25px;font-size: 20px;border-top-left-radius: 18px;border-top-right-radius: 18px;cursor:auto;" class="settinglinks">Change Profile Photo</div>
+             <div style="color: #0087e5;font-weight: bolder;" class="settinglinks">
+              <label style="cursor: pointer;" *ngIf="showupload" for="uploadpic"> Choose Photo </label>
+              <label *ngIf="showsave" style="cursor: pointer;color: rgb(137, 227, 2);" data-bs-dismiss="modal"  (click)="setprofilepic()" > Upload Photo </label>
+              <input (change)="storefile($event)" style="display: none;" type="file" id="uploadpic" />
+            </div>
+             <div style="color: red;font-weight: bold;" class="settinglinks">Remove Current Photo</div>
+             <div  data-bs-dismiss="modal"  class="settinglinkslast" style="border-bottom-left-radius: 18px;border-bottom-right-radius: 18px;">Cancel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
