@@ -7,7 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class LoginsignupService {
 
-  private url = "http://localhost:8000";
+  //private url = "http://localhost:8000";
+
+  private url = "https://instagramclone-api.onrender.com"
 
   constructor(private http:HttpClient) { }
   

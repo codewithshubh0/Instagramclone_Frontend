@@ -23,7 +23,7 @@
             <div class="menu"><i class="fa-solid fa-clapperboard menuicon"></i><span>Reels</span></div>
             <div class="menu"><i class="fa-brands fa-facebook-messenger menuicon"></i><span>Messages</span></div>
             <div class="menu"><i class="fa-regular fa-heart menuicon"></i><span>Notifications</span></div>
-            <div class="menu"><i class="fa-regular fa-square-plus menuicon"></i><span>Create</span></div>
+            <div class="menu" data-bs-toggle="modal" data-bs-target="#PostModal" ><i class="fa-regular fa-square-plus menuicon"></i><span>Create</span></div>
             <div [ngStyle]="{'backgroundColor':profilepageselected && !Searchpageselected?isdark?'#282828':'rgb(233, 233, 233)':'','fontWeight':profilepageselected && !Searchpageselected?'bold':''}" class="menu" (click)="showprofilepage()"><img [ngStyle]="{'border':profilepageselected?'2px solid black':'none'}" [src]="profilepicurl" class="profilepicmenu"><span>Profile</span></div>
             
             <div #moreoption class="menu" style="margin-top: 48px;" (click)="showmore()"><i #moreoption1 class="fa-solid fa-bars menuicon"></i><span #moreoption2 class="more">More
@@ -227,6 +227,45 @@
     </div>
 </div>
 
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.7)" size = "medium" color = "#fff" type = "square-jelly-box" [fullScreen] = "true"><img src="../../assets/loader.png" style="width: 140px; height: 140px;margin-top: -143px" /></ngx-spinner>
+
+
+<div class="modal fade" id="PostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered">
+     <div class="modal-content" style="width: 475px; margin: auto;border-radius: 18px;height: 73vh ">
+      <div style="font-size: 17px;
+      font-weight: 600;
+      cursor: auto;
+      border-bottom: 1px solid #c6c6c6;
+      width: 100%;
+      text-align: center;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+      padding: 11px;" class="settinglinks">Create new post</div>
+       <div class="modal-body">
+        
+         <div style="height: 236px;">
+            
+           
+            <div style="
+            width: 26%;
+            margin: 0 auto;
+            margin-top: 109px;
+        ">
+            <img src="../../assets/postmodalimage.png" style=" width: 115px;" />
+         </div>
+            <div  class="selectpost">
+              
+             <label style="cursor: pointer;" *ngIf="showupload" for="uploadpic"> Select from computer </label>
+             <label *ngIf="showsave" style="cursor: pointer;color: rgb(137, 227, 2);" data-bs-dismiss="modal"  (click)="Uploadpostimage()" > Upload Photo </label>
+             <input (change)="storefile($event)" style="display: none;" type="file" id="uploadpic" />
+           </div>
+            <!-- <div  data-bs-dismiss="modal"  class="settinglinkslast" style="border-bottom-left-radius: 18px;border-bottom-right-radius: 18px;">Cancel</div> -->
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
 
 
 <!-- for responsive navbar menu  -->

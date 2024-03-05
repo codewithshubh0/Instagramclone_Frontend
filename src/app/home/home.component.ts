@@ -2,7 +2,8 @@ import { Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/cor
 import { Router } from '@angular/router';
 import { ProfileService } from '../Services/profile.service';
 import { Buffer } from 'buffer';
-import { filter } from 'smart-array-filter';
+import { ViewportScroller } from '@angular/common';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -32,7 +33,10 @@ export class HomeComponent implements OnInit {
   isdark = false;
   switchappearance = false;
   profilepageforsearch = false;
-  constructor(private router:Router,private renderer:Renderer2,private service:ProfileService){
+  file:any
+showsave:boolean = false;
+showupload:boolean = true;
+  constructor(private router:Router,private renderer:Renderer2,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService){
     this.renderer.listen('window', 'click',(e:Event)=>{
    
      if( e.target !== this.moreoption?.nativeElement && e.target !== this.moreoption1?.nativeElement && e.target !== this.moreoption2?.nativeElement && e.target!==this.moremenus?.nativeElement){
@@ -50,10 +54,11 @@ export class HomeComponent implements OnInit {
 
     var userdetails = JSON.parse(sessionStorage.getItem("userdetails"));
     if(userdetails==null || userdetails==undefined){
-      this.router.navigate(["/login"])
-     }
-    this.AccountName = userdetails.username;
+        this.router.navigate(["/login"])
+     }else{
 
+    this.AccountName = userdetails?.username;
+    this.spinner.show();
     this.service.getallusers(userid).subscribe(
      { next:(data)=>{
           for(let d of data){
@@ -70,20 +75,24 @@ export class HomeComponent implements OnInit {
                     }else{
                       this.Allusers.push({userid:d._id,username:d.username,imgurl:this.defaultpicurl});
                     }
-
+                    this.spinner.hide();
                 },
                 error:(error)=>{
+                  this.spinner.hide();
                    alert("something went wrong")
                 }
               }
             )
           }
+          this.spinner.hide();
      },
      error:(error)=>{
+      this.spinner.hide();
         alert("something went wrong")
      }
     }
     )
+  }
   }
   showmore(){
     this.showmoredropdown = !this.showmoredropdown;
@@ -120,10 +129,12 @@ export class HomeComponent implements OnInit {
     this.Allusersfilter = []
   }
   showhomepage(){
+    this.scroller.scrollToPosition([0,0]);
     this.homeoptionselected = true;
     this.profilepageselected = false;
     this.Searchpageselected = false;
     this.showsearchbox = false;
+    this.profilepageforsearch = false;
   }
 
   getimage(userid:any){
@@ -176,6 +187,7 @@ export class HomeComponent implements OnInit {
   }
 
   openuserprofile(userid:any){
+    this.spinner.show();
     this.service.isOwnProfile = false;
     this.Allusersfilter = []
     this.profilepageforsearch = false;
@@ -190,10 +202,22 @@ export class HomeComponent implements OnInit {
          this.Searchpageselected = false;
          this.showsearchbox = false;
          this.profilepageselected = false;
+         this.spinner.hide();
       },
       error:(error)=>{
+        this.spinner.hide();
         alert("Something Went Wrong");
       }
     })
+  }
+
+  storefile(event:any){
+    this.file = event.target.files[0];
+    this.showsave = true;
+    this.showupload = false;
+  }
+
+  Uploadpostimage(){
+    
   }
 }

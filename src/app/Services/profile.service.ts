@@ -9,6 +9,8 @@ export class ProfileService {
 
   private url = "http://localhost:8000";
 
+ // private url = "https://instagramclone-api.onrender.com"
+
   userdetails = {};
   isOwnProfile = false;
   constructor(private http:HttpClient) { }
@@ -42,7 +44,9 @@ export class ProfileService {
         return this.http.post<any[]>(this.url+"/activity/savefollowactivity",{useridfollowedby:useridfollowedby,useridfollowedto:useridfollowedto});
     }
 
-    addFollower(useridfollowedby:any,useridfollowedto):Observable<any>{
-      return this.http.post<any[]>(this.url+"/activity/addfollower",{useridfollowedby:useridfollowedby,useridfollowedto:useridfollowedto});
-  }
+    Unfollowuser(useridfollowedby:any,useridfollowedto):Observable<any>{
+         return this.http.post<any[]>(this.url+"/activity/saveunfollowactivity",{useridfollowedby:useridfollowedby,useridfollowedto:useridfollowedto});
+    }
+
+  
 }

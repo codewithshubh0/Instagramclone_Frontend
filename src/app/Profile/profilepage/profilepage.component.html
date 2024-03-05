@@ -7,7 +7,7 @@
             <div style="display: flex;margin-left: 48px;margin-top: 32px;">
                 <div style="margin-right: 16px;font-size: 19px;">{{AccountName}}</div>
                 <div class="editandview" *ngIf="!isfromSearch">Edit profile</div>
-                <div (click)="followActivity()" class="follow" *ngIf="isfromSearch && !isfollowing">Follow</div>
+                <div (click)="follow()" class="follow" *ngIf="isfromSearch && !isfollowing">Follow</div>
                 <div data-bs-toggle="modal" data-bs-target="#unfollowmodel" class="follow" *ngIf="isfromSearch && isfollowing">Following</div>
                 <div class="editandview">View archive</div>
                 <div data-bs-toggle="modal" data-bs-target="#settingsModal" ><img src="../../../assets/settings.png" style="width: 33px;height: 28px;margin-left: -7px;cursor: pointer;"/></div>
@@ -75,7 +75,7 @@
              <div  class="settinglinks">Settings and privacy</div>
              <div  class="settinglinks">Supervision</div>
              <div (click)="logout()" data-bs-dismiss="modal"  class="settinglinks">Log Out</div>
-             <div  class="settinglinkslast">Cancel</div>
+             <div  class="settinglinkslast" data-bs-dismiss="modal" >Cancel</div>
           </div>
         </div>
       </div>
@@ -95,7 +95,7 @@
              <div  class="settinglinks1">Add to favorites</div>
              <div  class="settinglinks1">Mute</div>
              <div  class="settinglinks1">Restrict</div>
-             <div data-bs-dismiss="modal"  class="settinglinkslast1">Unfollow</div>
+             <div data-bs-dismiss="modal" (click)="unfollow()"  class="settinglinkslast1">Unfollow</div>
           </div>
         </div>
       </div>

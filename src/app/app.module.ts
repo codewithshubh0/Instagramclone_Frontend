@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ProfilepageComponent } from './Profile/profilepage/profilepage.component';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { NgxSpinnerModule } from 'ngx-spinner';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +25,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    MatDialogModule
+    MatDialogModule,
+    NgxSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
