@@ -23,6 +23,11 @@ bio:any="";
 isfromSearch = false;
 userdetail = {}
 isfollowing = false;
+editprofilepage = false;
+profilehomepage = true;
+gender = ['Male','Female','Prefer not to say']
+savebiotext=''
+biodata:any
 constructor(private router:Router,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService){}
   
 ngOnInit(): void {
@@ -35,8 +40,15 @@ ngOnInit(): void {
            this.follower = this.userdetail[0].followers.length;
            this.following = this.userdetail[0].followings.length;
         //  console.log(this,this.follower,this.following,"count");
+            
+            this.bio = this.userdetail[0].bio 
+            this.savebiotext = this.bio;
+            this.biodata = this.bio.toString().split("\\n+");
           
-           // this.bio = this.userdetail[0].bio 
+            for(let x of this.biodata){
+              console.log(x);
+              
+            }
         this.isfromSearch = !this.service.isOwnProfile;
    }
    const userid = sessionStorage.getItem("userid");
@@ -136,4 +148,30 @@ unfollow(){
     }
   })
 }
+
+editprofile(){
+  this.profilehomepage = false
+   this.editprofilepage = true;
+}
+
+editprofilesubmit(){
+  this.spinner.show();
+  const userid = sessionStorage.getItem("userid");
+  this.service.savebio(userid,this.savebiotext).subscribe({
+    next:(data)=>{
+       console.log(data);
+       if(data=="bio saved"){
+       alert("Profile Updated")
+        //  alert("unfollowed");     
+       }
+       this.spinner.hide();
+    },
+    error:(error)=>{   
+      this.spinner.hide();
+     alert("Something Went Wrong");
+    }
+  })
+
+}
+
 }

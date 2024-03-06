@@ -93,3 +93,85 @@
     padding: 0px !important;
 }
 
+.editimg{
+    background-color: #e8e8e8;
+    width: 64%;
+    margin: 0 auto;
+    margin-top: 45px;
+    padding: 17px;
+    border-radius: 17px;
+}
+
+.websitebox{
+    width: 68%;
+    margin: 0 auto;
+    padding: 17px;
+    border-radius: 17px;
+}
+.profiletext{
+    width: 64%;
+    margin: 0 auto;
+    margin-top: 52px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.websitetext{
+    width: 64%;
+    margin: 0 auto;
+    margin-top: 26px;
+    font-size: 17px;
+    font-weight: bold;
+}
+.websiteinput{
+    background-color: #e8e8e8;
+    width: 100%;
+    border-radius: 11px;
+    padding: 9px;
+    border: 1px solid #c5c5c5;
+}
+
+.biotext{
+    width: 64%;
+    margin: 0 auto;
+    margin-top: -10px;
+    font-size: 17px;
+    font-weight: bold;
+}
+.bioinput{
+    width: 100%;
+    border-radius: 11px;
+    padding: 9px;
+    border: 1px solid #c5c5c5;
+}
+.bioinput:focus{
+    outline-color: #c5c5c5;
+}
+.biobox{
+    width: 68%;
+    margin: 0 auto;
+    padding: 17px;
+    border-radius: 17px;
+}
+.chooseimgbutton{
+    background-color: #3d93ff;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 8px;
+    margin-left: 235px;
+    cursor: pointer;
+}
+
+.submiteditprofile{
+    background-color: #3d93ff;
+    color: white;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-left: 57%;
+    cursor: pointer;
+    margin-right: 164px;
+    text-align: center;
+}
+
+.chooseimgbutton:hover{
+    background-color:rgb(17, 100, 224) ;
+}

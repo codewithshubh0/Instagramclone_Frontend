@@ -1,12 +1,15 @@
+<div  *ngIf="profilehomepage">
 <div style="margin-top: 23px;width: 65%;margin: 0 auto;">
     <div class="row" style="height: 30vh;">
         <div class="col-3" >
-           <img  data-bs-toggle="modal" data-bs-target="#profilepicmodal" [src]="profileimgurl" style="width: 150px;height: 150px;border-radius: 50%;margin-top: 29px;cursor: pointer;" />
+           <img   *ngIf="!isfromSearch" data-bs-toggle="modal" data-bs-target="#profilepicmodal" [src]="profileimgurl" style="width: 150px;height: 150px;border-radius: 50%;margin-top: 29px;cursor: pointer;" />
+           <img  *ngIf="isfromSearch"  [src]="profileimgurl" style="width: 150px;height: 150px;border-radius: 50%;margin-top: 29px;" />
+          
           </div>
         <div class="col">
             <div style="display: flex;margin-left: 48px;margin-top: 32px;">
                 <div style="margin-right: 16px;font-size: 19px;">{{AccountName}}</div>
-                <div class="editandview" *ngIf="!isfromSearch">Edit profile</div>
+                <div class="editandview" (click)="editprofile()" *ngIf="!isfromSearch">Edit profile</div>
                 <div (click)="follow()" class="follow" *ngIf="isfromSearch && !isfollowing">Follow</div>
                 <div data-bs-toggle="modal" data-bs-target="#unfollowmodel" class="follow" *ngIf="isfromSearch && isfollowing">Following</div>
                 <div class="editandview">View archive</div>
@@ -17,10 +20,8 @@
                 <div style="margin-right: 16px;"><span style="font-weight: bold;">{{follower}}</span> Followers</div>
                 <div style="margin-right: 16px;"><span style="font-weight: bold;">{{following}}</span> Following</div>
             </div>
-            <div style="margin-left: 48px;margin-top: 16px;">
-                <div style="margin-right: 16px;">{{bio}}</div>
-                <div style="margin-right: 16px;">{{bio}}</div>
-                <div style="margin-right: 16px;">{{bio}}</div>
+            <div style="margin-left: 48px;margin-top: 16px;" *ngFor="let b of biodata" >
+              {{b}}
             </div>
         </div>
     </div>
@@ -102,6 +103,10 @@
     </div>
   </div>
 
+  
+
+  </div>
+
   <div class="modal fade" id="profilepicmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" style="width: 432px; margin: auto;border-radius: 18px ">
@@ -120,5 +125,39 @@
       </div>
     </div>
   </div>
+  <div *ngIf="editprofilepage" class="col">
+   <div class="row">
+       <div style="
+       height: 100vh;
+       background-color: grey;
+   " class="col-3" >
+        
+       </div>
+       <div class="col">
+            <div class="profiletext">Edit profile</div>
+            <div class="editimg"> <img [src]="profileimgurl" style="width: 55px;height: 55px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 16px #c8c5c5" />
+              <span style="font-weight: bold;margin-left: 18px;">{{AccountName}}</span>
+              <span  data-bs-toggle="modal" data-bs-target="#profilepicmodal" class="chooseimgbutton">Change photo</span>
+             </div>
+               <div class="websitetext">Website</div>
+             <div  class="websitebox"><input placeholder="Website" class="websiteinput"  type="text" disabled/> 
+                 <p style="font-size: 12px;color: grey;margin-top: 6px ">Editing your links is only available on mobile. Visit the Instagram app and edit your profile to change the websites in your bio.</p>
+             </div> 
+             <div class="biotext">Bio</div>
+             <div  class="biobox"><textarea [(ngModel)]="savebiotext" placeholder="Bio" style="overflow:hidden" class="bioinput"  type="text"></textarea> 
+             </div> 
+             <div class="biotext">Bio</div>
+             <div  class="biobox"><select class="bioinput">
+              <option selected disabled >Select your gender</option>
+                 <option *ngFor="let g of gender">{{g}}</option>
+            </select> 
+                 <p style="font-size: 12px;color: grey;margin-top: 6px ">This won’t be part of your public profile.</p>
+             </div>
+             
+             <div (click)="editprofilesubmit()" class="submiteditprofile">Submit</div>
+       </div>
+   </div>
+ </div>
+
 
 

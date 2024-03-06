@@ -48,5 +48,7 @@ export class ProfileService {
          return this.http.post<any[]>(this.url+"/activity/saveunfollowactivity",{useridfollowedby:useridfollowedby,useridfollowedto:useridfollowedto});
     }
 
-  
+    savebio(userid:any,bio:any):Observable<any>{
+      return this.http.post<any[]>(this.url+"/activity/savebio",{userid:userid,bio:bio});
+ }
 }
