@@ -175,3 +175,15 @@
 .chooseimgbutton:hover{
     background-color:rgb(17, 100, 224) ;
 }
+
+.selectpost{
+    font-weight: bolder;
+   color: #ffffff;
+   font-weight: bolder;
+   background-color: dodgerblue;
+   width: fit-content;
+   padding: 5px 12px;
+   margin: 0 auto;
+   margin-top: 4%;
+   border-radius: 8px;
+}

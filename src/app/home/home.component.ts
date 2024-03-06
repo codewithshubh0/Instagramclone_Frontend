@@ -117,7 +117,6 @@ showupload:boolean = true;
   showprofilepage(){
     const userid = sessionStorage.getItem("userid");
     this.openuserprofile(userid);
-    this.service.isOwnProfile = true;
 
     //this.service.setuserdetails(null);
     this.homeoptionselected = false;
@@ -143,7 +142,7 @@ showupload:boolean = true;
       {
         next:(data)=>{
            // console.log(data);
-            if(data!=null || data!=undefined){
+            if(data!='not found' && data!=null && data!=undefined){
               var thumb = Buffer.from(data.image.data).toString('base64');
               this.profilepicurl = "data:"+data.image.contentType+""+";base64,"+thumb;
             }
@@ -188,13 +187,12 @@ showupload:boolean = true;
 
   openuserprofile(userid:any){
     this.spinner.show();
-    this.service.isOwnProfile = false;
     this.Allusersfilter = []
     this.profilepageforsearch = false;
-    console.log(userid+" user");
+    //console.log(userid+" user");
     this.service.getuserdetails(userid).subscribe({
       next:(data)=>{
-         console.log(JSON.stringify(data) +" details");
+        // console.log(JSON.stringify(data) +" details");
          this.service.setuserdetails(data);
          this.showsearchbox = false;
          this.homeoptionselected = false;
@@ -218,6 +216,24 @@ showupload:boolean = true;
   }
 
   Uploadpostimage(){
-    
+
+      const id = sessionStorage.getItem("userid");
+      const formdata = new FormData();
+      formdata.append("image",this.file);
+      formdata.append("userid",id);
+     
+      this.service.saveposts(formdata).subscribe({
+        next:(data)=>{
+            if(data=='post saved'){
+               alert("Successfully Posted");
+            }
+           console.log(data);
+        },
+        error:(error)=>{
+       //   this.spinner.hide();
+          alert("Something Went Wrong");
+        }
+      })
+
   }
 }

@@ -9,10 +9,9 @@ export class ProfileService {
 
   private url = "http://localhost:8000";
 
- // private url = "https://instagramclone-api.onrender.com"
+  //private url = "https://instagram-backend-igfs.onrender.com"
 
   userdetails = {};
-  isOwnProfile = false;
   constructor(private http:HttpClient) { }
 
   setuserdetails(detailofuser:any){
@@ -51,4 +50,10 @@ export class ProfileService {
     savebio(userid:any,bio:any):Observable<any>{
       return this.http.post<any[]>(this.url+"/activity/savebio",{userid:userid,bio:bio});
  }
+
+
+ saveposts(formdata:any):Observable<any>{
+    return this.http.post<any[]>(this.url+"/activity/savepost",formdata);
+ }
+
 }

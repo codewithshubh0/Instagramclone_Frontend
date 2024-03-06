@@ -27,35 +27,47 @@ editprofilepage = false;
 profilehomepage = true;
 gender = ['Male','Female','Prefer not to say']
 savebiotext=''
-biodata:any
+biodata:String[] = [];
+Userposts:Array<{userid:string,username:string,posturl:string}> = [];
 constructor(private router:Router,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService){}
   
 ngOnInit(): void {
-  
+  const userid = sessionStorage.getItem("userid");
   this.userdetail = this.service.getdetails();
-   if(this.userdetail!=null || this.userdetail!=undefined){
-        this.getimage(this.userdetail[0].userid);
-        this.AccountName = this.userdetail[0].username;
-        // this.post = this.userdetail[0].post;
-           this.follower = this.userdetail[0].followers.length;
-           this.following = this.userdetail[0].followings.length;
-        //  console.log(this,this.follower,this.following,"count");
-            
-            this.bio = this.userdetail[0].bio 
-            this.savebiotext = this.bio;
-            this.biodata = this.bio.toString().split("\\n+");
+   if(this.userdetail!=null && this.userdetail!=undefined){
+         this.isfromSearch = (userid!=this.userdetail[0]?.userid);
+          this.getimage(this.userdetail[0]?.userid);
           
-            for(let x of this.biodata){
-              console.log(x);
-              
+            this.AccountName = this.userdetail[0]?.username;
+            this.follower = this.userdetail[0]?.followers?.length;
+            this.following = this.userdetail[0]?.followings?.length;
+            this.bio = this.userdetail[0]?.bio 
+                       
+            this.biodata = this.bio?.split("-");
+  
+            
+
+           this.savebiotext = this.bio?.replaceAll("-", "\n");
+           if(this.userdetail[0]?.posts[0]?.image!=null && this.userdetail[0]?.posts[0]?.image!=undefined){
+          //    console.log(JSON.stringify(this.userdetail[0]?.posts)+" posta");
+
+            for(let i=0;i<this.userdetail[0]?.posts.length;i++){
+              var thumb = Buffer.from(this.userdetail[0]?.posts[i]?.image?.data).toString('base64');
+              var url = "data:"+this.userdetail[0]?.posts[i]?.image?.contentType+""+";base64,"+thumb;
+              this.Userposts.push({userid:this.userdetail[0]?.userid,username:this.userdetail[0]?.username,posturl:url});
             }
-        this.isfromSearch = !this.service.isOwnProfile;
-   }
-   const userid = sessionStorage.getItem("userid");
-   
-   if(this.userdetail[0].followers.indexOf(userid) > -1){
-         this.isfollowing = true;
-   }
+
+             
+           }
+         
+
+          
+           //  console.log(JSON.stringify(this.Userposts)+" details");
+             if(this.userdetail[0]?.followers?.indexOf(userid) > -1){
+                this.isfollowing = true;
+             }
+           
+          }
    this.scroller.scrollToPosition([0,0])
   }
 
@@ -101,11 +113,12 @@ getimage(userid:any){
     {
       next:(data)=>{
          // console.log(data);
-          if(data!=null || data!=undefined){
+       
+          if(data!='not found' && data!=null && data!=undefined){
             var thumb = Buffer.from(data.image.data).toString('base64');
             this.profileimgurl = "data:"+data.image.contentType+""+";base64,"+thumb;
-            this.spinner.hide();
           }
+          this.spinner.hide();
       },
       error:(error)=>{
         this.spinner.hide();
@@ -157,9 +170,13 @@ editprofile(){
 editprofilesubmit(){
   this.spinner.show();
   const userid = sessionStorage.getItem("userid");
-  this.service.savebio(userid,this.savebiotext).subscribe({
+ 
+  var reg = new RegExp(/(\r\n?|\n|\t)/g);
+  var bio = this.savebiotext.replace(reg, "-");
+  //console.log(bio+" save");
+  this.service.savebio(userid,bio).subscribe({
     next:(data)=>{
-       console.log(data);
+      // console.log(data);
        if(data=="bio saved"){
        alert("Profile Updated")
         //  alert("unfollowed");     
@@ -169,6 +186,28 @@ editprofilesubmit(){
     error:(error)=>{   
       this.spinner.hide();
      alert("Something Went Wrong");
+    }
+  })
+
+}
+
+Uploadpostimage(){
+
+  const id = sessionStorage.getItem("userid");
+  const formdata = new FormData();
+  formdata.append("image",this.file);
+  formdata.append("userid",id);
+ 
+  this.service.saveposts(formdata).subscribe({
+    next:(data)=>{
+        if(data=='post saved'){
+           alert("Successfully Posted");
+        }
+       console.log(data);
+    },
+    error:(error)=>{
+   //   this.spinner.hide();
+      alert("Something Went Wrong");
     }
   })
 
