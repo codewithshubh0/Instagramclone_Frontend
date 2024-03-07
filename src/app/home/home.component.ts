@@ -117,15 +117,16 @@ showupload:boolean = true;
   showprofilepage(){
     const userid = sessionStorage.getItem("userid");
     this.openuserprofile(userid);
-
-    //this.service.setuserdetails(null);
-    this.homeoptionselected = false;
-    this.profilepageselected = true;
-    //this.router.navigate(['/profile']);
-    this.profilepageforsearch = false
-    this.Searchpageselected = false;
-    this.showsearchbox = false;
-    this.Allusersfilter = []
+    // console.log(("coming here"));
+    
+    // //this.service.setuserdetails(null);
+    // this.homeoptionselected = false;
+    // this.profilepageselected = true;
+    // //this.router.navigate(['/profile']);
+    // this.profilepageforsearch = false
+    // this.Searchpageselected = false;
+    // this.showsearchbox = false;
+    // this.Allusersfilter = []
   }
   showhomepage(){
     this.scroller.scrollToPosition([0,0]);
@@ -186,6 +187,8 @@ showupload:boolean = true;
   }
 
   openuserprofile(userid:any){
+
+    
     this.spinner.show();
     this.Allusersfilter = []
     this.profilepageforsearch = false;
@@ -200,7 +203,10 @@ showupload:boolean = true;
          this.Searchpageselected = false;
          this.showsearchbox = false;
          this.profilepageselected = false;
-         this.spinner.hide();
+
+        //  setTimeout(()=>{
+          this.spinner.hide();
+        //  },3000)
       },
       error:(error)=>{
         this.spinner.hide();
@@ -221,16 +227,17 @@ showupload:boolean = true;
       const formdata = new FormData();
       formdata.append("image",this.file);
       formdata.append("userid",id);
-     
+     this.spinner.show()
       this.service.saveposts(formdata).subscribe({
         next:(data)=>{
             if(data=='post saved'){
                alert("Successfully Posted");
+               this.openuserprofile(id);
             }
-           console.log(data);
+           this.spinner.hide()
         },
         error:(error)=>{
-       //   this.spinner.hide();
+          this.spinner.hide();
           alert("Something Went Wrong");
         }
       })

@@ -29,48 +29,53 @@ gender = ['Male','Female','Prefer not to say']
 savebiotext=''
 biodata:String[] = [];
 Userposts:Array<{userid:string,username:string,posturl:string}> = [];
-constructor(private router:Router,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService){}
+constructor(private router:Router,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService){  
+          this.onload();
+      }
   
 ngOnInit(): void {
-  const userid = sessionStorage.getItem("userid");
-  this.userdetail = this.service.getdetails();
-   if(this.userdetail!=null && this.userdetail!=undefined){
-         this.isfromSearch = (userid!=this.userdetail[0]?.userid);
-          this.getimage(this.userdetail[0]?.userid);
-          
-            this.AccountName = this.userdetail[0]?.username;
-            this.follower = this.userdetail[0]?.followers?.length;
-            this.following = this.userdetail[0]?.followings?.length;
-            this.bio = this.userdetail[0]?.bio 
-                       
-            this.biodata = this.bio?.split("-");
-  
-            
-
-           this.savebiotext = this.bio?.replaceAll("-", "\n");
-           if(this.userdetail[0]?.posts[0]?.image!=null && this.userdetail[0]?.posts[0]?.image!=undefined){
-          //    console.log(JSON.stringify(this.userdetail[0]?.posts)+" posta");
-
-            for(let i=0;i<this.userdetail[0]?.posts.length;i++){
-              var thumb = Buffer.from(this.userdetail[0]?.posts[i]?.image?.data).toString('base64');
-              var url = "data:"+this.userdetail[0]?.posts[i]?.image?.contentType+""+";base64,"+thumb;
-              this.Userposts.push({userid:this.userdetail[0]?.userid,username:this.userdetail[0]?.username,posturl:url});
-            }
-
-             
-           }
-         
-
-          
-           //  console.log(JSON.stringify(this.Userposts)+" details");
-             if(this.userdetail[0]?.followers?.indexOf(userid) > -1){
-                this.isfollowing = true;
-             }
-           
-          }
    this.scroller.scrollToPosition([0,0])
   }
 
+  onload(){
+    const userid = sessionStorage.getItem("userid");
+    this.userdetail = this.service.getdetails();
+    this.spinner.show();
+     if(this.userdetail!=null && this.userdetail!=undefined){
+           this.isfromSearch = (userid!=this.userdetail[0]?.userid);
+            this.getimage(this.userdetail[0]?.userid);
+            
+              this.AccountName = this.userdetail[0]?.username;
+              this.follower = this.userdetail[0]?.followers?.length;
+              this.following = this.userdetail[0]?.followings?.length;
+              this.bio = this.userdetail[0]?.bio 
+                         
+              this.biodata = this.bio?.split("-");
+    
+              
+  
+             this.savebiotext = this.bio?.replaceAll("-", "\n");
+             if(this.userdetail[0]?.posts[0]?.image!=null && this.userdetail[0]?.posts[0]?.image!=undefined){
+        
+              this.spinner.show();
+              for(let i=this.userdetail[0]?.posts.length-1;i>=0;i--){
+                 var thumb = Buffer.from(this.userdetail[0]?.posts[i]?.image?.data).toString('base64');
+                 var url = "data:"+this.userdetail[0]?.posts[i]?.image?.contentType+""+";base64,"+thumb;
+                 this.Userposts.push({userid:this.userdetail[0]?.userid,username:this.userdetail[0]?.username,posturl:url});
+                 if(i==0) {
+                  this.spinner.hide();
+                 }
+              }    
+             }     
+            
+               if(this.userdetail[0]?.followers?.indexOf(userid) > -1){
+                  this.isfollowing = true;
+               }
+            }
+  
+              this.spinner.hide();
+        
+  }
 
 logout(){
   sessionStorage.clear();
@@ -202,6 +207,7 @@ Uploadpostimage(){
     next:(data)=>{
         if(data=='post saved'){
            alert("Successfully Posted");
+           this.onload();
         }
        console.log(data);
     },
