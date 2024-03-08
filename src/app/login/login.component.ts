@@ -24,14 +24,14 @@ export class LoginComponent {
             sessionStorage.setItem("userid",data._id);
             sessionStorage.setItem("userdetails", JSON.stringify(data));
             this.spinner.hide();
-            this.router.navigate(["/home"]);
+           this.router.navigate(["/home"]);
           }else{
             this.spinner.hide();
             alert(data)
           }  
         } ,
         error:(error)=>{
-          this.spinner.hide();
+         this.spinner.hide();
           alert("Something went wrong")
         }
         }

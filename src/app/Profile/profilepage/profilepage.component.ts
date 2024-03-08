@@ -29,6 +29,7 @@ gender = ['Male','Female','Prefer not to say']
 savebiotext=''
 biodata:String[] = [];
 Userposts:Array<{userid:string,username:string,posturl:string}> = [];
+openimgurl = ''
 constructor(private router:Router,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService){  
           this.onload();
       }
@@ -217,6 +218,12 @@ Uploadpostimage(){
     }
   })
 
+}
+
+openpost(post:any){
+   this.openimgurl = post.posturl;
+   console.log(this.openimgurl);
+   
 }
 
 }

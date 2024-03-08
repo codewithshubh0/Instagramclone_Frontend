@@ -193,9 +193,15 @@
     transition: 1s;
 }
 
-.postimg:hover{
-   transform: scale(1.1);
+.profilepicinpost{
+    width: 102%;
+    margin: 0 auto;
+    padding: 17px;
+    margin-left: -12px 
 }
+/* .postimg:hover{
+   transform: scale(1.1);
+} */
 
 
 
@@ -229,9 +235,9 @@ figure figcaption {
 figure:hover figcaption{
   --_i: 0%;
 }
-figure:hover img {
+/* figure:hover img {
   transform: scale(1.2);
-}
+} */
 @supports not (-webkit-mask-clip: text) {
   figure figcaption {
    -webkit-mask: none;

@@ -48,23 +48,13 @@
 
 <div style="margin-top: 23px;width: 74%;margin: 58px auto;">
     <div class="row" style="height: 42vh;" >
-         <div class="col-4 " style="margin-bottom: 23px;height: 100%;" *ngFor="let post of Userposts"><div class="postimg">
+         <div class="col-4 " style="margin-bottom: 23px;height: 100%;" *ngFor="let post of Userposts"><div data-bs-toggle="modal" data-bs-target="#openpostmodal" (click)="openpost(post)" class="postimg">
           <figure>  
-            <img style="max-width: 100%;height: 100%; object-fit: contain;" [src]="post.posturl"/>
-            <figcaption>The Day</figcaption>
+            <img  style="max-width: 100%;height: 100%; object-fit: contain;" [src]="post.posturl"/>
+            <figcaption><div>ddd</div></figcaption>
            </figure>
         </div></div>
     </div>
-    <!-- <div class="row" style="height: 42vh;">
-         <div class="col-4 postimg"></div>
-         <div class="col-4 postimg"></div>
-         <div class="col-4 postimg"></div>
-   </div>
-   <div class="row" style="height: 42vh;">
-        <div class="col-4 postimg"></div>
-        <div class="col-4 postimg"></div>
-        <div class="col-4 postimg"></div>
-    </div> -->
 </div>
   
   <!-- Modal -->
@@ -138,7 +128,8 @@
        </div>
        <div class="col">
             <div class="profiletext">Edit profile</div>
-            <div class="editimg"> <img [src]="profileimgurl" style="width: 55px;height: 55px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 16px #c8c5c5" />
+            <div class="editimg">
+              <img [src]="profileimgurl" style="width: 55px;height: 55px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 16px #c8c5c5" />
               <span style="font-weight: bold;margin-left: 18px;">{{AccountName}}</span>
               <span  data-bs-toggle="modal" data-bs-target="#profilepicmodal" class="chooseimgbutton">Change photo</span>
              </div>
@@ -200,3 +191,47 @@
   </div>
 </div>
 
+<div class="modal fade" id="openpostmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content" style="height: 636px ; margin: auto;">
+      <div class="modal-body">
+        <div class="row">
+           <div class="col-7" style="height: 634px;background-color: #f0f0f0fc"><img style="max-width: 100%;height: 100%; object-fit: contain;"[src]="openimgurl" /></div>
+           <div class="col">
+            <div>
+                <div class="profilepicinpost">
+                    <img [src]="profileimgurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+                    <span style="font-weight: bold;margin-left: 18px;">{{AccountName}}</span>
+                    <button data-bs-toggle="modal" data-bs-target="#postmoreoption" >***</button>
+                </div>
+            </div>
+            <div></div>
+            <div></div>
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="postmoreoption" style="background-color: rgb(25 25 25 / 78%);" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" >
+    <div class="modal-content" style="width: 418px; margin: auto;">
+      <div class="modal-body" style="box-shadow: 0px 0px 24px #424242;">
+        <div style="height: 461px;">
+           <div class="settinglinks" style="color: red;">Delete</div>
+           <div  class="settinglinks">Edit</div>
+           <div  class="settinglinks">Hide like count to others</div>
+           <div  class="settinglinks">Turn off commenting</div>
+           <div  class="settinglinks">Go to post</div>
+           <div  class="settinglinks">Share to...</div>
+           <div  class="settinglinks">Copy link</div>
+           <div  class="settinglinks">Embeded</div>
+           <div  class="settinglinkslast" data-bs-dismiss="modal" >Cancel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
