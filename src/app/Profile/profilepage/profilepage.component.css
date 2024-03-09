@@ -274,5 +274,10 @@ figure:hover figcaption{
     background-color: white;
     color: #0297c8;
     font-weight: bold;
-    margin-left: 78px;
+    float: right;
+}
+.menuiconpost{
+    font-size: 24px;
+    margin-right: 17px;
+    cursor: pointer;
 }

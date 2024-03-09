@@ -5,3 +5,14 @@ body {
     min-height: 100vh;
     background: #eceffc;
   }
+
+  .mat-progress-bar-fill::after {
+    background-color: #db0f5a !important;
+  }
+
+  /* remove animation and the dots*/ 
+  .mat-progress-bar-background {
+    animation: none;
+    background-color: #0184db;
+    fill: #eceff1;
+  }

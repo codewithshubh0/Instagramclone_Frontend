@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { ProfileService } from '../Services/profile.service';
 import { Buffer } from 'buffer';
 import { ViewportScroller } from '@angular/common';
-import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -34,6 +33,7 @@ export class HomeComponent implements OnInit {
   switchappearance = false;
   profilepageforsearch = false;
   file:any
+  showloader = false;
 showsave:boolean = false;
 showupload:boolean = true;
 instantuploadedimgurl:string=''
@@ -41,7 +41,7 @@ caption=''
 likes=0
 commentedby=''
 comment=''
-  constructor(private router:Router,private renderer:Renderer2,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService){
+  constructor(private router:Router,private renderer:Renderer2,private service:ProfileService,private scroller:ViewportScroller){
     this.renderer.listen('window', 'click',(e:Event)=>{
    
      if( e.target !== this.moreoption?.nativeElement && e.target !== this.moreoption1?.nativeElement && e.target !== this.moreoption2?.nativeElement && e.target!==this.moremenus?.nativeElement){
@@ -63,7 +63,8 @@ comment=''
      }else{
 
     this.AccountName = userdetails?.username;
-    this.spinner.show();
+    //this.spinner.show();
+    this.showloader = true;
     this.service.getallusers(userid).subscribe(
      { next:(data)=>{
           for(let d of data){
@@ -80,19 +81,23 @@ comment=''
                     }else{
                       this.Allusers.push({userid:d._id,username:d.username,imgurl:this.defaultpicurl});
                     }
-                    this.spinner.hide();
+                    //this.spinner.hide();
+                    this.showloader = false;
                 },
                 error:(error)=>{
-                  this.spinner.hide();
+                 // this.spinner.hide();
+                  this.showloader = false;
                    alert("something went wrong")
                 }
               }
             )
           }
-          this.spinner.hide();
+         // this.spinner.hide();
+         this.showloader = false;
      },
      error:(error)=>{
-      this.spinner.hide();
+      //this.spinner.hide();
+      this.showloader = false;
         alert("something went wrong")
      }
     }
@@ -122,16 +127,6 @@ comment=''
   showprofilepage(){
     const userid = sessionStorage.getItem("userid");
     this.openuserprofile(userid);
-    // console.log(("coming here"));
-    
-    // //this.service.setuserdetails(null);
-    // this.homeoptionselected = false;
-    // this.profilepageselected = true;
-    // //this.router.navigate(['/profile']);
-    // this.profilepageforsearch = false
-    // this.Searchpageselected = false;
-    // this.showsearchbox = false;
-    // this.Allusersfilter = []
   }
   showhomepage(){
     this.scroller.scrollToPosition([0,0]);
@@ -194,7 +189,8 @@ comment=''
   openuserprofile(userid:any){
 
     
-    this.spinner.show();
+    //this.spinner.show();
+    this.showloader = true;
     this.Allusersfilter = []
     this.profilepageforsearch = false;
     //console.log(userid+" user");
@@ -210,11 +206,13 @@ comment=''
          this.profilepageselected = false;
 
         //  setTimeout(()=>{
-          this.spinner.hide();
+         // this.spinner.hide();
+         this.showloader = false;
         //  },3000)
       },
       error:(error)=>{
-        this.spinner.hide();
+        //this.spinner.hide();
+        this.showloader = false;
         alert("Something Went Wrong");
       }
     })

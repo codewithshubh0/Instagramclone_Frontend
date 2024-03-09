@@ -28,14 +28,16 @@ profilehomepage = true;
 gender = ['Male','Female','Prefer not to say']
 savebiotext=''
 biodata:String[] = [];
-Userposts:Array<{userid:string,username:string,posturl:string,imagename:string,likes:Number,commentdata:{username:string,commenttext:string}}> = [];
+Userposts:Array<{userid:string,username:string,posturl:string,imagename:string,postcaption:string,likes:Number,commentdata:{username:string,commenttext:string}}> = [];
 openimgurl = ''
 imagename = ''
+showloader = false;
 instantuploadedimgurl:string=''
 caption=''
 likes= 0;
 commentedby=''
 comment=''
+postcaption=''
 constructor(private router:Router,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService){  
           this.onload();
       }
@@ -48,7 +50,8 @@ ngOnInit(): void {
     this.Userposts = []
     const userid = sessionStorage.getItem("userid");
     this.userdetail = this.service.getdetails();
-    this.spinner.show();
+  //  this.spinner.show();
+  this.showloader = true;
      if(this.userdetail!=null && this.userdetail!=undefined){
            this.isfromSearch = (userid!=this.userdetail[0]?.userid);
             this.getimage(this.userdetail[0]?.userid);
@@ -65,8 +68,9 @@ ngOnInit(): void {
              this.savebiotext = this.bio?.replaceAll("-", "\n");
              if(this.userdetail[0]?.posts[0]?.image!=null && this.userdetail[0]?.posts[0]?.image!=undefined){
               this.post = this.userdetail[0].posts?.length;
-              this.spinner.show();
-              for(let i=this.userdetail[0]?.posts.length-1;i>=0;i--){
+             // this.spinner.show();
+             this.showloader = true; 
+             for(let i=this.userdetail[0]?.posts.length-1;i>=0;i--){
                  var thumb = Buffer.from(this.userdetail[0]?.posts[i]?.image?.data).toString('base64');
                  var url = "data:"+this.userdetail[0]?.posts[i]?.image?.contentType+""+";base64,"+thumb;
                  this.Userposts.push(
@@ -75,13 +79,15 @@ ngOnInit(): void {
                     username:this.userdetail[0]?.username,
                     posturl:url,
                     imagename:this.userdetail[0]?.posts[i]?.name,
+                    postcaption:this.userdetail[0]?.posts[i]?.postcaption,
                     likes:this.userdetail[0]?.posts[i]?.likes,
                     commentdata: this.userdetail[0]?.posts[i]?.comments
                  }
                  );
                  if(i==0) {
-                  this.spinner.hide();
-                 }
+                  //this.spinner.hide();
+                  this.showloader = false; 
+                }
               }    
              }     
             
@@ -90,7 +96,8 @@ ngOnInit(): void {
                }
             }
   
-              this.spinner.hide();
+              //this.spinner.hide();
+              this.showloader = false; 
         
   }
 
@@ -105,8 +112,9 @@ storefile(event:any){
 }
 setprofilepic(){
    //const file = event.target.files[0];
-   this.spinner.show();
-  console.log(this.file); 
+   //this.spinner.show();
+  this.showloader = true;
+   console.log(this.file); 
    const id = sessionStorage.getItem("userid");
       const formdata = new FormData();
       formdata.append("image",this.file);
@@ -116,13 +124,15 @@ setprofilepic(){
       {
         next:(data)=>{
           console.log(data);
-          this.spinner.hide();
-          this.file="";
+         // this.spinner.hide();
+         this.showloader = false;
+         this.file="";
         window.location.reload();
           
         },
         error:(error)=>{
-          this.spinner.hide();
+          this.showloader = false;
+          //this.spinner.hide();
             alert("something went wrong")
         }
       }
@@ -130,7 +140,8 @@ setprofilepic(){
 }
 
 getimage(userid:any){
-  this.spinner.show();
+  //this.spinner.show();
+  this.showloader = true;
   this.service.getimage(userid).subscribe(
     {
       next:(data)=>{
@@ -140,10 +151,12 @@ getimage(userid:any){
             var thumb = Buffer.from(data.image.data).toString('base64');
             this.profileimgurl = "data:"+data.image.contentType+""+";base64,"+thumb;
           }
-          this.spinner.hide();
-      },
+          //this.spinner.hide();
+          this.showloader = false;
+        },
       error:(error)=>{
-        this.spinner.hide();
+        //this.spinner.hide();
+        this.showloader = false;
          alert("something went wrong")
       }
     }
@@ -190,7 +203,8 @@ editprofile(){
 }
 
 editprofilesubmit(){
-  this.spinner.show();
+  //this.spinner.show();
+  this.showloader = true;
   const userid = sessionStorage.getItem("userid");
  
   var reg = new RegExp(/(\r\n?|\n|\t)/g);
@@ -203,10 +217,12 @@ editprofilesubmit(){
        alert("Profile Updated")
         //  alert("unfollowed");     
        }
-       this.spinner.hide();
+      // this.spinner.hide();
+      this.showloader = false;
     },
     error:(error)=>{   
-      this.spinner.hide();
+      //this.spinner.hide();
+      this.showloader = false;
      alert("Something Went Wrong");
     }
   })
@@ -254,25 +270,29 @@ createpost(){
 openpost(post:any){
    this.openimgurl = post.posturl;
    this.imagename = post.imagename;
-   this.likes
+   this.postcaption = post.postcaption;
+  
    console.log(this.openimgurl);
    
 }
 
 deletepost(imagename:any){
-  this.spinner.show();
-  const id = sessionStorage.getItem("userid");
+ // this.spinner.show();
+ this.showloader = true; 
+ const id = sessionStorage.getItem("userid");
   this.service.deleteposts(id,imagename).subscribe({
     next:(data)=>{
         if(data=='post deleted'){
            alert("Successfully Deleted");
            this.onload();
-           this.spinner.hide();
-        }
+           //this.spinner.hide();
+         this.showloader = false;
+          }
        console.log(data);
     },
     error:(error)=>{
-      this.spinner.hide();
+      //this.spinner.hide();
+      this.showloader = false;
       alert("Something Went Wrong");
     }
   })
