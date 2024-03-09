@@ -28,8 +28,14 @@ profilehomepage = true;
 gender = ['Male','Female','Prefer not to say']
 savebiotext=''
 biodata:String[] = [];
-Userposts:Array<{userid:string,username:string,posturl:string}> = [];
+Userposts:Array<{userid:string,username:string,posturl:string,imagename:string,likes:Number,commentdata:{username:string,commenttext:string}}> = [];
 openimgurl = ''
+imagename = ''
+instantuploadedimgurl:string=''
+caption=''
+likes= 0;
+commentedby=''
+comment=''
 constructor(private router:Router,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService){  
           this.onload();
       }
@@ -39,6 +45,7 @@ ngOnInit(): void {
   }
 
   onload(){
+    this.Userposts = []
     const userid = sessionStorage.getItem("userid");
     this.userdetail = this.service.getdetails();
     this.spinner.show();
@@ -57,12 +64,21 @@ ngOnInit(): void {
   
              this.savebiotext = this.bio?.replaceAll("-", "\n");
              if(this.userdetail[0]?.posts[0]?.image!=null && this.userdetail[0]?.posts[0]?.image!=undefined){
-        
+              this.post = this.userdetail[0].posts?.length;
               this.spinner.show();
               for(let i=this.userdetail[0]?.posts.length-1;i>=0;i--){
                  var thumb = Buffer.from(this.userdetail[0]?.posts[i]?.image?.data).toString('base64');
                  var url = "data:"+this.userdetail[0]?.posts[i]?.image?.contentType+""+";base64,"+thumb;
-                 this.Userposts.push({userid:this.userdetail[0]?.userid,username:this.userdetail[0]?.username,posturl:url});
+                 this.Userposts.push(
+                  {
+                    userid:this.userdetail[0]?.userid,
+                    username:this.userdetail[0]?.username,
+                    posturl:url,
+                    imagename:this.userdetail[0]?.posts[i]?.name,
+                    likes:this.userdetail[0]?.posts[i]?.likes,
+                    commentdata: this.userdetail[0]?.posts[i]?.comments
+                 }
+                 );
                  if(i==0) {
                   this.spinner.hide();
                  }
@@ -199,15 +215,31 @@ editprofilesubmit(){
 
 Uploadpostimage(){
 
+  this.instantuploadedimgurl = ''
+  const reader = new FileReader();
+    reader.readAsDataURL(this.file); 
+    reader.onload = (_event) => { 
+        this.instantuploadedimgurl = reader.result.toString(); 
+    }
+ this.showsave = false;
+ this.showupload = true;
+}
+
+
+createpost(){
+
   const id = sessionStorage.getItem("userid");
   const formdata = new FormData();
   formdata.append("image",this.file);
-  formdata.append("userid",id);
- 
+  formdata.append("userid",id); 
+  formdata.append("caption",this.caption);
+  formdata.append("likes",this.likes.toString());
+  formdata.append("commentedby",this.commentedby);
+  formdata.append("comment",this.comment);
   this.service.saveposts(formdata).subscribe({
     next:(data)=>{
         if(data=='post saved'){
-           alert("Successfully Posted");
+          alert("Successfully posted")
            this.onload();
         }
        console.log(data);
@@ -217,13 +249,39 @@ Uploadpostimage(){
       alert("Something Went Wrong");
     }
   })
-
 }
 
 openpost(post:any){
    this.openimgurl = post.posturl;
+   this.imagename = post.imagename;
+   this.likes
    console.log(this.openimgurl);
    
 }
 
+deletepost(imagename:any){
+  this.spinner.show();
+  const id = sessionStorage.getItem("userid");
+  this.service.deleteposts(id,imagename).subscribe({
+    next:(data)=>{
+        if(data=='post deleted'){
+           alert("Successfully Deleted");
+           this.onload();
+           this.spinner.hide();
+        }
+       console.log(data);
+    },
+    error:(error)=>{
+      this.spinner.hide();
+      alert("Something Went Wrong");
+    }
+  })
+}
+
+create(){
+  this.showsave=false;
+  this.showupload = true;
+  this.instantuploadedimgurl = '';
+
+}
 }

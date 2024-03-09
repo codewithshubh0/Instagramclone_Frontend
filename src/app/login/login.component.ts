@@ -16,6 +16,10 @@ export class LoginComponent {
   constructor(private service:LoginsignupService,private router:Router,private spinner: NgxSpinnerService){}
   login(){
     this.spinner.show();
+    if(this.email=='' || this.password==''){
+      alert("Please fill all details")
+      return
+    }
     this.service.checkuser(this.email,this.password).subscribe(
       {
         next:(data)=>{

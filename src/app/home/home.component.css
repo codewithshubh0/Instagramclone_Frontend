@@ -205,5 +205,21 @@
     margin-top: 4%;
     border-radius: 8px;
 }
+
+.captioninput{
+    border: none;
+}
+
+.captioninput:focus{
+    border: none;
+    outline: none;
+}
    
+.share{
+    border: none;
+    background-color: white;
+    color: #0297c8;
+    font-weight: bold;
+    margin-left: 78px;
+}
 

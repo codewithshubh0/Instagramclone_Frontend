@@ -36,6 +36,11 @@ export class HomeComponent implements OnInit {
   file:any
 showsave:boolean = false;
 showupload:boolean = true;
+instantuploadedimgurl:string=''
+caption=''
+likes=0
+commentedby=''
+comment=''
   constructor(private router:Router,private renderer:Renderer2,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService){
     this.renderer.listen('window', 'click',(e:Event)=>{
    
@@ -223,24 +228,45 @@ showupload:boolean = true;
 
   Uploadpostimage(){
 
-      const id = sessionStorage.getItem("userid");
-      const formdata = new FormData();
-      formdata.append("image",this.file);
-      formdata.append("userid",id);
-     this.spinner.show()
-      this.service.saveposts(formdata).subscribe({
-        next:(data)=>{
-            if(data=='post saved'){
-               alert("Successfully Posted");
-               this.openuserprofile(id);
-            }
-           this.spinner.hide()
-        },
-        error:(error)=>{
-          this.spinner.hide();
-          alert("Something Went Wrong");
-        }
-      })
 
+    const reader = new FileReader();
+      reader.readAsDataURL(this.file); 
+      reader.onload = (_event) => { 
+          this.instantuploadedimgurl = reader.result.toString(); 
+      }
+  
+  }
+
+
+  create(){
+    this.showsave=false;
+    this.showupload = true;
+    this.instantuploadedimgurl = '';
+
+  }
+
+  createpost(){
+
+    const id = sessionStorage.getItem("userid");
+    const formdata = new FormData();
+    formdata.append("image",this.file);
+    formdata.append("userid",id); 
+    formdata.append("caption",this.caption);
+    formdata.append("likes",this.likes.toString());
+    formdata.append("commentedby",this.commentedby);
+    formdata.append("comment",this.comment);
+    this.service.saveposts(formdata).subscribe({
+      next:(data)=>{
+          if(data=='post saved'){
+            alert("Successfully posted")
+             
+          }
+         console.log(data);
+      },
+      error:(error)=>{
+     //   this.spinner.hide();
+        alert("Something Went Wrong");
+      }
+    })
   }
 }

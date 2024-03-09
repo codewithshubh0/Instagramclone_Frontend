@@ -244,3 +244,35 @@ figure:hover figcaption{
    color: #fff;
   }
 }
+
+
+
+.createnewpost{
+    font-size: 17px;
+     font-weight: 600;
+     cursor: auto;
+     border-bottom: 1px solid #c6c6c6;
+     width: 100%;
+     text-align: center;
+     border-top-left-radius: 18px;
+     border-top-right-radius: 18px;
+     padding: 11px;
+}
+
+
+.captioninput{
+    border: none;
+}
+
+.captioninput:focus{
+    border: none;
+    outline: none;
+}
+   
+.share{
+    border: none;
+    background-color: white;
+    color: #0297c8;
+    font-weight: bold;
+    margin-left: 78px;
+}

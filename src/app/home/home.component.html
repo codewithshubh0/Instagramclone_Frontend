@@ -23,7 +23,7 @@
             <div class="menu"><i class="fa-solid fa-clapperboard menuicon"></i><span>Reels</span></div>
             <div class="menu"><i class="fa-brands fa-facebook-messenger menuicon"></i><span>Messages</span></div>
             <div class="menu"><i class="fa-regular fa-heart menuicon"></i><span>Notifications</span></div>
-            <div class="menu" data-bs-toggle="modal" data-bs-target="#PostModal" ><i class="fa-regular fa-square-plus menuicon"></i><span>Create</span></div>
+            <div class="menu" data-bs-toggle="modal" data-bs-target="#PostModal" (click)="create()" ><i class="fa-regular fa-square-plus menuicon"></i><span>Create</span></div>
             <div [ngStyle]="{'backgroundColor':profilepageselected && !Searchpageselected?isdark?'#282828':'rgb(233, 233, 233)':'','fontWeight':profilepageselected && !Searchpageselected?'bold':''}" class="menu" (click)="showprofilepage()"><img [ngStyle]="{'border':profilepageselected?'2px solid black':'none'}" [src]="profilepicurl" class="profilepicmenu"><span>Profile</span></div>
             
             <div #moreoption class="menu" style="margin-top: 48px;" (click)="showmore()"><i #moreoption1 class="fa-solid fa-bars menuicon"></i><span #moreoption2 class="more">More
@@ -261,7 +261,7 @@
             <div  class="selectpost">
               
              <label style="cursor: pointer;" *ngIf="showupload" for="uploadpic"> Select from computer </label>
-             <label *ngIf="showsave" style="cursor: pointer;color: rgb(137, 227, 2);" data-bs-dismiss="modal"  (click)="Uploadpostimage()" > Upload Photo </label>
+             <label *ngIf="showsave" style="cursor: pointer;" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#openpostmodalwhenupload"   (click)="Uploadpostimage()" > Upload Photo </label>
              <input (change)="storefile($event)" style="display: none;" type="file" id="uploadpic" />
            </div>
             <!-- <div  data-bs-dismiss="modal"  class="settinglinkslast" style="border-bottom-left-radius: 18px;border-bottom-right-radius: 18px;">Cancel</div> -->
@@ -272,6 +272,31 @@
  </div>
 
 
+ <div class="modal fade" id="openpostmodalwhenupload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered modal-xl">
+     <div class="modal-content" style="height: 500px ; margin: auto;width: 74%;">
+       <div class="modal-body">
+         <div class="row">
+            <div class="col-7" style="height: 470px;background-color: #f0f0f0fc"><img style="max-width: 100%;height: 100%; object-fit: contain;display: block;margin: auto;"[src]="instantuploadedimgurl" /></div>
+            <div class="col">
+             <div>
+                 <div class="profilepicinpost">
+                     <img [src]="profilepicurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+                     <span style="font-weight: bold;margin-left: 18px;">{{AccountName}}</span>
+                     <button class="share" (click)="createpost()" data-bs-dismiss="modal" >Share</button>
+                 </div>
+                 <div style="margin-top: 22px;">
+                  <input class="captioninput" [(ngModel)]="caption" style="border: none;" type="text" placeholder="Write a caption" />
+                 </div>
+             </div>
+             <div></div>
+             <div></div>
+            </div>
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
 <!-- for responsive navbar menu  -->
 <!-- <nav class="navbar fixed-bottom navbar-expand-lg bg-primary navbar-dark">
    <div class="container-fluid">
