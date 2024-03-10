@@ -2,7 +2,7 @@
 <div >
     <div class="row" [ngStyle]="{'backgroundColor':isdark?'black':'white','color':isdark?'white':'black'}">
        
-      <div style="height: 100vh; border: 1px solid #c9c8c8;position: fixed;border-top: none;" class="col-2">
+      <div *ngIf="!navbarformobile" style="height: 100vh; border: 1px solid #c9c8c8;position: fixed;border-top: none;" class="col-2">
         <img  [ngStyle]="{'filter':isdark?'invert(1)':'none'}" style="height: 35px;margin-top: 40px;margin-bottom: 22px;margin-left: 18px;" src="../../assets/loginlogo.png"/>
         <div style="width: 97%;margin: 10px auto;height: 100vh;margin-left: 10px">
             <div [ngStyle]="{'backgroundColor':homeoptionselected && !Searchpageselected?isdark?'#282828':'rgb(233, 233, 233)':'','fontWeight':homeoptionselected && !Searchpageselected?'bold':'','color':homeoptionselected?isdark?'white':'':''}" class="menu" (click)="showhomepage()"><i class="fa-solid fa-house menuicon"></i><span>Home</span></div>
@@ -56,7 +56,7 @@
         </div> 
       </div>
    
-      <div *ngIf="homeoptionselected" style="height: 200vh;margin-left: 250px;" class="col-6">
+      <div *ngIf="homeoptionselected && !mobileview" [ngStyle]="{'height': '200vh','margin-left':!homepageformobile?'250px':''}" class="col-6">
          <div style=" margin-top: 29px;">
             <div class="postbox">
                 <div class="row userdetail">
@@ -208,7 +208,167 @@
   </div>
          </div>
       </div>
-      <div *ngIf="homeoptionselected" style="height: 100vh;" class="col-4">        
+
+
+      <div *ngIf="homeoptionselected && mobileview" [ngStyle]="{'height': '200vh','margin-left':!homepageformobile?'250px':''}" class="col-6">
+        <div style=" margin-top: 29px;">
+           <div class="postbox">
+               <div class="row userdetail">
+                 <div class="inneruserdetail" style="display: flex;">
+                  <span><img [src]="defaultpicurl" class="postsimage"></span>
+                  <span>UserName</span>
+                  <span>.Timestamp</span>
+                  <span>.follow</span>
+                 </div>
+               </div>
+               <div class="row postmobile">
+                  <img src="../../assets/post1.jpg"/>
+               </div>
+               <div class="row likesandcommentmobile">
+                 <div class="innerlikesandcommentmobile">
+                   <span  (click)="like()" *ngIf="!liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+                   <span (click)="like()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
+                   <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
+                   <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
+                   <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
+                   <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;" class="fa-solid fa-bookmark menuiconpost"></i></span>
+                   
+                  </div>
+                  <p>n likes</p>
+                  <p>Captions</p>
+                  <input class="commentinput" type="text" placeholder="Add a comment" />
+               </div>
+              
+           </div>
+
+
+           <div class="postbox">
+            <div class="row userdetail">
+              <div class="inneruserdetail" style="display: flex;">
+               <span><img [src]="defaultpicurl" class="postsimage"></span>
+               <span>UserName</span>
+               <span>.Timestamp</span>
+               <span>.follow</span>
+              </div>
+            </div>
+            <div class="row postmobile">
+               <img src="../../assets/post2.jpg"/>
+            </div>
+            <div class="row likesandcommentmobile">
+              <div class="innerlikesandcommentmobile">
+                <span  (click)="like()" *ngIf="!liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+                <span (click)="like()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
+                <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
+                <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
+                <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
+                <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;" class="fa-solid fa-bookmark menuiconpost"></i></span>
+                
+               </div>
+               <p>n likes</p>
+               <p>Captions</p>
+               <input class="commentinput" type="text" placeholder="Add a comment" />
+            </div>
+           
+        </div>
+
+           
+        <div class="postbox">
+          <div class="row userdetail">
+            <div class="inneruserdetail" style="display: flex;">
+             <span><img [src]="defaultpicurl" class="postsimage"></span>
+             <span>UserName</span>
+             <span>.Timestamp</span>
+             <span>.follow</span>
+            </div>
+          </div>
+          <div class="row postmobile">
+             <img src="../../assets/post3.jpg"/>
+          </div>
+          <div class="row likesandcommentmobile">
+            <div class="innerlikesandcommentmobile">
+              <span  (click)="like()" *ngIf="!liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+              <span (click)="like()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
+              <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
+              <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
+              <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
+              <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;" class="fa-solid fa-bookmark menuiconpost"></i></span>
+              
+             </div>
+             <p>n likes</p>
+             <p>Captions</p>
+             <input class="commentinput" type="text" placeholder="Add a comment" />
+          </div>
+         
+      </div>
+
+           
+      <div class="postbox">
+        <div class="row userdetail">
+          <div class="inneruserdetail" style="display: flex;">
+           <span><img [src]="defaultpicurl" class="postsimage"></span>
+           <span>UserName</span>
+           <span>.Timestamp</span>
+           <span>.follow</span>
+          </div>
+        </div>
+        <div class="row postmobile">
+           <img src="../../assets/post4.jpg"/>
+        </div>
+        <div class="row likesandcommentmobile">
+          <div class="innerlikesandcommentmobile">
+            <span  (click)="like()" *ngIf="!liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+            <span (click)="like()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
+            <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
+            <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
+            <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
+            <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;" class="fa-solid fa-bookmark menuiconpost"></i></span>
+            
+           </div>
+           <p>n likes</p>
+           <p>Captions</p>
+           <input class="commentinput" type="text" placeholder="Add a comment" />
+        </div>
+       
+    </div>
+           
+    <div class="postbox">
+      <div class="row userdetail">
+        <div class="inneruserdetail" style="display: flex;">
+         <span><img [src]="defaultpicurl" class="postsimage"></span>
+         <span>UserName</span>
+         <span>.Timestamp</span>
+         <span>.follow</span>
+        </div>
+      </div>
+      <div class="row postmobile">
+         <img src="../../assets/post5.jpg"/>
+      </div>
+      <div class="row likesandcommentmobile">
+        <div class="innerlikesandcommentmobile">
+          <span  (click)="like()" *ngIf="!liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+          <span (click)="like()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
+          <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
+          <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
+          <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
+          <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;" class="fa-solid fa-bookmark menuiconpost"></i></span>
+          
+         </div>
+         <p>n likes</p>
+         <p>Captions</p>
+         <input class="commentinput" type="text" placeholder="Add a comment" />
+      </div>
+     
+  </div>
+        </div>
+     </div>
+
+
+
+
+
+
+
+      <div *ngIf="homeoptionselected && !suggestionsforMobile" style="height: 100vh;" class="col-4">        
          <div style="margin-top: 27px;margin-left: 73px;font-size: 13px;">
             <div class="suggestionaccount" style="margin-bottom: 30px;margin-left: -9px;"><img [src]="profilepicurl" class="profilepicmenu2"><span>{{AccountName}}</span><span class="followlink">Switch</span></div>
             <div style="width: 73%;margin-bottom: 4px; ">
@@ -219,10 +379,10 @@
          </div>
       </div>
 
-      <div *ngIf="profilepageselected" style="margin-left: 250px;" class="col">
+      <div *ngIf="profilepageselected" [ngStyle]="{'margin-left':!homepageformobile?'250px':''}" class="col">
          <app-profilepage></app-profilepage>
       </div>
-      <div *ngIf="profilepageforsearch" style="margin-left: 250px;" class="col">
+      <div *ngIf="profilepageforsearch"  [ngStyle]="{'margin-left':!homepageformobile?'250px':''}" class="col">
          <app-profilepage></app-profilepage>
       </div>
     </div>
@@ -299,13 +459,12 @@
    </div>
  </div>
 <!-- for responsive navbar menu  -->
-<!-- <nav class="navbar fixed-bottom navbar-expand-lg bg-primary navbar-dark">
+<nav *ngIf="navbarformobile" class="navbar fixed-bottom navbar-expand-lg bg-primary navbar-dark">
    <div class="container-fluid">
-     <a class="navbar-brand" href="#">Brand</a>
-     <a class="navbar-brand" href="#">Brand</a>
-     <a class="navbar-brand" href="#">Brand</a>
-     <a class="navbar-brand" href="#">Brand</a>
-     <a class="navbar-brand" href="#">Brand</a>
-     <a class="navbar-brand" href="#">Brand</a>
+     <div class="navbar-brand" (click)="showhomepage()" ><i class="fa-solid fa-house menuicon"></i></div>
+     <div class="navbar-brand" ><i class="fa-solid fa-magnifying-glass menuicon"></i></div>
+     <div class="navbar-brand" > <i class="fa-regular fa-square-plus menuicon"></i></div> 
+     <div class="navbar-brand" ><i class="fa-brands fa-facebook-messenger menuicon"></i></div>
+     <div class="navbar-brand" (click)="showprofilepage()" ><img [ngStyle]="{'border':profilepageselected?'2px solid black':'none'}" [src]="profilepicurl" class="profilepicmenu"/></div>
    </div>
- </nav> -->
+ </nav>

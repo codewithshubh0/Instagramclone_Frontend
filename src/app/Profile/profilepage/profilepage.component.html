@@ -1,6 +1,6 @@
 <mat-progress-bar *ngIf="showloader" mode="indeterminate" color="accent"></mat-progress-bar>
 <div  *ngIf="profilehomepage">
-<div style="margin-top: 23px;width: 65%;margin: 0 auto;">
+<div *ngIf="!mobileview"  [ngStyle]="{'margin-top': '23px','width':!mobileview?'65%':'','margin': '0 auto'}">
     <div class="row" style="height: 30vh;">
         <div class="col-3" >
            <img   *ngIf="!isfromSearch" data-bs-toggle="modal" data-bs-target="#profilepicmodal" [src]="profileimgurl" style="width: 150px;height: 150px;border-radius: 50%;margin-top: 29px;cursor: pointer;object-fit: contain;" />
@@ -27,7 +27,40 @@
         </div>
     </div>
 </div>
-<div *ngIf="Userposts.length!=0" style="width: 74%;margin: 0 auto;">
+
+<div *ngIf="mobileview"  [ngStyle]="{'margin-top': '23px','width':'100%','margin': '0 auto'}">
+    <div class="row" style="height: 30vh;">
+      <div class="mobileaccountname">{{AccountName}}</div>
+        <div class="col-3" >
+           <img   *ngIf="!isfromSearch" data-bs-toggle="modal" data-bs-target="#profilepicmodal" [src]="profileimgurl" class="mobileprofilepic" />
+           <img  *ngIf="isfromSearch"  [src]="profileimgurl" class="mobileprofilepic" />
+          
+          </div>
+          <div class="col">
+            <div  style="display: flex;margin-left: 33px;margin-top: 78px;">
+              <div style="margin-right: 16px;"><p style="font-weight: bold;margin-bottom: 0px;text-align: center;">{{post}}</p> Posts</div>
+              <div style="margin-right: 16px;"><p style="font-weight: bold;margin-bottom: 0px;text-align: center;">{{follower}}</p> Followers</div>
+              <div style="margin-right: 16px;"><p style="font-weight: bold;margin-bottom: 0px;text-align: center;">{{following}}</p> Following</div>
+             </div>
+          </div>
+        <div class="col">
+            <div style="display: flex;margin-left: 11px;margin-top: 32px;">
+                
+                <div class="editandviewmobile" (click)="editprofile()" *ngIf="!isfromSearch">Edit profile</div>
+                <div (click)="follow()" class="follow" *ngIf="isfromSearch && !isfollowing">Follow</div>
+                <div data-bs-toggle="modal" data-bs-target="#unfollowmodel" class="follow" *ngIf="isfromSearch && isfollowing">Following</div>
+                <div class="editandviewmobile">View archive</div>
+                <div data-bs-toggle="modal" data-bs-target="#settingsModal" ><img src="../../../assets/settings.png" style="width: 33px;height: 28px;margin-left: -7px;cursor: pointer;"/></div>
+            </div>
+            <div style="margin-left: 48px;" *ngFor="let d of biodata" >
+              <div>{{d}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="!mobileview && Userposts.length!=0" style="width: 74%;margin: 0 auto;">
     <div class="row" style="height: 28vh;border-bottom: 1px solid #d7d6d6;">
         <div class="col-2" style="width: 12%;">
            <!-- <img src="../../../assets/post1.jpg" style="width: 100px;height: 100px;border-radius: 50%;margin-top: 29px" /> -->
@@ -47,7 +80,27 @@
     </div>
 </div>
 
-<div style="margin-top: 23px;width: 74%;margin: 58px auto;">
+<div *ngIf="mobileview && Userposts.length!=0" style="margin: 0 auto;">
+  <div class="row" style="height: 28vh;border-bottom: 1px solid #d7d6d6;margin-left: 5px ">
+      <div class="col-3" >
+         <!-- <img src="../../../assets/post1.jpg" style="width: 100px;height: 100px;border-radius: 50%;margin-top: 29px" /> -->
+         <div class="mobilehighlightimage"></div>
+         <p class="highlightname">Highlight1</p>
+      </div>
+      <div class="col-3" >
+          <!-- <img src="../../../assets/post1.jpg" style="width: 100px;height: 100px;border-radius: 50%;margin-top: 29px" /> -->
+         <div class="mobilehighlightimage"></div>
+         <p class="highlightname">Highlight2</p>
+       </div>
+       <div class="col-3">
+         <!-- <img src="../../../assets/post1.jpg" style="width: 100px;height: 100px;border-radius: 50%;margin-top: 29px" /> -->
+         <div class="mobilehighlightimage"></div>
+         <p class="highlightname">Highlight3</p>
+       </div>
+  </div>
+</div>
+
+<div *ngIf="!mobileview" style="margin-top: 23px;width: 74%;margin: 58px auto;">
     <div class="row" style="height: 42vh;" >
       <div *ngIf="Userposts.length==0">
          <div style="width: 231px;margin: 0 auto;">
@@ -59,12 +112,29 @@
           <div class="col-4 "  style="margin-bottom: 23px;height: 100%;" *ngFor="let post of Userposts" ><div  data-bs-toggle="modal" data-bs-target="#openpostmodal" (click)="openpost(post)" class="postimg">
             <figure>  
               <img  style="max-width: 100%;height: 281px; object-fit: contain;display: block;margin: auto;" [src]="post.posturl"/>
-              <figcaption><div>{{post.likes.length}}</div></figcaption>
+              <figcaption><p> <i class="fa-solid fa-heart likes"></i> {{post.likes.length}} <i style="transform: scaleX(-1);" class="fa-solid fa-comment comment"></i> {{post.commentdata.length}}</p> </figcaption>
             </figure>
             </div>
           </div>
       <!-- </div> -->
     </div>
+</div>
+
+<div *ngIf="mobileview" style="margin-top: 23px;width: 100%;margin: 58px auto;">
+  <div class="row" style="height: 31vh;" >
+    <div *ngIf="Userposts.length==0">
+       <div style="width: 231px;margin: 0 auto;">
+           <img style="width: 100px;margin-left: 49px;" src="../../../assets/nopost.png"/>
+           <p style="font-weight: bold;font-size:37px;">No Posts Yet</p>
+       </div>
+    </div> 
+    <!-- <div *ngIf="Userposts.length!=0">  -->
+        <div class="col-4"  style="height: fit-content;" *ngFor="let post of Userposts" ><div  data-bs-toggle="modal" data-bs-target="#openpostmodal" (click)="openpost(post)" class="postimgmobile">    
+            <img  style="max-width: 100%;height: inherit; object-fit: contain;display: block;margin: auto;" [src]="post.posturl"/>
+          </div>
+        </div>
+    <!-- </div> -->
+  </div>
 </div>
   
   <!-- Modal -->
@@ -217,15 +287,16 @@
                 </div> 
                 <div>
                   <div style="margin-top: 12px" class="innerlikesandcomment">
-                    <span (click)="savelikes()"><i  class="fa-regular fa-heart menuiconpost"></i></span>
-                    <!-- <span (click)="like()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span> -->
+                    <span (click)="savelikes()" *ngIf="!liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+                    <span (click)="dislike()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span> 
                     <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
                     <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
                     <span ><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
                     <!-- <span ><i style="float: right;" class="fa-solid fa-bookmark menuiconpost"></i></span>    -->
                    </div>
                 </div>
-                <p style="margin-top: 10px;font-weight: 500;">{{likes}} likes</p>
+                <p *ngIf="likes>0" style="margin-top: 10px;font-weight: 500;">{{likes}} likes</p>
+                <p *ngIf="likes==0" style="margin-top: 10px;font-weight: 500;">Be the first to like this</p>
                 <div style="border-top: 1px solid #e2e2e2;margin-left: -12px;"><textarea class="commentinput" style="border: none;margin-top: 19px;margin-left: 13px;width: 401px"  (keyup)="addcomment()" [(ngModel)]="usercomment" type="text" placeholder="Add a comment..."></textarea>
                   <span  (click)="postcomment()" *ngIf="showpost" style="color: #0087e5;float: right;font-size: 16px;margin-right: 20px;font-weight: 500;margin-top: 19px;cursor: pointer;">Post</span></div>
             </div>

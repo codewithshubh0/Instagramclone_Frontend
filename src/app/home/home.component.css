@@ -84,15 +84,27 @@
     width: 100%;
     
 }
+.postmobile{
+    width: 292%;
+}
 .likesandcomment{
     height: 100px;
     width: 100%;
     display: flex;
   
 }
+
+.likesandcommentmobile{
+    width: 322px 
+}
 .innerlikesandcomment{
     flex: 1;
     margin-top: 15px;
+}
+
+.innerlikesandcommentmobile{
+    margin-top: 15px;
+    width: 296px 
 }
 /* .moremenu:hover{
     background-color: rgb(233, 233, 233);

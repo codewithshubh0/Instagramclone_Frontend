@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ProfileService } from '../Services/profile.service';
 import { Buffer } from 'buffer';
 import { JsonPipe, ViewportScroller } from '@angular/common';
+import { HostListener } from "@angular/core";
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -42,6 +43,13 @@ caption=''
 likes=0
 commentedby=''
 comment=''
+
+  screenHeight: number;
+  screenWidth: number;
+  navbarformobile = false;
+  suggestionsforMobile = false;
+  homepageformobile = false;
+  mobileview = false;
   constructor(private router:Router,private renderer:Renderer2,private service:ProfileService,private scroller:ViewportScroller){
     this.renderer.listen('window', 'click',(e:Event)=>{
    
@@ -51,7 +59,7 @@ comment=''
 
     
      var userdetails = JSON.parse(sessionStorage.getItem("userdetails"));
-    
+     this.getScreenSize();
  });
   }
   ngOnInit(): void {
@@ -105,6 +113,25 @@ comment=''
     )
   }
   }
+
+
+  @HostListener('window:resize', ['$event'])
+    getScreenSize(event?) {
+          this.screenHeight = window.innerHeight;
+          this.screenWidth = window.innerWidth;
+
+          if(this.screenWidth<500){
+            this.suggestionsforMobile = true;
+            this.navbarformobile = true;
+            this.homepageformobile = true;
+            this.mobileview = true;
+          }else{
+            this.suggestionsforMobile = false;
+            this.navbarformobile = false;
+            this.homepageformobile = false;
+            this.mobileview = false
+          }
+    }
   showmore(){
     this.showmoredropdown = !this.showmoredropdown;
   }

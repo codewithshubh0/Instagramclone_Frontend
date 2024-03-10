@@ -4,6 +4,7 @@ import { ProfileService } from 'src/app/Services/profile.service';
 import { Buffer } from 'buffer';
 import { ViewportScroller } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { HostListener } from "@angular/core";
 @Component({
   selector: 'app-profilepage',
   templateUrl: './profilepage.component.html',
@@ -44,14 +45,32 @@ postcaption=''
 postuserid= ''
 usercomment = ''
 showpost = false
+liked = false;
+screenHeight: number;
+screenWidth: number;
+homepageformobile = false;
+mobileview = false;
 constructor(private router:Router,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService){  
           this.onload();
+          this.getScreenSize();
       }
   
 ngOnInit(): void {
    this.scroller.scrollToPosition([0,0])
   }
+  @HostListener('window:resize', ['$event'])
+    getScreenSize(event?) {
+          this.screenHeight = window.innerHeight;
+          this.screenWidth = window.innerWidth;
 
+          if(this.screenWidth<500){
+            this.mobileview = true;
+            this.homepageformobile = true;
+          }else{
+            this.mobileview = false;
+            this.homepageformobile = false;
+          }
+    }
   onload(){
     this.Userposts = []
     const userid = sessionStorage.getItem("userid");
@@ -84,11 +103,11 @@ ngOnInit(): void {
                        const commentuserid = this.userdetail[0]?.posts[i]?.comments[j]?.userid
                       const commenttext = this.userdetail[0]?.posts[i]?.comments[j]?.commenttext;
 
-                      
+                      this.commentdetails = []
                       this.service.getimage(commentuserid).subscribe(
                         {
                           next:(data)=>{
-                              if(data!='not found' && data!=null && data!=undefined){
+                              if(data!=null && data.image!=null){
                                 var thumb = Buffer.from(data.image.data).toString('base64');
                                 var imgurl = "data:"+data.image.contentType+""+";base64,"+thumb;
                                 this.commentdetails.push({username:data.username,imageurl:imgurl,commenttext:commenttext})
@@ -306,6 +325,7 @@ createpost(){
 }
 
 openpost(post:any){
+  this.liked = false;
    this.openimgurl = post.posturl;
    this.imagename = post.imagename;
    this.postcaption = post.postcaption;
@@ -314,6 +334,18 @@ openpost(post:any){
    this.showpost = false;
    this.usercomment = ''
    this.commentdetails = post.commentdata
+
+  
+   const id = sessionStorage.getItem("userid");
+    if(this.likes>0){
+      post.likes.forEach(item =>{
+        if( item.indexOf(id)>=0){
+          this.liked = true;
+        }
+      });
+    }  
+   
+   
   // console.log(this.openimgurl);
    
 }
@@ -349,13 +381,18 @@ create(){
 
 savelikes(){
   this.likes++;
+  this.showloader = true;
   const id = sessionStorage.getItem("userid");
   this.service.savelikes(this.postuserid,this.imagename,id).subscribe({
     next:(data)=>{
     //  console.log("like saved");
-      
+    if(data){
+      this.liked = true;
+    }
+ this.showloader = false;
     },
     error:(error)=>{
+      this.showloader = false;
        alert("something went wrong");
     }
   })
@@ -412,6 +449,25 @@ postcomment(){
         this.showloader = false;
          alert("something went wrong");
       }
+  })
+}
+
+dislike(){
+  this.likes--;
+this.showloader = true;
+  const id = sessionStorage.getItem("userid");
+  this.service.savedislikes(this.postuserid,this.imagename,id).subscribe({
+    next:(data)=>{
+    //  console.log("like saved");
+      if(data){
+        this.liked = false;
+      }
+      this.showloader = false;
+    },
+    error:(error)=>{
+      this.showloader = false;
+       alert("something went wrong");
+    }
   })
 }
 }

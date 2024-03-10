@@ -9,6 +9,15 @@
     margin-top: 29px;
     cursor: pointer;
 }
+
+.mobilehighlightimage{width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    border: 1px solid grey;
+    margin-top: 47px;
+    cursor: pointer;
+}
+
 .highlightname{
     text-align: center;
     font-size: 14px;
@@ -23,6 +32,15 @@
     cursor: pointer;
     font-weight: 600;
     font-size: 14px;
+}
+.editandviewmobile{
+    margin-right: 16px;
+    background-color: #e4e4e4;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 5px 36px 
 }
 .follow{
     margin-right: 16px;
@@ -194,6 +212,15 @@
     transition: 1s;
 }
 
+.postimgmobile{
+    cursor: pointer;
+    /* height: 102%; */
+    height:17vh;
+    border-radius: 1px;
+    box-shadow: 0px 0px 3px #a9a9a9;
+    width: 118%;
+}
+
 .profilepicinpost{
     width: 102%;
     margin: 0 auto;
@@ -203,8 +230,22 @@
 /* .postimg:hover{
    transform: scale(1.1);
 } */
-
-
+.mobileprofilepic{
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    margin-top: 63px;
+    cursor: pointer;
+    object-fit: contain;
+    margin-left: 15px 
+}
+.mobileaccountname{
+    margin-right: 16px;
+    font-size: 19px;
+    margin-top: 16px;
+    margin-left: 13px;
+    margin-bottom: -33px 
+}
 
 figure {
   display: grid;
@@ -217,21 +258,19 @@ figure > * {
   transition: .4s;
 }
 figure figcaption {
-  display: grid;
-  align-items: end;
-  font-family: sans-serif;
-  font-size: 2.3rem;
-  font-weight: bold;
-  color: #0000;
-  padding: .75rem;
-  background: var(--c,#0009);
-  clip-path: inset(0 var(--_i,100%) 0 0);
-  -webkit-mask:
-    linear-gradient(#000 0 0),
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  -webkit-mask-clip: text, padding-box;
-  margin: -1px;
+    display: grid;
+    align-items: center;
+    font-family: sans-serif;
+    padding-left: 66px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #fff;
+    background: var(--c, #0009);
+    clip-path: inset(0 var(--_i, 100%) 0 0);
+    -webkit-mask: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+    -webkit-mask-clip: text, padding-box;
+    margin: -1px;
+    /* --_i: 0%; */
 }
 figure:hover figcaption{
   --_i: 0%;
@@ -281,6 +320,18 @@ figure:hover figcaption{
     font-size: 24px;
     margin-right: 17px;
     cursor: pointer;
+}
+.likes{
+    font-size: 24px;
+    margin-right: 2px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.comment{
+    font-size: 24px;
+    margin-right: 2px;
+    cursor: pointer;
+    margin-left: 38px;
 }
 
 .commentinput{
