@@ -3,8 +3,8 @@
 <div style="margin-top: 23px;width: 65%;margin: 0 auto;">
     <div class="row" style="height: 30vh;">
         <div class="col-3" >
-           <img   *ngIf="!isfromSearch" data-bs-toggle="modal" data-bs-target="#profilepicmodal" [src]="profileimgurl" style="width: 150px;height: 150px;border-radius: 50%;margin-top: 29px;cursor: pointer;" />
-           <img  *ngIf="isfromSearch"  [src]="profileimgurl" style="width: 150px;height: 150px;border-radius: 50%;margin-top: 29px;" />
+           <img   *ngIf="!isfromSearch" data-bs-toggle="modal" data-bs-target="#profilepicmodal" [src]="profileimgurl" style="width: 150px;height: 150px;border-radius: 50%;margin-top: 29px;cursor: pointer;object-fit: contain;" />
+           <img  *ngIf="isfromSearch"  [src]="profileimgurl" style="width: 150px;height: 150px;border-radius: 50%;margin-top: 29px;object-fit: contain;" />
           
           </div>
         <div class="col">
@@ -56,10 +56,10 @@
          </div>
       </div> 
       <!-- <div *ngIf="Userposts.length!=0">  -->
-          <div class="col-4 " *ngIf="Userposts.length!=0" style="margin-bottom: 23px;height: 100%;" ><div *ngFor="let post of Userposts" data-bs-toggle="modal" data-bs-target="#openpostmodal" (click)="openpost(post)" class="postimg">
+          <div class="col-4 "  style="margin-bottom: 23px;height: 100%;" *ngFor="let post of Userposts" ><div  data-bs-toggle="modal" data-bs-target="#openpostmodal" (click)="openpost(post)" class="postimg">
             <figure>  
-              <img  style="max-width: 100%;height: 100%; object-fit: contain;display: block;margin: auto;" [src]="post.posturl"/>
-              <figcaption><div>ddd</div></figcaption>
+              <img  style="max-width: 100%;height: 281px; object-fit: contain;display: block;margin: auto;" [src]="post.posturl"/>
+              <figcaption><div>{{post.likes.length}}</div></figcaption>
             </figure>
             </div>
           </div>
@@ -191,7 +191,7 @@
     <div class="modal-content" style="height: 636px ; margin: auto;">
       <div class="modal-body">
         <div class="row">
-           <div class="col-7" style="height: 634px;background-color: #f0f0f0fc"><img style="max-width: 100%;height: 100%; object-fit: contain;margin: auto;display: block;"[src]="openimgurl" /></div>
+           <div class="col-7" style="height: 634px;background-color: #f0f0f0fc;border-top-left-radius: 10px; border-bottom-left-radius: 10px;"><img style="max-width: 100%;height: 100%; object-fit: contain;margin: auto;display: block;"[src]="openimgurl" /></div>
            <div class="col">
             <div>
                 <div style="border-bottom: 1px solid #e0e0e0;" class="profilepicinpost">
@@ -199,15 +199,25 @@
                     <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{AccountName}}</span>
                     <button style="float: right;border: none;background: none;font-size: 19px;" data-bs-toggle="modal" data-bs-target="#postmoreoption" ><i  class="fa-solid fa-ellipsis"></i></button>
                 </div>
-                <div style=" height: 59vh; border-bottom: 1px solid #e1e1e1;margin-bottom: 12px" class="profilepicinpost">
+                <div style="border-bottom: 1px solid #e1e1e1;margin-bottom: 12px;max-height: 142px;height: 140px;overflow-y: scroll;" class="profilepicinpost">
                   <img [src]="profileimgurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
                   <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{AccountName}}</span>
                   <span style="margin-left: 10px;max-width:200px;word-wrap:break-word;">{{postcaption?.substring(0,20)}}</span>
                   <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;">{{postcaption.length>20?postcaption.substring(20):""}}</p>
-                </div>
+                 </div>
+                 <div style="overflow-y: scroll;max-height: 253px;height: 253px ">
+                  <div *ngFor="let commentdet of commentdetails">
+                    <div style="padding-top: 0px; padding-bottom: 0px; " class="profilepicinpost">
+                      <img [src]="commentdet.imageurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+                      <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{commentdet.username}}</span>
+                      <span style="margin-left: 10px;max-width:200px;word-wrap:break-word;font-size: 13px">{{commentdet.commenttext?.substring(0,30)}}</span>
+                      <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;font-size: 13px">{{commentdet.commenttext.length>30?commentdet.commenttext.substring(30):""}}</p>
+                    </div> 
+                  </div>
+                </div> 
                 <div>
-                  <div class="innerlikesandcomment">
-                    <span ><i  class="fa-regular fa-heart menuiconpost"></i></span>
+                  <div style="margin-top: 12px" class="innerlikesandcomment">
+                    <span (click)="savelikes()"><i  class="fa-regular fa-heart menuiconpost"></i></span>
                     <!-- <span (click)="like()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span> -->
                     <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
                     <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
@@ -215,6 +225,9 @@
                     <!-- <span ><i style="float: right;" class="fa-solid fa-bookmark menuiconpost"></i></span>    -->
                    </div>
                 </div>
+                <p style="margin-top: 10px;font-weight: 500;">{{likes}} likes</p>
+                <div style="border-top: 1px solid #e2e2e2;margin-left: -12px;"><textarea class="commentinput" style="border: none;margin-top: 19px;margin-left: 13px;width: 401px"  (keyup)="addcomment()" [(ngModel)]="usercomment" type="text" placeholder="Add a comment..."></textarea>
+                  <span  (click)="postcomment()" *ngIf="showpost" style="color: #0087e5;float: right;font-size: 16px;margin-right: 20px;font-weight: 500;margin-top: 19px;cursor: pointer;">Post</span></div>
             </div>
             <div></div>
             <div></div>
@@ -240,7 +253,7 @@
                 </div>
 
                 <div style="margin-top: 22px;">
-                  <input class="captioninput" [(ngModel)]="caption" style="border: none;" type="text" placeholder="Write a caption" />
+                  <input class="captioninput" [(ngModel)]="caption" style="border: none;" type="text" placeholder="Write a caption..." />
                  </div>
             </div>
             <div></div>

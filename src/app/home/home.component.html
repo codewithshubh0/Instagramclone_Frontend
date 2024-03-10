@@ -263,7 +263,7 @@
               
              <label style="cursor: pointer;" *ngIf="showupload" for="uploadpic"> Select from computer </label>
              <label *ngIf="showsave" style="cursor: pointer;" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#openpostmodalwhenupload"   (click)="Uploadpostimage()" > Upload Photo </label>
-             <input (change)="storefile($event)" style="display: none;" type="file" id="uploadpic" />
+             <input #myInput (change)="storefile($event)" style="display: none;" type="file" id="uploadpic" />
            </div>
             <!-- <div  data-bs-dismiss="modal"  class="settinglinkslast" style="border-bottom-left-radius: 18px;border-bottom-right-radius: 18px;">Cancel</div> -->
          </div>

@@ -7,9 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class ProfileService {
 
-  // private url = "http://localhost:8000";
+  private url = "http://localhost:8000";
 
-  private url = "https://instagram-backend-igfs.onrender.com"
+  //private url = "https://instagram-backend-igfs.onrender.com"
 
   userdetails = {};
   constructor(private http:HttpClient) { }
@@ -58,5 +58,16 @@ export class ProfileService {
 
  deleteposts(userid:any,imagename:any):Observable<any>{
   return this.http.post<any[]>(this.url+"/activity/deletepost",{userid:userid,imagename:imagename});
+}
+
+savelikes(userid:any,imagename:any,likeuserid:any){
+  return this.http.post<any[]>(this.url+"/activity/savelikes",{userid:userid,imagename:imagename,like_userid:likeuserid});
+}
+
+savedislikes(userid:any,imagename:any,dislikeuserid:any){
+  return this.http.post<any[]>(this.url+"/activity/savedislikes",{userid:userid,imagename:imagename,dislike_userid:dislikeuserid});
+}
+addcomment(profileuserid:any,commentuserid:any,imagename:any,comment:any){
+  return this.http.post<any[]>(this.url+"/activity/addcomment",{profileuserid:profileuserid,commentuserid:commentuserid,imagename:imagename,comment:comment});
 }
 }

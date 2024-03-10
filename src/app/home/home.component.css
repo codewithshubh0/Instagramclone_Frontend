@@ -113,6 +113,7 @@
     height: 27px;
     width: 27px;
     border-radius: 50%;
+    object-fit: contain;
 }
 
 .profilepicmenu2{
@@ -121,6 +122,7 @@
     width: 43px;
     height: 43px;
     border-radius: 50%;
+    object-fit: contain;
 }
 
 .menuiconpost{

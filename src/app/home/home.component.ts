@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/cor
 import { Router } from '@angular/router';
 import { ProfileService } from '../Services/profile.service';
 import { Buffer } from 'buffer';
-import { ViewportScroller } from '@angular/common';
+import { JsonPipe, ViewportScroller } from '@angular/common';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -14,7 +14,8 @@ export class HomeComponent implements OnInit {
   @ViewChild('moreoption2') moreoption2: ElementRef;
   @ViewChild('moremenus') moremenus: ElementRef;
   @ViewChild('backopt') backopt: ElementRef;
-  
+  @ViewChild('myInput')
+seletedfile: ElementRef;
   
   showmoredropdown = false;
   liked = false;
@@ -188,7 +189,6 @@ comment=''
 
   openuserprofile(userid:any){
 
-    
     //this.spinner.show();
     this.showloader = true;
     this.Allusersfilter = []
@@ -197,6 +197,8 @@ comment=''
     this.service.getuserdetails(userid).subscribe({
       next:(data)=>{
         // console.log(JSON.stringify(data) +" details");
+       // console.log(JSON.stringify(data)+" getting data");
+        
          this.service.setuserdetails(data);
          this.showsearchbox = false;
          this.homeoptionselected = false;
@@ -220,19 +222,23 @@ comment=''
 
   storefile(event:any){
     this.file = event.target.files[0];
-    this.showsave = true;
     this.showupload = false;
+    this.showsave = true;
+   
   }
 
   Uploadpostimage(){
 
-
+   
     const reader = new FileReader();
       reader.readAsDataURL(this.file); 
       reader.onload = (_event) => { 
-          this.instantuploadedimgurl = reader.result.toString(); 
-      }
-  
+          this.instantuploadedimgurl = reader.result.toString();          
+        }
+
+        this.showsave = false;
+        this.showupload = true;
+      
   }
 
 
@@ -250,16 +256,16 @@ comment=''
     formdata.append("image",this.file);
     formdata.append("userid",id); 
     formdata.append("caption",this.caption);
-    formdata.append("likes",this.likes.toString());
-    formdata.append("commentedby",this.commentedby);
-    formdata.append("comment",this.comment);
+    // formdata.append("likes",this.likes.toString());
+    // formdata.append("commentedby",this.commentedby);
+    // formdata.append("comment",this.comment);
     this.service.saveposts(formdata).subscribe({
       next:(data)=>{
           if(data=='post saved'){
             alert("Successfully posted")
              
           }
-         console.log(data);
+         //console.log(data);
       },
       error:(error)=>{
      //   this.spinner.hide();
