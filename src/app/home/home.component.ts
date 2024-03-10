@@ -75,7 +75,7 @@ comment=''
               {
                 next:(data1)=>{
                  // console.log(data1);
-                    if(data1!=null && data1!=undefined && data1!="not found"){
+                    if(data1!=null && data1!=undefined && data1.image!=null){
                       var thumb = Buffer.from(data1.image.data).toString('base64');
                       var url = "data:"+data1.image.contentType+""+";base64,"+thumb;
                       this.Allusers.push({userid:d._id,username:d.username,imgurl:url});
@@ -144,7 +144,7 @@ comment=''
       {
         next:(data)=>{
            // console.log(data);
-            if(data!='not found' && data!=null && data!=undefined){
+            if(data!=null && data.image!=null){
               var thumb = Buffer.from(data.image.data).toString('base64');
               this.profilepicurl = "data:"+data.image.contentType+""+";base64,"+thumb;
             }

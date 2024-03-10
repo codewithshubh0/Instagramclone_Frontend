@@ -185,7 +185,7 @@ getimage(userid:any){
       next:(data)=>{
          // console.log(data);
        
-          if(data!='not found' && data!=null && data!=undefined){
+          if(data!=null && data.image!=null){
             var thumb = Buffer.from(data.image.data).toString('base64');
             this.profileimgurl = "data:"+data.image.contentType+""+";base64,"+thumb;
           }
@@ -386,7 +386,7 @@ postcomment(){
           this.service.getimage(id).subscribe(
             {
               next:(data)=>{
-                  if(data!='not found' && data!=null && data!=undefined){
+                  if(data!=null && data.image!=null){
                     var thumb = Buffer.from(data.image.data).toString('base64');
                     var imgurl = "data:"+data.image.contentType+""+";base64,"+thumb;
                     this.commentdetails.unshift({username:data.username,imageurl:imgurl,commenttext:this.usercomment})
