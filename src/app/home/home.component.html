@@ -240,9 +240,9 @@
                <p *ngIf="postdata.likes>0" style="margin-top: 10px;font-weight: 600;">{{(postdata.likes)}} likes</p>
                <p *ngIf="postdata.likes==0" style="margin-top: 10px;font-weight: 600;">Be the first to like this</p>
                <div style="display: flex;">
-                   <p style="margin-top: -4px;font-weight: 600; ">{{postdata.username}}</p><span style="margin-top: -4px ;margin-left: 10px;max-width:200px;word-wrap:break-word;">{{postdata.postcaption?.substring(0,20)}}</span>
+                   <p style="margin-top: -4px;font-weight: 600; ">{{postdata.username}}</p><span style="margin-top: -4px ;margin-left: 10px;max-width:200px;word-wrap:break-word;">{{postdata.postcaption?.substring(0,30)}}</span>
                 </div>
-               <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;">{{postdata.postcaption?.length>20?postdata.postcaption.substring(20):""}}</p>
+               <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;">{{postdata.postcaption?.length>30?postdata.postcaption.substring(30):""}}</p>
             
                <input class="commentinput" type="text" placeholder="Add a comment" />
             </div>
