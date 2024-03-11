@@ -4,6 +4,7 @@ import { ProfileService } from '../Services/profile.service';
 import { Buffer } from 'buffer';
 import { JsonPipe, ViewportScroller } from '@angular/common';
 import { HostListener } from "@angular/core";
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -36,21 +37,22 @@ seletedfile: ElementRef;
   profilepageforsearch = false;
   file:any
   showloader = false;
-showsave:boolean = false;
-showupload:boolean = true;
-instantuploadedimgurl:string=''
-caption=''
-likes=0
-commentedby=''
-comment=''
-
+  showsave:boolean = false;
+  showupload:boolean = true;
+  instantuploadedimgurl:string=''
+  caption=''
+  likes=0
+  commentedby=''
+  comment=''
   screenHeight: number;
   screenWidth: number;
   navbarformobile = false;
   suggestionsforMobile = false;
   homepageformobile = false;
   mobileview = false;
-  constructor(private router:Router,private renderer:Renderer2,private service:ProfileService,private scroller:ViewportScroller){
+  Randomposts:Array<{userid:string,username:string,posturl:string,imagename:string,postcaption:string,likes:number,commentdata:Array<{username:any,imageurl:any,commenttext:any}>,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}> = [];
+  commentdetails:Array<{username:any,imageurl:any,commenttext:any}> = []
+  constructor(private router:Router,private renderer:Renderer2,private service:ProfileService,private scroller:ViewportScroller,private datepipe:DatePipe){
     this.renderer.listen('window', 'click',(e:Event)=>{
    
      if( e.target !== this.moreoption?.nativeElement && e.target !== this.moreoption1?.nativeElement && e.target !== this.moreoption2?.nativeElement && e.target!==this.moremenus?.nativeElement){
@@ -63,26 +65,27 @@ comment=''
  });
   }
   ngOnInit(): void {
+    this.Randomposts = []
+    this.Allusers = []
+    this.showloader = true;
     const userid = sessionStorage.getItem("userid");
     this.getimage(userid);
 
     var userdetails = JSON.parse(sessionStorage.getItem("userdetails"));
     if(userdetails==null || userdetails==undefined){
+      this.showloader = false;
         this.router.navigate(["/login"])
      }else{
 
     this.AccountName = userdetails?.username;
     //this.spinner.show();
-    this.showloader = true;
+    
     this.service.getallusers(userid).subscribe(
      { next:(data)=>{
           for(let d of data){
-           // console.log(d._id);
-            
             this.service.getimage(d._id).subscribe(
               {
                 next:(data1)=>{
-                 // console.log(data1);
                     if(data1!=null && data1!=undefined && data1.image!=null){
                       var thumb = Buffer.from(data1.image.data).toString('base64');
                       var url = "data:"+data1.image.contentType+""+";base64,"+thumb;
@@ -90,27 +93,30 @@ comment=''
                     }else{
                       this.Allusers.push({userid:d._id,username:d.username,imgurl:this.defaultpicurl});
                     }
-                    //this.spinner.hide();
-                    this.showloader = false;
+                    //this.showloader = false;
                 },
                 error:(error)=>{
-                 // this.spinner.hide();
                   this.showloader = false;
                    alert("something went wrong")
                 }
               }
             )
           }
-         // this.spinner.hide();
-         this.showloader = false;
+          setTimeout(() => {
+            this.showloader = false;
+          },3000);
+         
      },
      error:(error)=>{
-      //this.spinner.hide();
       this.showloader = false;
         alert("something went wrong")
      }
     }
     )
+
+  
+    this.onloadhomepage();
+    
   }
   }
 
@@ -132,6 +138,137 @@ comment=''
             this.mobileview = false
           }
     }
+
+    sortData() {
+      return this.Randomposts.sort((a, b) => {
+        return <any>new Date(b.postdate) - <any>new Date(a.postdate);
+      });
+    }
+    calculateDiff(dateSent){
+      let currentDate = new Date();
+      dateSent = new Date(dateSent);
+   
+       return Math.floor((Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()) - Date.UTC(dateSent.getFullYear(), dateSent.getMonth(), dateSent.getDate()) ) /(1000 * 60 * 60 * 24));
+     }
+
+     onloadhomepage(){
+      this.showloader=true
+    this.service.getalluserdetails().subscribe({
+       next:(data)=>{
+           if(data){
+            for(let dat of data){
+              const userid = dat?.userid;
+              const username = dat?.username;
+
+              for(let post of dat?.posts){
+                var thumb = Buffer.from(post?.image?.data).toString('base64');
+                var url = "data:"+post?.image?.contentType+""+";base64,"+thumb;
+                const imgname = post?.name;
+                const postcaption = post?.postcaption
+                const likes = post?.likes.length;
+
+                var postingdate = this.datepipe.transform(post.postdate, 'yyyy-MM-dd hh:mm a')
+               var agedate  = this.calculateDiff(postingdate);
+               console.log(agedate);
+               
+              // var agedate = this.calculateDiff(this.datepipe.transform('Mon Jan 08 2024 20:10:27 GMT+0530 (India Standard Time)', 'yyyy-MM-dd hh:mm'));
+                var ageofpost = ''
+                var todaypostage = ''
+                var todaypost = false;
+                if(agedate==0 ){
+                    //calculate time diff
+                    todaypost = true;
+                    var currdate = new Date()
+                    var timediff = currdate.getTime()-new Date(post.postdate).getTime();
+                   // console.log((timediff/1000)/60+" minutes");
+                    todaypostage = Math.floor(timediff/1000)>=0 && Math.floor(timediff/1000)<60?Math.floor(timediff/1000)+'s':
+                             Math.floor(timediff/1000)>=60 && Math.floor(timediff/1000)<3600?Math.floor((timediff/1000)/60)+'m':
+                             Math.floor(((timediff/1000)/60)/60)+'h';
+                    
+               }
+               
+               if(agedate>0 && agedate<=30){
+                  ageofpost = (agedate)+'d' 
+               }
+               else if(agedate>30 && agedate<365){
+                   ageofpost = Math.floor(agedate/7)+'w' 
+               }else if(agedate>365){
+                    ageofpost = Math.floor(agedate/365)+'y'
+               }
+
+               const id = sessionStorage.getItem("userid");
+               var isliked = false;
+                  post.likes.forEach(item =>{
+                    if( item.indexOf(id)>=0){
+                      isliked = true;
+                    }
+                  });
+              
+                this.commentdetails = [] 
+                // for(let cmt of post?.comments){
+                //   this.commentdetails.push({username:cmt.userid,imageurl:this.defaultpicurl,commenttext:cmt.commenttext});    
+                // }
+              //   console.log(userid,likes,postcaption,imgname);
+                 
+                 this.Randomposts.unshift({userid:userid,username:username,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:this.commentdetails,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
+              }
+            //  console.log(this.Randomposts.length+" lll");
+           
+            }
+            setTimeout(()=>{
+              this.showloader = false;
+            },5000)
+           }
+       },
+       error:(error)=>{
+         this.showloader = false
+       }
+    })
+   
+     }
+
+     savelikes(userid:any,imagename:any){
+  
+      this.showloader = true;
+      const id = sessionStorage.getItem("userid");
+      this.service.savelikes(userid,imagename,id).subscribe({
+        next:(data)=>{
+        //  console.log("like saved");
+        if(data){
+          // this.router.navigate(['/home'])
+          // window.location.reload();
+          this.ngOnInit();
+        }
+     this.showloader = false;
+        },
+        error:(error)=>{
+          this.showloader = false;
+           alert("something went wrong");
+        }
+      })
+    }
+
+    dislike(userid:any,imagename:any){
+      this.likes--;
+    this.showloader = true;
+      const id = sessionStorage.getItem("userid");
+      this.service.savedislikes(userid,imagename,id).subscribe({
+        next:(data)=>{
+        //  console.log("like saved");
+          if(data){
+            // this.router.navigate(['/home'])
+            // window.location.reload();
+            this.ngOnInit();
+          }
+          this.showloader = false;
+        },
+        error:(error)=>{
+          this.showloader = false;
+           alert("something went wrong");
+        }
+      })
+    }
+    
   showmore(){
     this.showmoredropdown = !this.showmoredropdown;
   }
@@ -163,6 +300,7 @@ comment=''
     this.Searchpageselected = false;
     this.showsearchbox = false;
     this.profilepageforsearch = false;
+    this.ngOnInit()
   }
 
   getimage(userid:any){
@@ -288,11 +426,8 @@ comment=''
     // formdata.append("comment",this.comment);
     this.service.saveposts(formdata).subscribe({
       next:(data)=>{
-          if(data=='post saved'){
-            alert("Successfully posted")
-             
-          }
-         //console.log(data);
+        alert(data)
+        this.ngOnInit();
       },
       error:(error)=>{
      //   this.spinner.hide();

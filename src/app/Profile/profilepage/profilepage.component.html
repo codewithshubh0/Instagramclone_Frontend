@@ -64,19 +64,23 @@
     <div class="row" style="height: 28vh;border-bottom: 1px solid #d7d6d6;">
         <div class="col-2" style="width: 12%;">
            <!-- <img src="../../../assets/post1.jpg" style="width: 100px;height: 100px;border-radius: 50%;margin-top: 29px" /> -->
-           <div class="highlightimage"></div>
-           <p class="highlightname">Highlight1</p>
+           <div class="highlightimage"><img style="
+            width: 117%;
+            margin-left: -5px;
+            margin-top: -1px;
+        " src="../../../assets/addhighlight1.png" /></div>
+           <p class="highlightname">New</p>
         </div>
-        <div class="col-2" style="width: 12%;">
-            <!-- <img src="../../../assets/post1.jpg" style="width: 100px;height: 100px;border-radius: 50%;margin-top: 29px" /> -->
+        <!-- <div class="col-2" style="width: 12%;">
+         
            <div class="highlightimage"></div>
            <p class="highlightname">Highlight2</p>
          </div>
          <div class="col-2" style="width: 12%;">
-           <!-- <img src="../../../assets/post1.jpg" style="width: 100px;height: 100px;border-radius: 50%;margin-top: 29px" /> -->
+          
            <div class="highlightimage"></div>
            <p class="highlightname">Highlight3</p>
-         </div>
+         </div> -->
     </div>
 </div>
 
@@ -276,7 +280,8 @@
                   <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;">{{postcaption.length>20?postcaption.substring(20):""}}</p>
                  </div>
                  <div style="overflow-y: scroll;max-height: 253px;height: 253px ">
-                  <div *ngFor="let commentdet of commentdetails">
+                  <mat-progress-bar *ngIf="showloader" mode="indeterminate" color="accent"></mat-progress-bar>
+                  <div style="margin-top: 10px;" *ngFor="let commentdet of commentdetails">
                     <div style="padding-top: 0px; padding-bottom: 0px; " class="profilepicinpost">
                       <img [src]="commentdet.imageurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
                       <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{commentdet.username}}</span>
@@ -297,7 +302,7 @@
                 </div>
                 <p *ngIf="likes>0" style="margin-top: 10px;font-weight: 500;">{{likes}} likes</p>
                 <p *ngIf="likes==0" style="margin-top: 10px;font-weight: 500;">Be the first to like this</p>
-                <div style="border-top: 1px solid #e2e2e2;margin-left: -12px;"><textarea class="commentinput" style="border: none;margin-top: 19px;margin-left: 13px;width: 401px"  (keyup)="addcomment()" [(ngModel)]="usercomment" type="text" placeholder="Add a comment..."></textarea>
+                <div style="border-top: 1px solid #e2e2e2;margin-left: -12px;"><textarea class="commentinput" style="border: none;margin-top: 19px;margin-left: 13px;width: 401px"  (keyup)="addcomment()" [(ngModel)]="usercomment" type="text" placeholder="Add a comment..." autofocus></textarea>
                   <span  (click)="postcomment()" *ngIf="showpost" style="color: #0087e5;float: right;font-size: 16px;margin-right: 20px;font-weight: 500;margin-top: 19px;cursor: pointer;">Post</span></div>
             </div>
             <div></div>

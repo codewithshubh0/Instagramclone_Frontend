@@ -5,6 +5,7 @@ import { Buffer } from 'buffer';
 import { ViewportScroller } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HostListener } from "@angular/core";
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-profilepage',
   templateUrl: './profilepage.component.html',
@@ -50,7 +51,8 @@ screenHeight: number;
 screenWidth: number;
 homepageformobile = false;
 mobileview = false;
-constructor(private router:Router,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService){  
+showloaderforcommentload = false
+constructor(private router:Router,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService,private datepipe:DatePipe){  
           this.onload();
           this.getScreenSize();
       }
@@ -75,7 +77,6 @@ ngOnInit(): void {
     this.Userposts = []
     const userid = sessionStorage.getItem("userid");
     this.userdetail = this.service.getdetails();
-  //  this.spinner.show();
   this.showloader = true;
      if(this.userdetail!=null && this.userdetail!=undefined){
            this.isfromSearch = (userid!=this.userdetail[0]?.userid);
@@ -86,44 +87,30 @@ ngOnInit(): void {
               this.following = this.userdetail[0]?.followings?.length;
               this.bio = this.userdetail[0]?.bio 
                          
-              this.biodata = this.bio?.split("-");
-    
-              
-  
+              this.biodata = this.bio?.split("-");   
+            //  var dd = this.datepipe.transform(new Date(), 'yyyy-MM-dd hh:mm');
+            //  console.log(dd+" ff");
+             
+             // console.log('03/11/24 08:10'-dd>'03/11/24 07:57');
+           //   console.log('03/11/24 08:10'-dd);
              this.savebiotext = this.bio?.replaceAll("-", "\n");
              if(this.userdetail[0]?.posts[0]?.image!=null && this.userdetail[0]?.posts[0]?.image!=undefined){
               this.post = this.userdetail[0].posts?.length;
-             // this.spinner.show();
              this.showloader = true; 
              for(let i=this.userdetail[0]?.posts.length-1;i>=0;i--){
                  var thumb = Buffer.from(this.userdetail[0]?.posts[i]?.image?.data).toString('base64');
                  var url = "data:"+this.userdetail[0]?.posts[i]?.image?.contentType+""+";base64,"+thumb;
-                 this.commentarray = []
+                 var commentdata = []
+               
+                // console.log(d+" date");
+                 
                    for(let j=this.userdetail[0]?.posts[i]?.comments?.length-1;j>=0;j--){
                        const commentuserid = this.userdetail[0]?.posts[i]?.comments[j]?.userid
                       const commenttext = this.userdetail[0]?.posts[i]?.comments[j]?.commenttext;
 
-                      this.commentdetails = []
-                      this.service.getimage(commentuserid).subscribe(
-                        {
-                          next:(data)=>{
-                              if(data!=null && data.image!=null){
-                                var thumb = Buffer.from(data.image.data).toString('base64');
-                                var imgurl = "data:"+data.image.contentType+""+";base64,"+thumb;
-                                this.commentdetails.push({username:data.username,imageurl:imgurl,commenttext:commenttext})
-                              }else{
-                                this.commentdetails.push({username:data.username,imageurl:this.defaultpicurl,commenttext:commenttext})
-                              }
-                            },
-                          error:(error)=>{
-                            //this.spinner.hide();
-                            this.showloader = false;
-                             alert("something went wrong")
-                          }
-                        })                     
+                      commentdata.push({username:commentuserid,imageurl:this.defaultpicurl,commenttext:commenttext})              
                    }
-                  
-
+                                   
                  this.Userposts.push(
                   {
                     userid:this.userdetail[0]?.userid,
@@ -132,26 +119,20 @@ ngOnInit(): void {
                     imagename:this.userdetail[0]?.posts[i]?.name,
                     postcaption:this.userdetail[0]?.posts[i]?.postcaption,
                     likes:this.userdetail[0]?.posts[i]?.likes,
-                    commentdata: this.commentdetails
+                    commentdata: commentdata
                  }
-                 
-                 
+            
                  );
-
-              //   console.log(JSON.stringify(this.Userposts)+" posts");
                  if(i==0) {
                   //this.spinner.hide();
                   this.showloader = false; 
                 }
               }    
              }     
-            
                if(this.userdetail[0]?.followers?.indexOf(userid) > -1){
                   this.isfollowing = true;
                }
             }
-  
-              //this.spinner.hide();
               this.showloader = false; 
         
   }
@@ -311,10 +292,9 @@ createpost(){
   // formdata.append("comment",this.comment);
   this.service.saveposts(formdata).subscribe({
     next:(data)=>{
-        if(data=='post saved'){
-          alert("Successfully posted")
-           this.onload();
-        }
+          alert(data)
+           this.ngOnInit();
+        
      //  console.log(data);
     },
     error:(error)=>{
@@ -325,6 +305,7 @@ createpost(){
 }
 
 openpost(post:any){
+  this.commentdetails = []
   this.liked = false;
    this.openimgurl = post.posturl;
    this.imagename = post.imagename;
@@ -333,9 +314,42 @@ openpost(post:any){
    this.postuserid = post.userid;
    this.showpost = false;
    this.usercomment = ''
-   this.commentdetails = post.commentdata
+   
 
   
+   for(let i=0;i<post.commentdata.length;i++){
+    this.showloader = true;
+      this.service.getimage(post.commentdata[i].username).subscribe(
+        {
+          next:(data)=>{
+            // console.log(data);
+          
+              if(data!=null && data.image!=null){
+                var thumb = Buffer.from(data.image.data).toString('base64');
+                var url = "data:"+data.image.contentType+""+";base64,"+thumb;
+                this.commentdetails.push({username:data.username,imageurl:url,commenttext:post.commentdata[i].commenttext})
+               }else{
+                this.commentdetails.push({username:data.username,imageurl:this.defaultpicurl,commenttext:post.commentdata[i].commenttext})
+               }
+              //this.spinner.hide();
+              //this.showloaderforcommentload = false;
+            },
+          error:(error)=>{
+            //this.spinner.hide();
+            this.showloader = false;
+            alert("something went wrong")
+          }
+        }
+      )
+      
+      
+   }
+
+   //this.showloader = false
+   setTimeout(()=>{
+      this.showloader = false
+   },5000)
+
    const id = sessionStorage.getItem("userid");
     if(this.likes>0){
       post.likes.forEach(item =>{
@@ -358,7 +372,7 @@ deletepost(imagename:any){
     next:(data)=>{
         if(data=='post deleted'){
            alert("Successfully Deleted");
-           this.onload();
+           this.ngOnInit()
            //this.spinner.hide();
          this.showloader = false;
           }
@@ -380,7 +394,7 @@ create(){
 }
 
 savelikes(){
-  this.likes++;
+  
   this.showloader = true;
   const id = sessionStorage.getItem("userid");
   this.service.savelikes(this.postuserid,this.imagename,id).subscribe({
@@ -388,6 +402,7 @@ savelikes(){
     //  console.log("like saved");
     if(data){
       this.liked = true;
+      this.likes++;
     }
  this.showloader = false;
     },

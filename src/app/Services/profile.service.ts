@@ -70,4 +70,9 @@ savedislikes(userid:any,imagename:any,dislikeuserid:any){
 addcomment(profileuserid:any,commentuserid:any,imagename:any,comment:any){
   return this.http.post<any[]>(this.url+"/activity/addcomment",{profileuserid:profileuserid,commentuserid:commentuserid,imagename:imagename,comment:comment});
 }
+
+getalluserdetails():Observable<any>{
+  return this.http.get(this.url+"/users/getalluserdetail");
+ }
+
 }

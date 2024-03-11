@@ -12,6 +12,7 @@ import { ProfilepageComponent } from './Profile/profilepage/profilepage.componen
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { DatePipe } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,7 +31,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     NgxSpinnerModule,
     MatProgressBarModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
