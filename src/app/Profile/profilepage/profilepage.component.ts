@@ -31,9 +31,9 @@ profilehomepage = true;
 gender = ['Male','Female','Prefer not to say']
 savebiotext=''
 biodata:String[] = [];
-Userposts:Array<{userid:string,username:string,posturl:string,imagename:string,postcaption:string,likes:[String],commentdata:Array<{username:any,imageurl:any,commenttext:any}>}> = [];
+Userposts:Array<{userid:string,username:string,posturl:string,imagename:string,postcaption:string,likes:[String],commentdata:Array<{commentuserid:string,username:any,imageurl:any,commenttext:any}>}> = [];
 commentarray:Array<{userid:any,commenttext:any}> = []
-commentdetails:Array<{username:any,imageurl:any,commenttext:any}> = []
+commentdetails:Array<{commentuserid:string,username:any,imageurl:any,commenttext:any}> = []
 openimgurl = ''
 imagename = ''
 showloader = false;
@@ -52,6 +52,9 @@ screenWidth: number;
 homepageformobile = false;
 mobileview = false;
 showloaderforcommentload = false
+postuseridfordelcomment:any
+imagenamefordelcomment:any
+commentfordel:any
 constructor(private router:Router,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService,private datepipe:DatePipe){  
           this.onload();
           this.getScreenSize();
@@ -108,7 +111,7 @@ ngOnInit(): void {
                        const commentuserid = this.userdetail[0]?.posts[i]?.comments[j]?.userid
                       const commenttext = this.userdetail[0]?.posts[i]?.comments[j]?.commenttext;
 
-                      commentdata.push({username:commentuserid,imageurl:this.defaultpicurl,commenttext:commenttext})              
+                      commentdata.push({commentuserid:commentuserid,username:commentuserid,imageurl:this.defaultpicurl,commenttext:commenttext})              
                    }
                                    
                  this.Userposts.push(
@@ -327,9 +330,9 @@ openpost(post:any){
               if(data!=null && data.image!=null){
                 var thumb = Buffer.from(data.image.data).toString('base64');
                 var url = "data:"+data.image.contentType+""+";base64,"+thumb;
-                this.commentdetails.push({username:data.username,imageurl:url,commenttext:post.commentdata[i].commenttext})
+                this.commentdetails.push({commentuserid:post.commentdata[i].commentuserid ,username:data.username,imageurl:url,commenttext:post.commentdata[i].commenttext})
                }else{
-                this.commentdetails.push({username:data.username,imageurl:this.defaultpicurl,commenttext:post.commentdata[i].commenttext})
+                this.commentdetails.push({commentuserid:post.commentdata[i].commentuserid,username:data.username,imageurl:this.defaultpicurl,commenttext:post.commentdata[i].commenttext})
                }
               //this.spinner.hide();
               //this.showloaderforcommentload = false;
@@ -441,10 +444,10 @@ postcomment(){
                   if(data!=null && data.image!=null){
                     var thumb = Buffer.from(data.image.data).toString('base64');
                     var imgurl = "data:"+data.image.contentType+""+";base64,"+thumb;
-                    this.commentdetails.unshift({username:data.username,imageurl:imgurl,commenttext:this.usercomment})
+                    this.commentdetails.unshift({commentuserid:id,username:data.username,imageurl:imgurl,commenttext:this.usercomment})
                     this.usercomment = "";
                   }else{
-                    this.commentdetails.unshift({username:data.username,imageurl:this.defaultpicurl,commenttext:this.usercomment})
+                    this.commentdetails.unshift({commentuserid:id,username:data.username,imageurl:this.defaultpicurl,commenttext:this.usercomment})
                     this.usercomment = "";
                   }
                 },
@@ -485,4 +488,43 @@ this.showloader = true;
     }
   })
 }
+
+opendeletecommentmodal(commentuserid:any,imagename:any,comment:any){
+  this.postuseridfordelcomment = commentuserid
+  this.imagenamefordelcomment = imagename;
+  this.commentfordel = comment;
+  }
+
+  deletecomment(postuserid:any,imagename:any,comment:any){
+    this.showloader = true;
+    const id = sessionStorage.getItem("userid");
+    this.service.deletecomment(postuserid,id,imagename,comment).subscribe({
+      next:(data)=>{
+        //  console.log("like saved");
+          if(data=="comment deleted"){
+            this.postuseridfordelcomment = '';
+            this.imagenamefordelcomment = '';
+            this.commentfordel = '';
+             console.log(comment);
+             
+          // this.commentdetailsformodalpost = tempdata.splice(tempdata.findIndex(item=>{item.commenttext == comment}),1);          
+           
+            this.commentdetails.forEach((el,ind)=>{
+               if(el.commenttext==comment){
+                  
+                  this.commentdetails.splice(ind,1);
+                  console.log(JSON.stringify(this.commentdetails)+" getting");
+               }
+            })
+            this.ngOnInit()
+           this.showpost = false;
+          }
+          this.showloader = false;
+        },
+        error:(error)=>{
+          this.showloader = false;
+           alert("something went wrong");
+        }
+    })
+  }
 }

@@ -285,6 +285,7 @@
                     <div style="padding-top: 0px; padding-bottom: 0px; " class="profilepicinpost">
                       <img [src]="commentdet.imageurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
                       <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{commentdet.username}}</span>
+                      <button data-bs-toggle="modal" data-bs-target="#deletecommentmodal" (click)="opendeletecommentmodal(commentdet.commentuserid, imagename,commentdet.commenttext)" style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
                       <span style="margin-left: 10px;max-width:200px;word-wrap:break-word;font-size: 13px">{{commentdet.commenttext?.substring(0,30)}}</span>
                       <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;font-size: 13px">{{commentdet.commenttext.length>30?commentdet.commenttext.substring(30):""}}</p>
                     </div> 
@@ -357,6 +358,19 @@
            <div  class="settinglinks">Copy link</div>
            <div  class="settinglinks">Embeded</div>
            <div  class="settinglinkslast" data-bs-dismiss="modal" >Cancel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deletecommentmodal" style="background-color: rgb(25 25 25 / 78%);" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" >
+    <div class="modal-content" style="width: 394px; margin: auto;">
+      <div class="modal-body" style="box-shadow: 0px 0px 24px #424242;">
+        <div style="height: 98px;">
+           <div class="settinglinks" style="color: red;padding: 11px;text-align: center;cursor: pointer;margin-top: 5px;border-bottom: 1px solid #d1d1d1;" data-bs-dismiss="modal" (click)="deletecomment(postuseridfordelcomment,imagenamefordelcomment,commentfordel)">Delete</div>
+           <div  class="settinglinkslast" style="padding: 11px;text-align: center;cursor: pointer;" data-bs-dismiss="modal" >Cancel</div>
         </div>
       </div>
     </div>
