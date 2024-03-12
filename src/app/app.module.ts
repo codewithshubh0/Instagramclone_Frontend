@@ -13,6 +13,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { DatePipe } from '@angular/common';
+import { PickerModule } from '@ctrl/ngx-emoji-mart'
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +30,8 @@ import { DatePipe } from '@angular/common';
     HttpClientModule,
     MatDialogModule,
     NgxSpinnerModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    PickerModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

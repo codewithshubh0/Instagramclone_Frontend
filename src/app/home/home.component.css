@@ -69,7 +69,7 @@
 .postbox{
     width: 62%;
     margin-left: 29%;
-    margin-bottom: 112px;
+    margin-bottom: 126px;
    
 }
 .userdetail{
@@ -162,6 +162,7 @@
     padding-bottom: 17px;
     width: 94%;
     margin-left: 12px;
+    padding-left: 0px;
     border-bottom: 0.6px solid #b8b8b8;
 }
 

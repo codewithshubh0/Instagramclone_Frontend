@@ -216,12 +216,12 @@
            <div class="postbox" *ngFor="let postdata of sortData()">
             <div class="row userdetail">
               <div class="inneruserdetail" style="display: flex;">
-               <span><img [src]="defaultpicurl" class="postsimage"></span>
+               <span><img [src]="postdata.profileurl" class="postsimage"></span>
                <span style="margin-right: 4px;">{{postdata.username}}</span>
-               <span *ngIf="!postdata.istodayspost" style="margin-left: 2px;margin-right: 2px;">. {{postdata.ageofpost}}</span>
-               <span *ngIf="postdata.istodayspost" style="margin-left: 2px;margin-right: 2px;">. {{postdata.todaypostage}}</span>
+               <span *ngIf="!postdata.istodayspost" style="margin-left: 2px;margin-right: 2px;">&#8231; {{postdata.ageofpost}} &#8231;</span>
+               <span *ngIf="postdata.istodayspost" style="margin-left: 2px;margin-right: 2px;">&#8231; {{postdata.todaypostage}} &#8231;</span>
           
-               <span style="margin-left: 4px; color: #009cf6;font-weight: 500;">. Follow</span>
+               <span style="margin-left: 2px; color: #009cf6;font-weight: 500;"> Follow</span>
               </div>
             </div>
             <div class="row">
@@ -231,120 +231,28 @@
               <div class="innerlikesandcomment">
                 <span (click)="savelikes(postdata.userid,postdata.imagename)" *ngIf="!postdata.liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
                 <span (click)="dislike(postdata.userid,postdata.imagename)" *ngIf="postdata.liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
-                <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
-                <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
+                <span data-bs-toggle="modal" data-bs-target="#openpostmodalhomepage" (click)="openpostmodal(postdata)"><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
+                <span ><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
                 <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;margin-right: -21px" class="fa-regular fa-bookmark menuiconpost"></i></span>
                 <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;margin-right: -21px" class="fa-solid fa-bookmark menuiconpost"></i></span>
                 
                </div>
                <p *ngIf="postdata.likes>0" style="margin-top: 10px;font-weight: 600;">{{(postdata.likes)}} likes</p>
                <p *ngIf="postdata.likes==0" style="margin-top: 10px;font-weight: 600;">Be the first to like this</p>
-               <div style="display: flex;">
-                   <p style="margin-top: -4px;font-weight: 600; ">{{postdata.username}}</p><span style="margin-top: -4px ;margin-left: 10px;max-width:200px;word-wrap:break-word;">{{postdata.postcaption?.substring(0,30)}}</span>
+               <div style="display: flex;height: 23px ">
+                   <p style="margin-top: -4px;font-weight: 600; ">{{postdata?.username}}</p><span style="margin-top: -4px ;margin-left: 10px;max-width:200px;word-wrap:break-word;">{{postdata.postcaption?.substring(0,30)}}</span>
                 </div>
                <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;">{{postdata.postcaption?.length>30?postdata.postcaption.substring(30):""}}</p>
-            
-               <input class="commentinput" type="text" placeholder="Add a comment" />
-            </div>
+               <p style="margin-top: -12px;margin-bottom: 5px;cursor: pointer;color: grey;" *ngIf="postdata?.commentdata?.length>0" data-bs-toggle="modal" data-bs-target="#openpostmodalhomepage" (click)="openpostmodal(postdata)">View all {{postdata?.commentdata?.length}} comments</p>
+               <div style="border-bottom: 1px solid #e2e2e2;margin-left: 11px;"><textarea class="commentinput" style="border: none;width: 386px;height: 48px;margin-left: -8px "  (keyup)="addcomment()" [(ngModel)]="usercomment" type="text" placeholder="Add a comment..."></textarea>
+                <span  (click)="postcomment(postdata?.userid,postdata?.imagename)" *ngIf="showpost" style="color: rgb(9 179 255);float: right;font-size: 16px;margin-right: 20px;font-weight: 500;margin-top: 19px;cursor: pointer;">Post</span></div>
+                <!-- <emoji-mart class="emoji-mart" set="google" *ngIf="showEmojiPicker" (emojiSelect)="addEmoji($event)" title="Pick your emoji…"></emoji-mart> -->
+             
+               </div>
            
         </div>
-
-<!--            
-        <div class="postbox">
-          <div class="row userdetail">
-            <div class="inneruserdetail" style="display: flex;">
-             <span><img [src]="defaultpicurl" class="postsimage"></span>
-             <span>UserName</span>
-             <span>.Timestamp</span>
-             <span>.follow</span>
-            </div>
-          </div>
-          <div class="row postmobile">
-             <img src="../../assets/post3.jpg"/>
-          </div>
-          <div class="row likesandcommentmobile">
-            <div class="innerlikesandcommentmobile">
-              <span  (click)="like()" *ngIf="!liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
-              <span (click)="like()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
-              <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
-              <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
-              <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
-              <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;" class="fa-solid fa-bookmark menuiconpost"></i></span>
-              
-             </div>
-             <p>n likes</p>
-             <p>Captions</p>
-             <input class="commentinput" type="text" placeholder="Add a comment" />
-          </div>
-         
-      </div>
-
-           
-      <div class="postbox">
-        <div class="row userdetail">
-          <div class="inneruserdetail" style="display: flex;">
-           <span><img [src]="defaultpicurl" class="postsimage"></span>
-           <span>UserName</span>
-           <span>.Timestamp</span>
-           <span>.follow</span>
-          </div>
-        </div>
-        <div class="row postmobile">
-           <img src="../../assets/post4.jpg"/>
-        </div>
-        <div class="row likesandcommentmobile">
-          <div class="innerlikesandcommentmobile">
-            <span  (click)="like()" *ngIf="!liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
-            <span (click)="like()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
-            <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
-            <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
-            <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
-            <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;" class="fa-solid fa-bookmark menuiconpost"></i></span>
-            
-           </div>
-           <p>n likes</p>
-           <p>Captions</p>
-           <input class="commentinput" type="text" placeholder="Add a comment" />
-        </div>
-       
-    </div> -->
-           
-    <!-- <div class="postbox">
-      <div class="row userdetail">
-        <div class="inneruserdetail" style="display: flex;">
-         <span><img [src]="defaultpicurl" class="postsimage"></span>
-         <span>UserName</span>
-         <span>.Timestamp</span>
-         <span>.follow</span>
-        </div>
-      </div>
-      <div class="row postmobile">
-         <img src="../../assets/post5.jpg"/>
-      </div>
-      <div class="row likesandcommentmobile">
-        <div class="innerlikesandcommentmobile">
-          <span  (click)="like()" *ngIf="!liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
-          <span (click)="like()" *ngIf="liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
-          <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
-          <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
-          <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
-          <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;" class="fa-solid fa-bookmark menuiconpost"></i></span>
-          
-         </div>
-         <p>n likes</p>
-         <p>Captions</p>
-         <input class="commentinput" type="text" placeholder="Add a comment" />
-      </div>
-     
-  </div> -->
         </div>
      </div>
-
-
-
-
-
-
 
       <div *ngIf="homeoptionselected && !suggestionsforMobile" style="height: 100vh;" class="col-4">        
          <div style="margin-top: 27px;margin-left: 73px;font-size: 13px;">
@@ -410,6 +318,89 @@
    </div>
  </div>
 
+
+ <div class="modal fade" id="openpostmodalhomepage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content" style="height: 636px ; margin: auto;">
+      <div class="modal-body">
+        <div class="row">
+           <div class="col-7" style="margin-top: -16px;margin-left: -5px;height: 634px;background-color: #f0f0f0fc;border-top-left-radius: 10px; border-bottom-left-radius: 10px;"><img style="max-width: 100%;height: 100%; object-fit: contain;margin: auto;display: block;" [src]="postmodaltempdata?.posturl" /></div>
+           <div class="col">
+            <div>
+                <div style="border-bottom: 1px solid #e0e0e0;padding-bottom: 10px;" class="profilepicinpost">
+                    <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+                    <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{postmodaltempdata?.username}}</span>
+                    <button style="float: right;border: none;background: none;font-size: 19px;" data-bs-toggle="modal" data-bs-target="#postmoreoption" ><i  class="fa-solid fa-ellipsis"></i></button>
+                </div>
+                <div style="padding-top: 5px;border-bottom: 1px solid #e1e1e1;margin-bottom: 12px;max-height: 142px;height: 140px;overflow-y: scroll;" class="profilepicinpost">
+                  <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+                  <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{postmodaltempdata?.username}}</span>
+                  <span style="margin-left: 10px;max-width:200px;word-wrap:break-word;">{{postmodaltempdata?.postcaption?.substring(0,20)}}</span>
+                  <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;">{{postmodaltempdata?.postcaption?.length>20?postmodaltempdata?.postcaption?.substring(20):""}}</p>
+                 </div>
+                 <div style="overflow-y: scroll;max-height: 253px;height: 253px ">
+                  <mat-progress-bar *ngIf="showloader" mode="indeterminate" color="accent"></mat-progress-bar>
+                  <div style="margin-top: 10px;" *ngFor="let commentdet of commentdetailsformodalpost">
+                    <div style="padding-top: 0px; padding-bottom: 0px; " class="profilepicinpost">
+                      <img [src]="commentdet?.imageurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+                      <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{commentdet?.username}}</span>
+                      <button *ngIf="commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#deletecommentmodal" (click)="opendeletecommentmodal(postmodaltempdata.userid,postmodaltempdata.imagename,commentdet.commenttext)" style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
+                      <button *ngIf="!commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#reportcommentmodal"  style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
+                      <span style="margin-left: 10px;max-width:200px;word-wrap:break-word;font-size: 13px">{{commentdet?.commenttext?.substring(0,30)}}</span>
+                      <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;font-size: 13px">{{commentdet?.commenttext?.length>30?commentdet.commenttext.substring(30):""}}</p>
+                      
+                    </div> 
+                  </div>
+                </div> 
+                <div>
+                  <div style="margin-top: 12px" class="innerlikesandcomment">
+                    <span (click)="savelikes(postmodaltempdata?.userid ,postmodaltempdata?.imagename)" *ngIf="!postmodaltempdata?.liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+                    <span (click)="dislike(postmodaltempdata?.userid ,postmodaltempdata?.imagename)" *ngIf="postmodaltempdata?.liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span> 
+                    <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
+                    <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
+                    <span ><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
+                  
+                   </div>
+                </div>
+                <p *ngIf="postmodaltempdata?.likes>0" style="margin-top: 10px;font-weight: 500;">{{postmodaltempdata?.likes}} likes</p>
+                <p *ngIf="postmodaltempdata?.likes==0" style="margin-top: 10px;font-weight: 500;">Be the first to like this</p>
+                <div style="border-top: 1px solid #e2e2e2;margin-left: -12px;"><textarea class="commentinput" style="border: none;margin-top: 19px;margin-left: 13px;width: 386px;height: 58px"  (keyup)="addcomment()" [(ngModel)]="usercomment" type="text" placeholder="Add a comment..." autofocus></textarea>
+                  <span  (click)="postcomment(postmodaltempdata?.userid,postmodaltempdata?.imagename)" *ngIf="showpost" style="color: #0087e5;float: right;font-size: 16px;margin-right: 20px;font-weight: 500;margin-top: 19px;cursor: pointer;">Post</span></div>
+            </div>
+            <div></div>
+            <div></div>
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deletecommentmodal" style="background-color: rgb(25 25 25 / 78%);" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" >
+    <div class="modal-content" style="width: 394px; margin: auto;">
+      <div class="modal-body" style="box-shadow: 0px 0px 24px #424242;">
+        <div style="height: 80px;">
+           <div class="settinglinks" style="color: red;padding: 11px;text-align: center;cursor: pointer;margin-top: -13px;border-bottom: 1px solid #d1d1d1;" data-bs-dismiss="modal" (click)="deletecomment(postuseridfordelcomment,imagenamefordelcomment,commentfordel)">Delete</div>
+           <div  class="settinglinkslast" style="padding: 11px;text-align: center;cursor: pointer;" data-bs-dismiss="modal" >Cancel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="reportcommentmodal" style="background-color: rgb(25 25 25 / 78%);" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" >
+    <div class="modal-content" style="width: 394px; margin: auto;">
+      <div class="modal-body" style="box-shadow: 0px 0px 24px #424242;">
+        <div style="height: 80px;">
+           <div class="settinglinks" (click)="reportpopup()" style="color: red;padding: 11px;text-align: center;cursor: pointer;margin-top: -13px;border-bottom: 1px solid #d1d1d1;" data-bs-dismiss="modal">Report</div>
+           <div  class="settinglinkslast" style="padding: 11px;text-align: center;cursor: pointer;" data-bs-dismiss="modal" >Cancel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
  <div class="modal fade" id="openpostmodalwhenupload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
    <div class="modal-dialog modal-dialog-centered modal-xl">

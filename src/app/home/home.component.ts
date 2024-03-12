@@ -5,6 +5,7 @@ import { Buffer } from 'buffer';
 import { JsonPipe, ViewportScroller } from '@angular/common';
 import { HostListener } from "@angular/core";
 import { DatePipe } from '@angular/common';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -50,33 +51,44 @@ seletedfile: ElementRef;
   suggestionsforMobile = false;
   homepageformobile = false;
   mobileview = false;
-  Randomposts:Array<{userid:string,username:string,posturl:string,imagename:string,postcaption:string,likes:number,commentdata:Array<{username:any,imageurl:any,commenttext:any}>,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}> = [];
-  commentdetails:Array<{username:any,imageurl:any,commenttext:any}> = []
+  usercomment = ''
+  showpost = false
+
+  postuseridfordelcomment:any
+  imagenamefordelcomment:any
+  commentfordel:any
+
+  Randomposts:Array<{userid:string,username:string,profileurl:string,posturl:string,imagename:string,postcaption:string,likes:number,commentdata:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}>,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}> = [];
+  postmodaltempdata:{userid:string,username:string,profileurl:string,posturl:string,imagename:string,postcaption:string,likes:number,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}
+  commentdetails:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}> = []
+  commentdetailsformodalpost:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}> = []
   constructor(private router:Router,private renderer:Renderer2,private service:ProfileService,private scroller:ViewportScroller,private datepipe:DatePipe){
     this.renderer.listen('window', 'click',(e:Event)=>{
    
      if( e.target !== this.moreoption?.nativeElement && e.target !== this.moreoption1?.nativeElement && e.target !== this.moreoption2?.nativeElement && e.target!==this.moremenus?.nativeElement){
          this.showmoredropdown=false;
      }
-
+     
     
      var userdetails = JSON.parse(sessionStorage.getItem("userdetails"));
      this.getScreenSize();
  });
+
+//  this.scroller.scrollToPosition([0,0]);
   }
   ngOnInit(): void {
-    this.Randomposts = []
     this.Allusers = []
     this.showloader = true;
+
+    
     const userid = sessionStorage.getItem("userid");
     this.getimage(userid);
 
-    var userdetails = JSON.parse(sessionStorage.getItem("userdetails"));
-    if(userdetails==null || userdetails==undefined){
+    if(sessionStorage.getItem("isLoggedIn")==null || sessionStorage.getItem("isLoggedIn")==undefined || sessionStorage.getItem("isLoggedIn")=="false" ){
       this.showloader = false;
         this.router.navigate(["/login"])
      }else{
-
+      var userdetails = JSON.parse(sessionStorage.getItem("userdetails"));
     this.AccountName = userdetails?.username;
     //this.spinner.show();
     
@@ -86,6 +98,7 @@ seletedfile: ElementRef;
             this.service.getimage(d._id).subscribe(
               {
                 next:(data1)=>{
+
                     if(data1!=null && data1!=undefined && data1.image!=null){
                       var thumb = Buffer.from(data1.image.data).toString('base64');
                       var url = "data:"+data1.image.contentType+""+";base64,"+thumb;
@@ -96,7 +109,7 @@ seletedfile: ElementRef;
                     //this.showloader = false;
                 },
                 error:(error)=>{
-                  this.showloader = false;
+                  this.showloader = false
                    alert("something went wrong")
                 }
               }
@@ -109,13 +122,37 @@ seletedfile: ElementRef;
      },
      error:(error)=>{
       this.showloader = false;
-        alert("something went wrong")
      }
     }
     )
 
   
-    this.onloadhomepage();
+    // this.scroller.scrollToPosition([0,0]);
+    this.homeoptionselected = true;
+    this.onloadhomepage()
+    
+    for(let item of this.Randomposts){
+      let userid = item.userid;
+    console.log("working");
+    
+      this.service.getimage(userid).subscribe(
+        {
+          next:(data)=>{
+             console.log(item.profileurl);
+             
+              if(data!=null && data.image!=null){
+                var thumb = Buffer.from(data.image.data).toString('base64');
+                var url = "data:"+data.image.contentType+""+";base64,"+thumb;
+                item.profileurl = url;
+
+              }
+          },
+          error:(error)=>{
+             alert("something went wrong")
+          }
+        }
+      )
+    }
     
   }
   }
@@ -152,13 +189,18 @@ seletedfile: ElementRef;
      }
 
      onloadhomepage(){
+      this.Randomposts = []
       this.showloader=true
+      const loggeduserid = sessionStorage.getItem("userid");
     this.service.getalluserdetails().subscribe({
        next:(data)=>{
            if(data){
             for(let dat of data){
+              
               const userid = dat?.userid;
               const username = dat?.username;
+              
+              const profileurl = this.defaultpicurl
 
               for(let post of dat?.posts){
                 var thumb = Buffer.from(post?.image?.data).toString('base64');
@@ -169,7 +211,7 @@ seletedfile: ElementRef;
 
                 var postingdate = this.datepipe.transform(post.postdate, 'yyyy-MM-dd hh:mm a')
                var agedate  = this.calculateDiff(postingdate);
-               console.log(agedate);
+              // console.log(agedate);
                
               // var agedate = this.calculateDiff(this.datepipe.transform('Mon Jan 08 2024 20:10:27 GMT+0530 (India Standard Time)', 'yyyy-MM-dd hh:mm'));
                 var ageofpost = ''
@@ -205,15 +247,17 @@ seletedfile: ElementRef;
                   });
               
                 this.commentdetails = [] 
-                // for(let cmt of post?.comments){
-                //   this.commentdetails.push({username:cmt.userid,imageurl:this.defaultpicurl,commenttext:cmt.commenttext});    
-                // }
-              //   console.log(userid,likes,postcaption,imgname);
-                 
-                 this.Randomposts.unshift({userid:userid,username:username,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:this.commentdetails,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
-              }
-            //  console.log(this.Randomposts.length+" lll");
-           
+                if(post?.comments!=null && post?.comments!=undefined){
+                    for(let cmt of post?.comments){
+
+                     const commentprofileimg =  this.defaultpicurl
+                      this.commentdetails.unshift({username:cmt.username,imageurl:commentprofileimg,commenttext:cmt.commenttext,iscurrentusercomment:(cmt.userid==loggeduserid)});    
+                    }
+                }
+
+                 this.Randomposts.unshift({userid:userid,username:username,profileurl:this.defaultpicurl,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:this.commentdetails,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
+                  
+                }
             }
             setTimeout(()=>{
               this.showloader = false;
@@ -224,7 +268,7 @@ seletedfile: ElementRef;
          this.showloader = false
        }
     })
-   
+    
      }
 
      savelikes(userid:any,imagename:any){
@@ -237,6 +281,8 @@ seletedfile: ElementRef;
         if(data){
           // this.router.navigate(['/home'])
           // window.location.reload();
+          this.postmodaltempdata.liked = true;
+          this.postmodaltempdata.likes++;
           this.ngOnInit();
         }
      this.showloader = false;
@@ -258,6 +304,8 @@ seletedfile: ElementRef;
           if(data){
             // this.router.navigate(['/home'])
             // window.location.reload();
+            this.postmodaltempdata.likes--;
+            this.postmodaltempdata.liked = false;
             this.ngOnInit();
           }
           this.showloader = false;
@@ -274,6 +322,7 @@ seletedfile: ElementRef;
   }
   logout(){
     sessionStorage.clear();
+    sessionStorage.setItem("isLoggedIn","false")
     this.router.navigate(['/login']);
   }
 
@@ -320,6 +369,8 @@ seletedfile: ElementRef;
       }
     )
   }
+//for returning the url
+
 
   changemode(){
 
@@ -418,10 +469,11 @@ seletedfile: ElementRef;
 
     const id = sessionStorage.getItem("userid");
     const formdata = new FormData();
+    var currdate = this.datepipe.transform(new Date(), 'yyyy-MM-dd hh:mm a')
     formdata.append("image",this.file);
     formdata.append("userid",id); 
     formdata.append("caption",this.caption);
-    // formdata.append("likes",this.likes.toString());
+    formdata.append("postdate",currdate);
     // formdata.append("commentedby",this.commentedby);
     // formdata.append("comment",this.comment);
     this.service.saveposts(formdata).subscribe({
@@ -435,4 +487,116 @@ seletedfile: ElementRef;
       }
     })
   }
+
+  openpostmodal(postdata:any){
+   // this.postmodaltempdata.posturl = postdata?.posturl
+   this.commentdetailsformodalpost = []
+   console.log(postdata);
+   this.postmodaltempdata = postdata
+   this.commentdetailsformodalpost = postdata.commentdata
+    // this.postmodaltempdata.username = postdata?.username;
+    // this.postmodaltempdata.likes = postdata?.likes
+    // this.postmodaltempdata.profileurl = postdata?.profileurl
+    // this.postmodaltempdata.postcaption = postdata?.postcaption
+    // this.postmodaltempdata.imagename = postdata?.imagename
+    // this.postmodaltempdata.username = postdata?.username
+  }
+
+  postcomment(postuserid:any,imagename:any){
+    this.showloader = true;
+    const id = sessionStorage.getItem("userid");
+    this.service.addcomment(postuserid,id,imagename,this.usercomment).subscribe({
+      next:(data)=>{
+        //  console.log("like saved");
+          if(data){
+  
+  
+            this.service.getimage(id).subscribe(
+              {
+                next:(data)=>{
+                    if(data!=null && data.image!=null){
+                      var thumb = Buffer.from(data.image.data).toString('base64');
+                      var imgurl = "data:"+data.image.contentType+""+";base64,"+thumb;
+                      this.commentdetailsformodalpost.unshift({username:data.username,imageurl:imgurl,commenttext:this.usercomment,iscurrentusercomment:true})
+                      this.ngOnInit();
+                      this.usercomment = "";
+                    }else{
+                      this.commentdetailsformodalpost.unshift({username:data.username,imageurl:this.defaultpicurl,commenttext:this.usercomment,iscurrentusercomment:true})
+                      this.ngOnInit();
+                      this.usercomment = "";
+                    }
+                  },
+                error:(error)=>{
+                  //this.spinner.hide();
+                  this.showloader = false;
+                   alert("something went wrong")
+                }
+              })       
+  
+   
+            this.showpost = false;
+          }
+          this.showloader = false;
+        },
+        error:(error)=>{
+          this.showloader = false;
+           alert("something went wrong");
+        }
+    })
+  }
+
+  opendeletecommentmodal(postuserid:any,imagename:any,comment:any){
+  this.postuseridfordelcomment = postuserid;
+  this.imagenamefordelcomment = imagename;
+  this.commentfordel = comment;
+  }
+
+  deletecomment(postuserid:any,imagename:any,comment:any){
+    this.showloader = true;
+    const id = sessionStorage.getItem("userid");
+    this.service.deletecomment(postuserid,id,imagename,comment).subscribe({
+      next:(data)=>{
+        //  console.log("like saved");
+          if(data=="comment deleted"){
+            this.postuseridfordelcomment = '';
+            this.imagenamefordelcomment = '';
+            this.commentfordel = '';
+             console.log(comment);
+             var tempdata = this.commentdetailsformodalpost;
+             
+          // this.commentdetailsformodalpost = tempdata.splice(tempdata.findIndex(item=>{item.commenttext == comment}),1);          
+           
+            this.commentdetailsformodalpost.forEach((el,ind)=>{
+               if(el.commenttext==comment){
+                  
+                  this.commentdetailsformodalpost.splice(ind,1);
+                  console.log(JSON.stringify(this.commentdetailsformodalpost)+" getting");
+               }
+            })
+            this.ngOnInit()
+           this.showpost = false;
+          }
+          this.showloader = false;
+        },
+        error:(error)=>{
+          this.showloader = false;
+           alert("something went wrong");
+        }
+    })
+  }
+  addcomment(){
+    // console.log(this.usercomment+" comment");
+     
+     if(this.usercomment!=null && this.usercomment!=undefined && this.usercomment.length>0){
+       this.showpost = true;
+     }else{
+       this.showpost = false;
+     }
+   }
+
+
+   reportpopup(){
+    alert("Comment Reported")
+   }
+
 }
