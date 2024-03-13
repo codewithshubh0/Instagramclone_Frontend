@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, Renderer2, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import { ProfileService } from '../Services/profile.service';
 import { Buffer } from 'buffer';
@@ -57,7 +57,9 @@ seletedfile: ElementRef;
   postuseridfordelcomment:any
   imagenamefordelcomment:any
   commentfordel:any
-
+  indextodel:number
+  
+ isOwnPost = false;
   useridtofetch = '';
   imagenametofetch = '';
   indextofetch = -1;
@@ -72,7 +74,6 @@ seletedfile: ElementRef;
         if( e.target !== this.moreoption?.nativeElement && e.target !== this.moreoption1?.nativeElement && e.target !== this.moreoption2?.nativeElement && e.target!==this.moremenus?.nativeElement){
             this.showmoredropdown=false;
         }
-        var userdetails = JSON.parse(sessionStorage.getItem("userdetails"));
     });
  this.getScreenSize();
 
@@ -93,40 +94,42 @@ seletedfile: ElementRef;
       var userdetails = JSON.parse(sessionStorage.getItem("userdetails"));
     this.AccountName = userdetails?.username;
     //this.spinner.show();
-    
-    this.service.getallusers(userid).subscribe(
-     { next:(data)=>{
-          for(let d of data){
-            this.service.getimage(d._id).subscribe(
-              {
-                next:(data1)=>{
-
-                    if(data1!=null && data1!=undefined && data1.image!=null){
-                      var thumb = Buffer.from(data1.image.data).toString('base64');
-                      var url = "data:"+data1.image.contentType+""+";base64,"+thumb;
-                      this.Allusers.push({userid:d._id,username:d.username,imgurl:url});
-                    }else{
-                      this.Allusers.push({userid:d._id,username:d.username,imgurl:this.defaultpicurl});
-                    }
-                    //this.showloader = false;
-                },
-                error:(error)=>{
-                  this.showloader = false
-                   alert("something went wrong")
-                }
-              }
-            )
-          }
-          setTimeout(() => {
-            this.showloader = false;
-          },3000);
-         
-     },
-     error:(error)=>{
-      this.showloader = false;
-     }
+    if(this.Allusers?.length==0){
+      this.service.getallusers(userid).subscribe(
+        { next:(data)=>{
+             for(let d of data){
+               this.service.getimage(d._id).subscribe(
+                 {
+                   next:(data1)=>{
+   
+                       if(data1!=null && data1!=undefined && data1.image!=null){
+                         var thumb = Buffer.from(data1.image.data).toString('base64');
+                         var url = "data:"+data1.image.contentType+""+";base64,"+thumb;
+                         this.Allusers.push({userid:d._id,username:d.username,imgurl:url});
+                       }else{
+                         this.Allusers.push({userid:d._id,username:d.username,imgurl:this.defaultpicurl});
+                       }
+                       //this.showloader = false;
+                   },
+                   error:(error)=>{
+                     this.showloader = false
+                      alert("something went wrong")
+                   }
+                 }
+               )
+             }
+             setTimeout(() => {
+               this.showloader = false;
+             },3000);
+            
+        },
+        error:(error)=>{
+         this.showloader = false;
+        }
+       }
+       )
     }
-    )
+    
 
   
     // this.scroller.scrollToPosition([0,0]);
@@ -135,29 +138,29 @@ seletedfile: ElementRef;
     this.showpost = false
     this.onloadhomepage()
     
-    this.Randomposts.forEach((item)=>{
-      let userid = item.userid;
-   // console.log("working");
+  //   this.Randomposts.forEach((item)=>{
+  //     let userid = item.userid;
+  //  // console.log("working");
     
-      this.service.getimage(userid).subscribe(
-        {
-          next:(data)=>{
-        //     console.log(item.profileurl);
+  //     this.service.getimage(userid).subscribe(
+  //       {
+  //         next:(data)=>{
+  //       //     console.log(item.profileurl);
              
-              if(data!=null && data.image!=null){
-                var thumb = Buffer.from(data.image.data).toString('base64');
-                var url = "data:"+data.image.contentType+""+";base64,"+thumb;
-                item.profileurl = url;
+  //             if(data!=null && data.image!=null){
+  //               var thumb = Buffer.from(data.image.data).toString('base64');
+  //               var url = "data:"+data.image.contentType+""+";base64,"+thumb;
+  //               item.profileurl = url;
 
-              }
-          },
-          error:(error)=>{
-             alert("something went wrong")
-          }
-        }
-      )
+  //             }
+  //         },
+  //         error:(error)=>{
+  //            alert("something went wrong")
+  //         }
+  //       }
+  //     )
     
-    })
+  //   })
     
   }
   }
@@ -197,20 +200,19 @@ seletedfile: ElementRef;
      // this.Randomposts = []
       this.showloader=true
       const loggeduserid = sessionStorage.getItem("userid");
-if(this.Randomposts?.length==0){
+ if(this.Randomposts?.length==0){
 
-
+   
     this.service.getalluserdetails().subscribe({
        next:(data)=>{
            if(data){
-            this.count =0;
+            
             for(let dat of data){
               
               const userid = dat?.userid;
               const username = dat?.username;
               
               const profileurl = this.defaultpicurl
-
               for(let post of dat?.posts){
                 var thumb = Buffer.from(post?.image?.data).toString('base64');
                 var url = "data:"+post?.image?.contentType+""+";base64,"+thumb;
@@ -264,89 +266,89 @@ if(this.Randomposts?.length==0){
                     }
                 }
 
-                 this.Randomposts.unshift({index:this.count,userid:userid,username:username,profileurl:this.defaultpicurl,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:this.commentdetails,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
-                 this.count++;
+                 this.Randomposts.unshift({index:this.Randomposts.length,userid:userid,username:username,profileurl:this.defaultpicurl,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:this.commentdetails,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
                 }
                 
             }
             setTimeout(()=>{
               this.showloader = false;
-            },5000)
+            },8000)
            }
        },
        error:(error)=>{
          this.showloader = false
        }
     })
-  }else{
-    console.log("do this");
-   var commentdata = []
-   console.log(this.indextofetch);
-   if(this.useridtofetch==''){
-     return;
    }
-    this.service.getuserdetails(this.useridtofetch).subscribe({
-      next:(data)=>{
-     //  console.log(JSON.stringify(data)+" details");
+   //else{
+  //   //console.log("do this");
+  //  var commentdata = []
+  //  //console.log(this.indextofetch);
+  //  if(this.useridtofetch==''){
+  //    return;
+  //  }
+  //   this.service.getuserdetails(this.useridtofetch).subscribe({
+  //     next:(data)=>{
+  //    //  console.log(JSON.stringify(data)+" details");
        
-       for(let post of data[0].posts){
-        // var thumb = Buffer.from(data[0]?.posts[i]?.image?.data).toString('base64');
-        // var url = "data:"+this.userdetail[0]?.posts[i]?.image?.contentType+""+";base64,"+thumb;
-        // var commentdata = []
-      // console.log("worked this time");
+  //      for(let post of data[0].posts){
+  //       // var thumb = Buffer.from(data[0]?.posts[i]?.image?.data).toString('base64');
+  //       // var url = "data:"+this.userdetail[0]?.posts[i]?.image?.contentType+""+";base64,"+thumb;
+  //       // var commentdata = []
+  //     // console.log("worked this time");
         
-         if(post.name== this.imagenametofetch){
+  //        if(post.name== this.imagenametofetch){
          
           
-          var thumb = Buffer.from(post?.image?.data).toString('base64');
-          var posturl = "data:"+post?.image?.contentType+""+";base64,"+thumb;
+  //         // var thumb = Buffer.from(post?.image?.data).toString('base64');
+  //         // var posturl = "data:"+post?.image?.contentType+""+";base64,"+thumb;
           
-          for(let j=post?.comments?.length-1;j>=0;j--){
-             const commentuserid = post?.comments[j]?.userid
-             const commenttext =  post?.comments[j]?.commenttext;
+  //         for(let j=post?.comments?.length-1;j>=0;j--){
+  //            const commentuserid = post?.comments[j]?.userid
+  //            const commenttext =  post?.comments[j]?.commenttext;
  
-             commentdata.push({commentuserid:commentuserid,username:commentuserid,imageurl:this.defaultpicurl,commenttext:commenttext})              
-           }
+  //            commentdata.push({commentuserid:commentuserid,username:commentuserid,imageurl:this.defaultpicurl,commenttext:commenttext})              
+  //          }
 
-           this.Randomposts[this.indextofetch].commentdata = commentdata;
-           this.Randomposts[this.indextofetch].likes = post?.likes?.length;
-           this.Randomposts[this.indextofetch].liked = !this.Randomposts[this.indextofetch].liked
-          // this.Randomposts.forEach((el,ind)=>{
-          //   if(el.imagename==post.name){
+  //          this.Randomposts[this.indextofetch].commentdata = commentdata;
+  //          this.Randomposts[this.indextofetch].likes = post?.likes?.length;
+  //          this.Randomposts[this.indextofetch].liked = !this.Randomposts[this.indextofetch].liked
+  //         // this.Randomposts.forEach((el,ind)=>{
+  //         //   if(el.imagename==post.name){
 
-          //     el.commentdata = commentdata;
+  //         //     el.commentdata = commentdata;
               
               
-          //     el.likes = post?.likes?.length;
-          //     el.liked = !el.liked
-          //    // console.log(commentdata);
-          //    // console.log(el.likes);
+  //         //     el.likes = post?.likes?.length;
+  //         //     el.liked = !el.liked
+  //         //    // console.log(commentdata);
+  //         //    // console.log(el.likes);
               
-          //   }
-          // }
-       //  )
-          // this.Randomposts.unshift({userid:data.userid,username:data.username,profileurl:this.defaultpicurl,posturl:posturl,imagename:post.name,postcaption:post.postcaption,likes:post?.likes?.length,commentdata:commentdata,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
-         }
-     }  
+  //         //   }
+  //         // }
+  //      //  )
+  //         // this.Randomposts.unshift({userid:data.userid,username:data.username,profileurl:this.defaultpicurl,posturl:posturl,imagename:post.name,postcaption:post.postcaption,likes:post?.likes?.length,commentdata:commentdata,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
+  //        }
+  //    }  
 
 
 
 
 
-         this.showloader = false;
-        //  },3000)
-      },
-      error:(error)=>{
-        //this.spinner.hide();
-        this.showloader = false;
-        alert("Something Went Wrong");
-      }
-    })
-  }
+    //      this.showloader = false;
+    //     //  },3000)
+    //   },
+    //   error:(error)=>{
+    //     //this.spinner.hide();
+    //     this.showloader = false;
+    //     alert("Something Went Wrong");
+    //   }
+    // })
+  // }
     
      }
 
-     savelikes(userid:any,imagename:any,index:number){
+     savelikes(userid:string,imagename:string,index:number){
     this.useridtofetch = userid;
     this.imagenametofetch = imagename;
     this.indextofetch = index;
@@ -362,7 +364,30 @@ if(this.Randomposts?.length==0){
               this.postmodaltempdata.liked = true;
               this.postmodaltempdata.likes++;
           }
-          this.ngOnInit();
+          //this.ngOnInit();
+
+
+              // this.Randomposts.find(e=>{e.userid==userid && e.imagename==e.imagename}).likes++;
+              // this.Randomposts[index].liked = true;
+
+              // console.log(this.Randomposts[index].likes+" after like at index "+index);
+
+            //  console.log(this.sortData()[index].likes+" before like at "+index);
+
+
+              //  this.sortData().map((el,ind)=>{
+              //    if(ind==index){
+              //       el.likes++;
+              //       el.liked = true;
+              //    }
+              //  })
+              this.sortData()[index].likes++;
+              this.sortData()[index].liked = true;
+
+           //   console.log(this.sortData()[index].likes+" after like at "+index);
+             
+           //   this.Randomposts= Object.assign([], this.Randomposts);
+           
         }
      this.showloader = false;
         },
@@ -390,7 +415,26 @@ if(this.Randomposts?.length==0){
                 this.postmodaltempdata.likes--;
                 this.postmodaltempdata.liked = false;
             }
-            this.ngOnInit();
+           // this.ngOnInit();
+
+          //  this.Randomposts[index].likes = this.Randomposts[index].likes - 1;
+       //   console.log(this.Randomposts[index].likes+" before like at "+index);
+
+
+               this.Randomposts.map((el,ind)=>{
+                 if(ind==index){
+                    el.likes--;
+                    el.liked = false;
+                 }
+               })
+              // this.Randomposts[index].likes++;
+              // this.Randomposts[index].liked = true;
+
+            //  console.log(this.Randomposts[index].likes+" after like at "+index);
+           
+
+          
+           
           }
           this.showloader = false;
         },
@@ -572,12 +616,15 @@ if(this.Randomposts?.length==0){
     })
   }
 
-  openpostmodal(postdata:any){
+  openpostmodal(postdata:any,index:number){
    // this.postmodaltempdata.posturl = postdata?.posturl
    this.commentdetailsformodalpost = []
-   console.log(postdata);
+  // console.log(postdata);
+  postdata.index = index;
    this.postmodaltempdata = postdata
    this.commentdetailsformodalpost = postdata.commentdata
+   const id = sessionStorage.getItem("userid");
+   this.isOwnPost = postdata.userid==id
     // this.postmodaltempdata.username = postdata?.username;
     // this.postmodaltempdata.likes = postdata?.likes
     // this.postmodaltempdata.profileurl = postdata?.profileurl
@@ -586,7 +633,44 @@ if(this.Randomposts?.length==0){
     // this.postmodaltempdata.username = postdata?.username
   }
 
-  postcomment(postuserid:any,imagename:any){
+
+  deletepost(imagename:any){
+    // this.spinner.show();
+    this.showloader = true; 
+    const id = sessionStorage.getItem("userid");
+     this.service.deleteposts(id,imagename).subscribe({
+       next:(data)=>{
+           if(data=='post deleted'){
+              alert("Successfully Deleted");
+            //  this.ngOnInit()
+
+            this.sortData().forEach((el,ind)=>{
+              if(el.imagename==imagename){
+                 
+                 this.sortData().splice(ind,1);
+               //  console.log(JSON.stringify(this.commentdetailsformodalpost)+" getting");
+              }
+           })
+
+
+              //this.spinner.hide();
+            this.showloader = false;
+             }
+         // console.log(data);
+       },
+       error:(error)=>{
+         //this.spinner.hide();
+         this.showloader = false;
+         alert("Something Went Wrong");
+       }
+     })
+   }
+
+  postcomment(postuserid:any,imagename:any,index:number){
+
+
+    console.log(index+" this index");
+    
     this.showloader = true;
     const id = sessionStorage.getItem("userid");
     this.service.addcomment(postuserid,id,imagename,this.usercomment).subscribe({
@@ -601,12 +685,16 @@ if(this.Randomposts?.length==0){
                     if(data!=null && data.image!=null){
                       var thumb = Buffer.from(data.image.data).toString('base64');
                       var imgurl = "data:"+data.image.contentType+""+";base64,"+thumb;
-                      this.commentdetailsformodalpost.unshift({username:data.username,imageurl:imgurl,commenttext:this.usercomment,iscurrentusercomment:true})
-                      this.ngOnInit();
+                     // this.commentdetailsformodalpost.unshift({username:data.username,imageurl:imgurl,commenttext:this.usercomment,iscurrentusercomment:true})
+                      
+                      this.sortData()[index].commentdata.unshift({username:data.username,imageurl:imgurl,commenttext:this.usercomment,iscurrentusercomment:true})
+                     
+                    //  this.ngOnInit();
                       this.usercomment = "";
                     }else{
-                      this.commentdetailsformodalpost.unshift({username:data.username,imageurl:this.defaultpicurl,commenttext:this.usercomment,iscurrentusercomment:true})
-                      this.ngOnInit();
+                     // this.commentdetailsformodalpost.unshift({username:data.username,imageurl:this.defaultpicurl,commenttext:this.usercomment,iscurrentusercomment:true})
+                      this.sortData()[index].commentdata.unshift({username:data.username,imageurl:this.defaultpicurl,commenttext:this.usercomment,iscurrentusercomment:true})
+                   //   this.ngOnInit();
                       this.usercomment = "";
                     }
                   },
@@ -628,14 +716,14 @@ if(this.Randomposts?.length==0){
         }
     })
   }
-
-  opendeletecommentmodal(postuserid:any,imagename:any,comment:any){
+  opendeletecommentmodal(postuserid:any,imagename:any,comment:any,index:number){
   this.postuseridfordelcomment = postuserid;
   this.imagenamefordelcomment = imagename;
   this.commentfordel = comment;
+  this.indextodel = index;
   }
 
-  deletecomment(postuserid:any,imagename:any,comment:any){
+  deletecomment(postuserid:any,imagename:any,comment:any,index){
     this.showloader = true;
     const id = sessionStorage.getItem("userid");
     this.service.deletecomment(postuserid,id,imagename,comment).subscribe({
@@ -650,14 +738,14 @@ if(this.Randomposts?.length==0){
              
           // this.commentdetailsformodalpost = tempdata.splice(tempdata.findIndex(item=>{item.commenttext == comment}),1);          
            
-            this.commentdetailsformodalpost.forEach((el,ind)=>{
+            this.sortData()[this.indextodel].commentdata.forEach((el,ind)=>{
                if(el.commenttext==comment){
                   
-                  this.commentdetailsformodalpost.splice(ind,1);
-                  console.log(JSON.stringify(this.commentdetailsformodalpost)+" getting");
+                  this.sortData()[this.indextodel].commentdata.splice(ind,1);
+                //  console.log(JSON.stringify(this.commentdetailsformodalpost)+" getting");
                }
             })
-            this.ngOnInit()
+           // this.ngOnInit()
            this.showpost = false;
           }
           this.showloader = false;
