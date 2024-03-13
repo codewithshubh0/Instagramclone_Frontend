@@ -69,14 +69,14 @@
                  <span style="margin-left: 2px; color: #009cf6;font-weight: 500;"> Follow</span>
                 </div>
               </div>
-                <div class="row post">
+                <div class="row postmobile">
                   <img [src]="postdata.posturl"/>
                 </div>
                 <div class="row likesandcommentmobile">
                   <div class="innerlikesandcommentmobile">
                     <span (click)="savelikes(postdata.userid,postdata.imagename,postdata.index)" *ngIf="!postdata.liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
                     <span (click)="dislike(postdata.userid,postdata.imagename,postdata.index)" *ngIf="postdata.liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
-                    <span data-bs-toggle="modal" data-bs-target="#openpostmodalhomepage" (click)="openpostmodal(postdata)"><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
+                    <span data-bs-toggle="modal" data-bs-target="#openpostmodalhomepagemobile" (click)="openpostmodal(postdata)"><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
                     <span ><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
                     <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;margin-right: -21px" class="fa-regular fa-bookmark menuiconpost"></i></span>
                     <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;margin-right: -21px" class="fa-solid fa-bookmark menuiconpost"></i></span>
@@ -88,7 +88,7 @@
                       <p style="margin-top: -4px;font-weight: 600; ">{{postdata?.username}}</p><span style="margin-top: -4px ;margin-left: 10px;max-width:200px;word-wrap:break-word;">{{postdata.postcaption?.substring(0,30)}}</span>
                    </div>
                   <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;">{{postdata.postcaption?.length>30?postdata.postcaption.substring(30):""}}</p>
-                  <p style="margin-top: -12px;margin-bottom: 5px;cursor: pointer;color: grey;" *ngIf="postdata?.commentdata?.length>0" data-bs-toggle="modal" data-bs-target="#openpostmodalhomepage" (click)="openpostmodal(postdata)">View all {{postdata?.commentdata?.length}} comments</p>
+                  <p style="margin-top: -12px;margin-bottom: 5px;cursor: pointer;color: grey;" *ngIf="postdata?.commentdata?.length>0" data-bs-toggle="modal" data-bs-target="#openpostmodalhomepagemobile" (click)="openpostmodal(postdata)">View all {{postdata?.commentdata?.length}} comments</p>
                   <div style="border-bottom: 1px solid #e2e2e2;margin-left: 11px;"><textarea class="commentinput" style="border: none;width: 90%;height: 48px;margin-left: -8px "  (keyup)="addcomment()" [(ngModel)]="usercomment" type="text" placeholder="Add a comment..."></textarea>
                    <span  (click)="postcomment(postdata?.userid,postdata?.imagename)" *ngIf="showpost" style="color: rgb(9 179 255);float: right;font-size: 16px;font-weight: 500;margin-top: 19px;cursor: pointer;">Post</span></div>
                 </div>
@@ -114,7 +114,7 @@
               </div>
             </div>
             <div class="row">
-               <img [src]="postdata.posturl"/>
+               <img style="max-width: 104%;" [src]="postdata.posturl"/>
             </div>
             <div style="width: 100%;" class="row likesandcomment">
               <div class="innerlikesandcomment">
@@ -267,7 +267,7 @@
 
 <div class="modal fade" id="deletecommentmodal" style="background-color: rgb(25 25 25 / 78%);" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" >
-    <div class="modal-content" style="width: 394px; margin: auto;">
+    <div class="modal-content" [ngStyle]="{'width': mobileview?'338px':'394px', 'margin': 'auto'}">
       <div class="modal-body" style="box-shadow: 0px 0px 24px #424242;">
         <div style="height: 80px;">
            <div class="settinglinks" style="color: red;padding: 11px;text-align: center;cursor: pointer;margin-top: -13px;border-bottom: 1px solid #d1d1d1;" data-bs-dismiss="modal" (click)="deletecomment(postuseridfordelcomment,imagenamefordelcomment,commentfordel)">Delete</div>
@@ -280,7 +280,7 @@
 
 <div class="modal fade" id="reportcommentmodal" style="background-color: rgb(25 25 25 / 78%);" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" >
-    <div class="modal-content" style="width: 394px; margin: auto;">
+    <div class="modal-content" [ngStyle]="{'width': mobileview?'338px':'394px', 'margin': 'auto'}">
       <div class="modal-body" style="box-shadow: 0px 0px 24px #424242;">
         <div style="height: 80px;">
            <div class="settinglinks" (click)="reportpopup()" style="color: red;padding: 11px;text-align: center;cursor: pointer;margin-top: -13px;border-bottom: 1px solid #d1d1d1;" data-bs-dismiss="modal">Report</div>
@@ -316,8 +316,80 @@
      </div>
    </div>
  </div>
+
+
+ <div class="modal fade" id="openpostmodalhomepagemobile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content" style="height: 147vh ; margin: auto;">
+      <div class="modal-body">
+        <div class="row">
+          <div>  <i data-bs-dismiss="modal" class="fa-solid fa-xmark" style="
+            float: right;
+            margin-top: 8px;
+            font-size: 28px;
+            margin-right: 10px;
+            cursor: pointer;
+        "></i></div>
+        
+           <div class="row" style="height: 345px;background-color: #f0f0f0fc;border-top-left-radius: 10px; border-top-right-radius: 10px;margin-left: -1px;margin-bottom: 6px;width: 111%;">
+           <img style="max-width: 100%;height: 100%; object-fit: contain;margin: auto;display: block;" [src]="postmodaltempdata?.posturl" /></div>
+           <div class="row" style="
+           margin-left: 0px;
+       ">
+            <div>
+              <div style="border-bottom: 1px solid #e0e0e0;padding-bottom: 10px;width: 111%;
+              margin-left: -17px " class="profilepicinpost">
+                <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+                <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{postmodaltempdata?.username}}</span>
+                <button style="float: right;border: none;background: none;font-size: 19px;" data-bs-toggle="modal" data-bs-target="#postmoreoption" ><i  class="fa-solid fa-ellipsis"></i></button>
+            </div>
+            <div style="padding-top: 5px;border-bottom: 1px solid #e1e1e1;margin-bottom: 12px;max-height: 142px;height: 140px;overflow-y: scroll;width: 114%;margin-left: -18px;" class="profilepicinpost">
+              <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+              <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{postmodaltempdata?.username}}</span>
+              <span style="margin-left: 10px;max-width:200px;word-wrap:break-word;">{{postmodaltempdata?.postcaption?.substring(0,20)}}</span>
+              <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;">{{postmodaltempdata?.postcaption?.length>20?postmodaltempdata?.postcaption?.substring(20):""}}</p>
+             </div>
+             <div style="overflow-y: scroll;max-height: 253px;height: 253px;width: 113%;
+             margin-left: -14px  ">
+              <mat-progress-bar *ngIf="showloader" mode="indeterminate" color="accent"></mat-progress-bar>
+              <div style="margin-top: 10px;" *ngFor="let commentdet of commentdetailsformodalpost">
+                <div style="padding-top: 0px; padding-bottom: 0px; " class="profilepicinpost">
+                  <img [src]="commentdet?.imageurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+                  <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{commentdet?.username}}</span>
+                  <button *ngIf="commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#deletecommentmodal" (click)="opendeletecommentmodal(postmodaltempdata.userid,postmodaltempdata.imagename,commentdet.commenttext)" style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
+                  <button *ngIf="!commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#reportcommentmodal"  style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
+                  <span style="margin-left: 10px;max-width:200px;word-wrap:break-word;font-size: 13px">{{commentdet?.commenttext?.substring(0,30)}}</span>
+                  <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;font-size: 13px">{{commentdet?.commenttext?.length>30?commentdet.commenttext.substring(30):""}}</p>
+                  
+                </div> 
+              </div>
+            </div> 
+            <div>
+              <div style="margin-top: 12px" class="innerlikesandcomment">
+                <span (click)="savelikes(postmodaltempdata?.userid ,postmodaltempdata?.imagename,postmodaltempdata.index)" *ngIf="!postmodaltempdata?.liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+                <span (click)="dislike(postmodaltempdata?.userid ,postmodaltempdata?.imagename,postmodaltempdata.index)" *ngIf="postmodaltempdata?.liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span> 
+                <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
+                <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
+                <span ><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>
+              
+               </div>
+            </div>
+            <p *ngIf="postmodaltempdata?.likes>0" style="margin-top: 10px;font-weight: 500;">{{postmodaltempdata?.likes}} likes</p>
+            <p *ngIf="postmodaltempdata?.likes==0" style="margin-top: 10px;font-weight: 500;">Be the first to like this</p>
+            <div style="border-top: 1px solid #e2e2e2;margin-left: -12px;"><textarea class="commentinput" style="border: none;margin-top: 19px;margin-left: 13px;width: 386px;height: 58px;width: 251px;
+              height: 52px "  (keyup)="addcomment()" [(ngModel)]="usercomment" type="text" placeholder="Add a comment..." autofocus></textarea>
+              <span  (click)="postcomment(postmodaltempdata?.userid,postmodaltempdata?.imagename)" *ngIf="showpost" style="color: #0087e5;float: right;font-size: 16px;margin-right: 20px;font-weight: 500;margin-top: 19px;cursor: pointer;">Post</span></div>
+           </div>
+            <div></div>
+            <div></div>
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- for responsive navbar menu  -->
-<nav *ngIf="navbarformobile" class="navbar fixed-bottom navbar-expand-lg bg-primary navbar-dark">
+<nav *ngIf="navbarformobile" class="navbar fixed-bottom navbar-expand-lg" style="background-color: white;color: black;border-top: 1px solid rgb(228, 228, 228);">
    <div class="container-fluid">
      <div style="padding-left: 14px;" class="navbar-brand" (click)="showhomepage()" ><i class="fa-solid fa-house menuicon"></i></div>
      <div class="navbar-brand" ><i class="fa-solid fa-magnifying-glass menuicon"></i></div>

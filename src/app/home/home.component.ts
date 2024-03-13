@@ -131,6 +131,8 @@ seletedfile: ElementRef;
   
     // this.scroller.scrollToPosition([0,0]);
     this.homeoptionselected = true;
+    this.usercomment = ''
+    this.showpost = false
     this.onloadhomepage()
     
     this.Randomposts.forEach((item)=>{
@@ -306,23 +308,23 @@ if(this.Randomposts?.length==0){
              commentdata.push({commentuserid:commentuserid,username:commentuserid,imageurl:this.defaultpicurl,commenttext:commenttext})              
            }
 
-          //  this.Randomposts[this.indextofetch].commentdata = commentdata;
-          //  this.Randomposts[this.indextofetch].likes = post?.likes?.length;
-          //  this.Randomposts[this.indextofetch].liked = !this.Randomposts[this.indextofetch].liked
-          this.Randomposts.forEach((el,ind)=>{
-            if(el.imagename==post.name){
+           this.Randomposts[this.indextofetch].commentdata = commentdata;
+           this.Randomposts[this.indextofetch].likes = post?.likes?.length;
+           this.Randomposts[this.indextofetch].liked = !this.Randomposts[this.indextofetch].liked
+          // this.Randomposts.forEach((el,ind)=>{
+          //   if(el.imagename==post.name){
 
-              el.commentdata = commentdata;
+          //     el.commentdata = commentdata;
               
               
-              el.likes = post?.likes?.length;
-              el.liked = !el.liked
-             // console.log(commentdata);
-             // console.log(el.likes);
+          //     el.likes = post?.likes?.length;
+          //     el.liked = !el.liked
+          //    // console.log(commentdata);
+          //    // console.log(el.likes);
               
-            }
-          }
-         )
+          //   }
+          // }
+       //  )
           // this.Randomposts.unshift({userid:data.userid,username:data.username,profileurl:this.defaultpicurl,posturl:posturl,imagename:post.name,postcaption:post.postcaption,likes:post?.likes?.length,commentdata:commentdata,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
          }
      }  
