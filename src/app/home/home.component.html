@@ -1,4 +1,4 @@
-<mat-progress-bar *ngIf="showloader" mode="indeterminate" color="accent"></mat-progress-bar>
+<mat-progress-bar *ngIf="showloader" style="top:0;position: fixed;" mode="indeterminate" color="accent"></mat-progress-bar>
 <div >
     <div class="row" [ngStyle]="{'backgroundColor':isdark?'black':'white','color':isdark?'white':'black'}">
        
@@ -74,8 +74,8 @@
                 </div>
                 <div class="row likesandcommentmobile">
                   <div class="innerlikesandcommentmobile">
-                    <span (click)="savelikes(postdata.userid,postdata.imagename)" *ngIf="!postdata.liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
-                    <span (click)="dislike(postdata.userid,postdata.imagename)" *ngIf="postdata.liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
+                    <span (click)="savelikes(postdata.userid,postdata.imagename,postdata.index)" *ngIf="!postdata.liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+                    <span (click)="dislike(postdata.userid,postdata.imagename,postdata.index)" *ngIf="postdata.liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
                     <span data-bs-toggle="modal" data-bs-target="#openpostmodalhomepage" (click)="openpostmodal(postdata)"><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
                     <span ><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
                     <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;margin-right: -21px" class="fa-regular fa-bookmark menuiconpost"></i></span>
@@ -118,8 +118,8 @@
             </div>
             <div style="width: 100%;" class="row likesandcomment">
               <div class="innerlikesandcomment">
-                <span (click)="savelikes(postdata.userid,postdata.imagename)" *ngIf="!postdata.liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
-                <span (click)="dislike(postdata.userid,postdata.imagename)" *ngIf="postdata.liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
+                <span (click)="savelikes(postdata.userid,postdata.imagename,postdata.index)" *ngIf="!postdata.liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+                <span (click)="dislike(postdata.userid,postdata.imagename,postdata.index)" *ngIf="postdata.liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
                 <span data-bs-toggle="modal" data-bs-target="#openpostmodalhomepage" (click)="openpostmodal(postdata)"><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
                 <span ><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
                 <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;margin-right: -21px" class="fa-regular fa-bookmark menuiconpost"></i></span>
@@ -243,8 +243,8 @@
                 </div> 
                 <div>
                   <div style="margin-top: 12px" class="innerlikesandcomment">
-                    <span (click)="savelikes(postmodaltempdata?.userid ,postmodaltempdata?.imagename)" *ngIf="!postmodaltempdata?.liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
-                    <span (click)="dislike(postmodaltempdata?.userid ,postmodaltempdata?.imagename)" *ngIf="postmodaltempdata?.liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span> 
+                    <span (click)="savelikes(postmodaltempdata?.userid ,postmodaltempdata?.imagename,postmodaltempdata.index)" *ngIf="!postmodaltempdata?.liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+                    <span (click)="dislike(postmodaltempdata?.userid ,postmodaltempdata?.imagename,postmodaltempdata.index)" *ngIf="postmodaltempdata?.liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span> 
                     <span><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
                     <span><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
                     <span ><i style="float: right;" class="fa-regular fa-bookmark menuiconpost"></i></span>

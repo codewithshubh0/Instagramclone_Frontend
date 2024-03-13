@@ -60,9 +60,11 @@ seletedfile: ElementRef;
 
   useridtofetch = '';
   imagenametofetch = '';
+  indextofetch = -1;
+  count=0;
 
-  Randomposts:Array<{userid:string,username:string,profileurl:string,posturl:string,imagename:string,postcaption:string,likes:number,commentdata:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}>,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}> = [];
-  postmodaltempdata:{userid:string,username:string,profileurl:string,posturl:string,imagename:string,postcaption:string,likes:number,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}
+  Randomposts:Array<{index:number,userid:string,username:string,profileurl:string,posturl:string,imagename:string,postcaption:string,likes:number,commentdata:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}>,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}> = [];
+  postmodaltempdata:{index:number,userid:string,username:string,profileurl:string,posturl:string,imagename:string,postcaption:string,likes:number,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}
   commentdetails:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}> = []
   commentdetailsformodalpost:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}> = []
   constructor(private router:Router,private renderer:Renderer2,private service:ProfileService,private scroller:ViewportScroller,private datepipe:DatePipe){
@@ -131,7 +133,7 @@ seletedfile: ElementRef;
     this.homeoptionselected = true;
     this.onloadhomepage()
     
-    for(let item of this.Randomposts){
+    this.Randomposts.forEach((item)=>{
       let userid = item.userid;
    // console.log("working");
     
@@ -152,7 +154,8 @@ seletedfile: ElementRef;
           }
         }
       )
-    }
+    
+    })
     
   }
   }
@@ -198,6 +201,7 @@ if(this.Randomposts?.length==0){
     this.service.getalluserdetails().subscribe({
        next:(data)=>{
            if(data){
+            this.count =0;
             for(let dat of data){
               
               const userid = dat?.userid;
@@ -258,9 +262,10 @@ if(this.Randomposts?.length==0){
                     }
                 }
 
-                 this.Randomposts.unshift({userid:userid,username:username,profileurl:this.defaultpicurl,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:this.commentdetails,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
-                  
+                 this.Randomposts.unshift({index:this.count,userid:userid,username:username,profileurl:this.defaultpicurl,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:this.commentdetails,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
+                 this.count++;
                 }
+                
             }
             setTimeout(()=>{
               this.showloader = false;
@@ -274,6 +279,10 @@ if(this.Randomposts?.length==0){
   }else{
     console.log("do this");
    var commentdata = []
+   console.log(this.indextofetch);
+   if(this.useridtofetch==''){
+     return;
+   }
     this.service.getuserdetails(this.useridtofetch).subscribe({
       next:(data)=>{
      //  console.log(JSON.stringify(data)+" details");
@@ -285,6 +294,8 @@ if(this.Randomposts?.length==0){
       // console.log("worked this time");
         
          if(post.name== this.imagenametofetch){
+         
+          
           var thumb = Buffer.from(post?.image?.data).toString('base64');
           var posturl = "data:"+post?.image?.contentType+""+";base64,"+thumb;
           
@@ -294,6 +305,10 @@ if(this.Randomposts?.length==0){
  
              commentdata.push({commentuserid:commentuserid,username:commentuserid,imageurl:this.defaultpicurl,commenttext:commenttext})              
            }
+
+          //  this.Randomposts[this.indextofetch].commentdata = commentdata;
+          //  this.Randomposts[this.indextofetch].likes = post?.likes?.length;
+          //  this.Randomposts[this.indextofetch].liked = !this.Randomposts[this.indextofetch].liked
           this.Randomposts.forEach((el,ind)=>{
             if(el.imagename==post.name){
 
@@ -307,7 +322,7 @@ if(this.Randomposts?.length==0){
               
             }
           }
-          )
+         )
           // this.Randomposts.unshift({userid:data.userid,username:data.username,profileurl:this.defaultpicurl,posturl:posturl,imagename:post.name,postcaption:post.postcaption,likes:post?.likes?.length,commentdata:commentdata,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
          }
      }  
@@ -329,9 +344,10 @@ if(this.Randomposts?.length==0){
     
      }
 
-     savelikes(userid:any,imagename:any){
+     savelikes(userid:any,imagename:any,index:number){
     this.useridtofetch = userid;
     this.imagenametofetch = imagename;
+    this.indextofetch = index;
       this.showloader = true;
       const id = sessionStorage.getItem("userid");
       this.service.savelikes(userid,imagename,id).subscribe({
@@ -355,9 +371,10 @@ if(this.Randomposts?.length==0){
       })
     }
 
-    dislike(userid:any,imagename:any){
+    dislike(userid:any,imagename:any,index:number){
       this.useridtofetch = userid;
     this.imagenametofetch = imagename;
+    this.indextofetch = index;
       this.likes--;
     this.showloader = true;
       const id = sessionStorage.getItem("userid");
