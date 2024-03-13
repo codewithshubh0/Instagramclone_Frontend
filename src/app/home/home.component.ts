@@ -462,7 +462,7 @@ seletedfile: ElementRef;
     this.showsave=false;
     this.showupload = true;
     this.instantuploadedimgurl = '';
-
+   this.caption = ''
   }
 
   createpost(){

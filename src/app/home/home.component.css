@@ -95,7 +95,7 @@
 }
 
 .likesandcommentmobile{
-    width: 322px 
+    width: 93% 
 }
 .innerlikesandcomment{
     flex: 1;
@@ -104,7 +104,7 @@
 
 .innerlikesandcommentmobile{
     margin-top: 15px;
-    width: 296px 
+    width: 100% 
 }
 /* .moremenu:hover{
     background-color: rgb(233, 233, 233);
@@ -236,5 +236,11 @@
     color: #0297c8;
     font-weight: bold;
     float: right;
+}
+
+.postboxmobile{
+    width: 217%;
+    margin-left: 5%;
+    margin-bottom:36px 
 }
 

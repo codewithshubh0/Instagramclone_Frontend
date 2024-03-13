@@ -43,8 +43,11 @@
               <div style="margin-right: 16px;"><p style="font-weight: bold;margin-bottom: 0px;text-align: center;">{{following}}</p> Following</div>
              </div>
           </div>
-        <div class="col">
-            <div style="display: flex;margin-left: 11px;margin-top: 32px;">
+        <div style="margin-top: 11px " class="col">
+          <div style="margin-left: 13px;" *ngFor="let d of biodata" >
+            <div>{{d}}</div>
+          </div>
+            <div style="display: flex;margin-left: 6px;margin-top: 32px;">
                 
                 <div class="editandviewmobile" (click)="editprofile()" *ngIf="!isfromSearch">Edit profile</div>
                 <div (click)="follow()" class="follow" *ngIf="isfromSearch && !isfollowing">Follow</div>
@@ -52,9 +55,7 @@
                 <div class="editandviewmobile">View archive</div>
                 <div data-bs-toggle="modal" data-bs-target="#settingsModal" ><img src="../../../assets/settings.png" style="width: 33px;height: 28px;margin-left: -7px;cursor: pointer;"/></div>
             </div>
-            <div style="margin-left: 48px;" *ngFor="let d of biodata" >
-              <div>{{d}}</div>
-            </div>
+        
         </div>
     </div>
 </div>
@@ -85,22 +86,16 @@
 </div>
 
 <div *ngIf="mobileview && Userposts.length!=0" style="margin: 0 auto;">
-  <div class="row" style="height: 28vh;border-bottom: 1px solid #d7d6d6;margin-left: 5px ">
+  <div class="row" style="height: 25vh;border-bottom: 1px solid #d7d6d6;margin-left: 5px;margin-top: 78px">
       <div class="col-3" >
          <!-- <img src="../../../assets/post1.jpg" style="width: 100px;height: 100px;border-radius: 50%;margin-top: 29px" /> -->
-         <div class="mobilehighlightimage"></div>
-         <p class="highlightname">Highlight1</p>
+         <div class="mobilehighlightimage"><img style="
+          width: 117%;
+          margin-left: -5px;
+          margin-top: -1px;
+      " src="../../../assets/addhighlight1.png" /></div>
+         <p class="highlightname">New</p>
       </div>
-      <div class="col-3" >
-          <!-- <img src="../../../assets/post1.jpg" style="width: 100px;height: 100px;border-radius: 50%;margin-top: 29px" /> -->
-         <div class="mobilehighlightimage"></div>
-         <p class="highlightname">Highlight2</p>
-       </div>
-       <div class="col-3">
-         <!-- <img src="../../../assets/post1.jpg" style="width: 100px;height: 100px;border-radius: 50%;margin-top: 29px" /> -->
-         <div class="mobilehighlightimage"></div>
-         <p class="highlightname">Highlight3</p>
-       </div>
   </div>
 </div>
 
