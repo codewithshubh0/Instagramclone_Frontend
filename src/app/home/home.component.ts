@@ -281,8 +281,10 @@ seletedfile: ElementRef;
         if(data){
           // this.router.navigate(['/home'])
           // window.location.reload();
-          this.postmodaltempdata.liked = true;
-          this.postmodaltempdata.likes++;
+          if(this.postmodaltempdata!=undefined && this.postmodaltempdata!=null){
+              this.postmodaltempdata.liked = true;
+              this.postmodaltempdata.likes++;
+          }
           this.ngOnInit();
         }
      this.showloader = false;
@@ -304,8 +306,10 @@ seletedfile: ElementRef;
           if(data){
             // this.router.navigate(['/home'])
             // window.location.reload();
-            this.postmodaltempdata.likes--;
-            this.postmodaltempdata.liked = false;
+            if(this.postmodaltempdata!=undefined && this.postmodaltempdata!=null){
+                this.postmodaltempdata.likes--;
+                this.postmodaltempdata.liked = false;
+            }
             this.ngOnInit();
           }
           this.showloader = false;
