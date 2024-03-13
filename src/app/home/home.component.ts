@@ -58,21 +58,21 @@ seletedfile: ElementRef;
   imagenamefordelcomment:any
   commentfordel:any
 
+  useridtofetch = '';
+  imagenametofetch = '';
+
   Randomposts:Array<{userid:string,username:string,profileurl:string,posturl:string,imagename:string,postcaption:string,likes:number,commentdata:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}>,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}> = [];
   postmodaltempdata:{userid:string,username:string,profileurl:string,posturl:string,imagename:string,postcaption:string,likes:number,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}
   commentdetails:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}> = []
   commentdetailsformodalpost:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}> = []
   constructor(private router:Router,private renderer:Renderer2,private service:ProfileService,private scroller:ViewportScroller,private datepipe:DatePipe){
     this.renderer.listen('window', 'click',(e:Event)=>{
-   
-     if( e.target !== this.moreoption?.nativeElement && e.target !== this.moreoption1?.nativeElement && e.target !== this.moreoption2?.nativeElement && e.target!==this.moremenus?.nativeElement){
-         this.showmoredropdown=false;
-     }
-     
-    
-     var userdetails = JSON.parse(sessionStorage.getItem("userdetails"));
-     this.getScreenSize();
- });
+        if( e.target !== this.moreoption?.nativeElement && e.target !== this.moreoption1?.nativeElement && e.target !== this.moreoption2?.nativeElement && e.target!==this.moremenus?.nativeElement){
+            this.showmoredropdown=false;
+        }
+        var userdetails = JSON.parse(sessionStorage.getItem("userdetails"));
+    });
+ this.getScreenSize();
 
 //  this.scroller.scrollToPosition([0,0]);
   }
@@ -133,12 +133,12 @@ seletedfile: ElementRef;
     
     for(let item of this.Randomposts){
       let userid = item.userid;
-    console.log("working");
+   // console.log("working");
     
       this.service.getimage(userid).subscribe(
         {
           next:(data)=>{
-             console.log(item.profileurl);
+        //     console.log(item.profileurl);
              
               if(data!=null && data.image!=null){
                 var thumb = Buffer.from(data.image.data).toString('base64');
@@ -189,9 +189,12 @@ seletedfile: ElementRef;
      }
 
      onloadhomepage(){
-      this.Randomposts = []
+     // this.Randomposts = []
       this.showloader=true
       const loggeduserid = sessionStorage.getItem("userid");
+if(this.Randomposts?.length==0){
+
+
     this.service.getalluserdetails().subscribe({
        next:(data)=>{
            if(data){
@@ -227,7 +230,7 @@ seletedfile: ElementRef;
                              Math.floor(timediff/1000)>=60 && Math.floor(timediff/1000)<3600?Math.floor((timediff/1000)/60)+'m':
                              Math.floor(((timediff/1000)/60)/60)+'h';
                     
-               }
+               }else
                
                if(agedate>0 && agedate<=30){
                   ageofpost = (agedate)+'d' 
@@ -268,11 +271,67 @@ seletedfile: ElementRef;
          this.showloader = false
        }
     })
+  }else{
+    console.log("do this");
+   var commentdata = []
+    this.service.getuserdetails(this.useridtofetch).subscribe({
+      next:(data)=>{
+     //  console.log(JSON.stringify(data)+" details");
+       
+       for(let post of data[0].posts){
+        // var thumb = Buffer.from(data[0]?.posts[i]?.image?.data).toString('base64');
+        // var url = "data:"+this.userdetail[0]?.posts[i]?.image?.contentType+""+";base64,"+thumb;
+        // var commentdata = []
+      // console.log("worked this time");
+        
+         if(post.name== this.imagenametofetch){
+          var thumb = Buffer.from(post?.image?.data).toString('base64');
+          var posturl = "data:"+post?.image?.contentType+""+";base64,"+thumb;
+          
+          for(let j=post?.comments?.length-1;j>=0;j--){
+             const commentuserid = post?.comments[j]?.userid
+             const commenttext =  post?.comments[j]?.commenttext;
+ 
+             commentdata.push({commentuserid:commentuserid,username:commentuserid,imageurl:this.defaultpicurl,commenttext:commenttext})              
+           }
+          this.Randomposts.forEach((el,ind)=>{
+            if(el.imagename==post.name){
+
+              el.commentdata = commentdata;
+              
+              
+              el.likes = post?.likes?.length;
+              el.liked = !el.liked
+             // console.log(commentdata);
+             // console.log(el.likes);
+              
+            }
+          }
+          )
+          // this.Randomposts.unshift({userid:data.userid,username:data.username,profileurl:this.defaultpicurl,posturl:posturl,imagename:post.name,postcaption:post.postcaption,likes:post?.likes?.length,commentdata:commentdata,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
+         }
+     }  
+
+
+
+
+
+         this.showloader = false;
+        //  },3000)
+      },
+      error:(error)=>{
+        //this.spinner.hide();
+        this.showloader = false;
+        alert("Something Went Wrong");
+      }
+    })
+  }
     
      }
 
      savelikes(userid:any,imagename:any){
-  
+    this.useridtofetch = userid;
+    this.imagenametofetch = imagename;
       this.showloader = true;
       const id = sessionStorage.getItem("userid");
       this.service.savelikes(userid,imagename,id).subscribe({
@@ -297,6 +356,8 @@ seletedfile: ElementRef;
     }
 
     dislike(userid:any,imagename:any){
+      this.useridtofetch = userid;
+    this.imagenametofetch = imagename;
       this.likes--;
     this.showloader = true;
       const id = sessionStorage.getItem("userid");
