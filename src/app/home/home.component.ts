@@ -5,7 +5,7 @@ import { Buffer } from 'buffer';
 import { JsonPipe, ViewportScroller } from '@angular/common';
 import { HostListener } from "@angular/core";
 import { DatePipe } from '@angular/common';
-
+import { NgxSpinnerService} from 'ngx-spinner';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -64,12 +64,12 @@ seletedfile: ElementRef;
   imagenametofetch = '';
   indextofetch = -1;
   count=0;
-
+  searchselectedformobile = false;
   Randomposts:Array<{index:number,userid:string,username:string,profileurl:string,posturl:string,imagename:string,postcaption:string,likes:number,commentdata:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}>,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}> = [];
   postmodaltempdata:{index:number,userid:string,username:string,profileurl:string,posturl:string,imagename:string,postcaption:string,likes:number,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}
   commentdetails:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}> = []
   commentdetailsformodalpost:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}> = []
-  constructor(private router:Router,private renderer:Renderer2,private service:ProfileService,private scroller:ViewportScroller,private datepipe:DatePipe){
+  constructor(private router:Router,private renderer:Renderer2,private service:ProfileService,private scroller:ViewportScroller,private datepipe:DatePipe,private spinner:NgxSpinnerService){
     this.renderer.listen('window', 'click',(e:Event)=>{
         if( e.target !== this.moreoption?.nativeElement && e.target !== this.moreoption1?.nativeElement && e.target !== this.moreoption2?.nativeElement && e.target!==this.moremenus?.nativeElement){
             this.showmoredropdown=false;
@@ -199,6 +199,7 @@ seletedfile: ElementRef;
      onloadhomepage(){
      // this.Randomposts = []
       this.showloader=true
+      this.spinner.show();
       const loggeduserid = sessionStorage.getItem("userid");
  if(this.Randomposts?.length==0){
 
@@ -272,13 +273,59 @@ seletedfile: ElementRef;
             }
             setTimeout(()=>{
               this.showloader = false;
-            },8000)
+              this.spinner.hide();
+            },6000)
            }
        },
        error:(error)=>{
          this.showloader = false
+         this.spinner.hide();
        }
     })
+   }else{
+    
+
+
+    this.sortData().forEach((obj)=>{
+     
+
+
+       var postingdate = this.datepipe.transform(obj.postdate, 'yyyy-MM-dd hh:mm a')
+       var agedate  = this.calculateDiff(postingdate);
+      // console.log(agedate);
+       
+      // var agedate = this.calculateDiff(this.datepipe.transform('Mon Jan 08 2024 20:10:27 GMT+0530 (India Standard Time)', 'yyyy-MM-dd hh:mm'));
+        var ageofpost = ''
+        var todaypostage = ''
+        var todaypost = false;
+        if(agedate==0 ){
+            //calculate time diff
+            todaypost = true;
+            var currdate = new Date()
+            var timediff = currdate.getTime()-new Date(obj.postdate).getTime();
+           // console.log((timediff/1000)/60+" minutes");
+            todaypostage = Math.floor(timediff/1000)>=0 && Math.floor(timediff/1000)<60?Math.floor(timediff/1000)+'s':
+                     Math.floor(timediff/1000)>=60 && Math.floor(timediff/1000)<3600?Math.floor((timediff/1000)/60)+'m':
+                     Math.floor(((timediff/1000)/60)/60)+'h';
+            
+       }else if(agedate>0 && agedate<=30){
+          ageofpost = (agedate)+'d' 
+       }
+       else if(agedate>30 && agedate<365){
+           ageofpost = Math.floor(agedate/7)+'w' 
+       }else if(agedate>365){
+            ageofpost = Math.floor(agedate/365)+'y'
+       }
+  
+       obj.ageofpost = ageofpost
+       obj.todaypostage = todaypostage;
+       obj.postdate = postingdate
+       obj.istodayspost = todaypost;
+
+    })
+    this.spinner.hide();
+    this.showloader = false;
+     
    }
    //else{
   //   //console.log("do this");
@@ -360,10 +407,10 @@ seletedfile: ElementRef;
         if(data){
           // this.router.navigate(['/home'])
           // window.location.reload();
-          if(this.postmodaltempdata!=undefined && this.postmodaltempdata!=null){
-              this.postmodaltempdata.liked = true;
-              this.postmodaltempdata.likes++;
-          }
+          // if(this.postmodaltempdata!=undefined && this.postmodaltempdata!=null){
+          //     this.postmodaltempdata.liked = true;
+          //     this.postmodaltempdata.likes++;
+          // }
           //this.ngOnInit();
 
 
@@ -411,10 +458,10 @@ seletedfile: ElementRef;
           if(data){
             // this.router.navigate(['/home'])
             // window.location.reload();
-            if(this.postmodaltempdata!=undefined && this.postmodaltempdata!=null){
-                this.postmodaltempdata.likes--;
-                this.postmodaltempdata.liked = false;
-            }
+            // if(this.postmodaltempdata!=undefined && this.postmodaltempdata!=null){
+            //     this.postmodaltempdata.likes--;
+            //     this.postmodaltempdata.liked = false;
+            // }
            // this.ngOnInit();
 
           //  this.Randomposts[index].likes = this.Randomposts[index].likes - 1;
@@ -477,6 +524,7 @@ seletedfile: ElementRef;
     this.Searchpageselected = false;
     this.showsearchbox = false;
     this.profilepageforsearch = false;
+    this.searchselectedformobile = false
     this.ngOnInit()
   }
 
@@ -550,6 +598,7 @@ seletedfile: ElementRef;
          this.Searchpageselected = false;
          this.showsearchbox = false;
          this.profilepageselected = false;
+         this.searchselectedformobile = false
 
         //  setTimeout(()=>{
          // this.spinner.hide();
@@ -598,6 +647,15 @@ seletedfile: ElementRef;
     const id = sessionStorage.getItem("userid");
     const formdata = new FormData();
     var currdate = this.datepipe.transform(new Date(), 'yyyy-MM-dd hh:mm a')
+    
+    var posturl='';
+    const reader = new FileReader();
+    reader.readAsDataURL(this.file); 
+    reader.onload = (_event) => { 
+       posturl =  reader.result.toString();          
+      }
+
+
     formdata.append("image",this.file);
     formdata.append("userid",id); 
     formdata.append("caption",this.caption);
@@ -607,7 +665,8 @@ seletedfile: ElementRef;
     this.service.saveposts(formdata).subscribe({
       next:(data)=>{
         alert(data)
-        this.ngOnInit();
+       // this.ngOnInit();
+       this.Randomposts.unshift({index:this.Randomposts.length,userid:id,username:this.AccountName,profileurl:this.defaultpicurl,posturl:posturl,imagename:this.file.name,postcaption:this.caption,likes:0,commentdata:[],ageofpost:'1d',postdate:currdate,todaypostage:'5s',liked:false,istodayspost:true});
       },
       error:(error)=>{
      //   this.spinner.hide();
@@ -769,6 +828,14 @@ seletedfile: ElementRef;
 
    reportpopup(){
     alert("Comment Reported")
+   }
+
+   showsearchformobile(){
+    this.scroller.scrollToPosition([0,0]);
+    this.searchselectedformobile = true;
+    this.homeoptionselected  = false;
+    this.profilepageselected = false;
+    this.profilepageforsearch = false;
    }
 
 }

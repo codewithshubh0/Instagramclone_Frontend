@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { LoginsignupService } from '../Services/loginsignup.service';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { HostListener } from "@angular/core";
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -12,9 +13,24 @@ export class SignupComponent {
   fullname:any
   username:any
   password:any;
-
-   constructor(private service:LoginsignupService,private router:Router,private spinner: NgxSpinnerService){}
+  screenHeight: number;
+  screenWidth: number;
+  mobileview = false;
+   constructor(private service:LoginsignupService,private router:Router,private spinner: NgxSpinnerService){
+    this.getScreenSize();
+   }
   
+   @HostListener('window:resize', ['$event'])
+    getScreenSize(event?) {
+          this.screenHeight = window.innerHeight;
+          this.screenWidth = window.innerWidth;
+
+          if(this.screenWidth<500){
+            this.mobileview = true;
+          }else{
+            this.mobileview = false
+          }
+    }
    signup(){
     this.spinner.show();
 

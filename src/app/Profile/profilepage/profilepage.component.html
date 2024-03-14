@@ -122,7 +122,7 @@
 <div *ngIf="mobileview" style="margin-top: 23px; width: 105%;;margin: 58px auto;">
   <div class="row" style="height: 31vh;width: 95%;" >
     <div *ngIf="Userposts.length==0">
-       <div style="width: 231px;margin: 0 auto;">
+       <div style="width: 231px;margin: 0 auto;margin-top: 93px ">
            <img style="width: 100px;margin-left: 49px;" src="../../../assets/nopost.png"/>
            <p style="font-weight: bold;font-size:37px;">No Posts Yet</p>
        </div>
@@ -260,6 +260,7 @@
     <div class="modal-content" style="height: 636px ; margin: auto;">
       <div class="modal-body">
         <div class="row">
+          <div id="cancelpostmodal" data-bs-dismiss="modal" ></div>
            <div class="col-7" style="height: 634px;background-color: #f0f0f0fc;border-top-left-radius: 10px; border-bottom-left-radius: 10px;"><img style="max-width: 100%;height: 100%; object-fit: contain;margin: auto;display: block;"[src]="openimgurl" /></div>
            <div class="col">
             <div>
@@ -316,7 +317,7 @@
     <div class="modal-content" style="height: 147vh ; margin: auto;">
       <div class="modal-body">
         <div class="row">
-          <div>  <i data-bs-dismiss="modal" class="fa-solid fa-xmark" style="
+          <div id="cancelpostmodalmobile"><i  data-bs-dismiss="modal" class="fa-solid fa-xmark" style="
             float: right;
             margin-top: 8px;
             font-size: 28px;
@@ -455,6 +456,88 @@
         <div style="height: 98px;">
            <div class="settinglinks" style="color: red;padding: 11px;text-align: center;cursor: pointer;margin-top: 5px;border-bottom: 1px solid #d1d1d1;" data-bs-dismiss="modal" (click)="deletecomment(postuseridfordelcomment,imagenamefordelcomment,commentfordel)">Delete</div>
            <div  class="settinglinkslast" style="padding: 11px;text-align: center;cursor: pointer;" data-bs-dismiss="modal" >Cancel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="openpostmodalwhenuploadmobile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content" style="height: 561px ; margin: auto;width: 100%;">
+      <div class="modal-body">
+        <div class="row">
+          <div>  <i data-bs-dismiss="modal" class="fa-solid fa-xmark" style="
+            float: right;
+    margin-top: 3px;
+    font-size: 28px;
+    margin-right: 6px;
+    cursor: pointer;
+        "></i></div>
+           <div class="row" style="height: 353px;background-color: #f0f0f0fc;margin-top: 4%;width: 93%;
+           margin-left: 13px;"><img style="max-width: 100%;height: 100%; object-fit: contain;display: block;margin: auto;"[src]="instantuploadedimgurl" /></div>
+           <div class="row" style="
+           margin-top: 15px;margin-left: 8px;
+       ">
+            <div>
+                <div class="profilepicinpost">
+                    <img [src]="profileimgurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+                    <span style="font-weight: bold;margin-left: 18px;">{{AccountName}}</span>
+                    <button class="share" (click)="createpost()" data-bs-dismiss="modal" >Share</button>
+                </div>
+                <div style="margin-top: 22px;">
+                 <textarea class="captioninput" [(ngModel)]="caption" style="border: none;width: 100%;margin-top: -7px;" type="text" placeholder="Write a caption"></textarea>
+                </div>
+            </div>
+            <div></div>
+            <div></div>
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="PostModalmobile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="width: 475px; margin: auto;border-radius: 18px;height: 73vh ">
+     <div style="font-size: 17px;
+     font-weight: 600;
+     cursor: auto;
+     border-bottom: 1px solid #c6c6c6;
+     width: 100%;
+     text-align: center;
+     border-top-left-radius: 18px;
+     border-top-right-radius: 18px;
+     padding: 11px;" class="settinglinks">Create new post <i data-bs-dismiss="modal" class="fa-solid fa-xmark" style="
+            float: right;
+            margin-top: -2px;
+            font-size: 28px;
+            margin-right: 10px;
+            cursor: pointer;
+        "></i></div>
+      <div class="modal-body">
+       
+        <div style="height: 236px;">
+           
+          
+           <div style="
+           width: 26%;
+           margin: 0 auto;
+           margin-top: 109px;
+       ">
+           <img src="../../assets/postmodalimage.png" style=" width: 115px;" />
+        </div>
+           <div  class="selectpost">
+             
+            <label style="cursor: pointer;" *ngIf="showupload" for="uploadpic"> Select from computer </label>
+            <label *ngIf="showsave" style="cursor: pointer;" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#openpostmodalwhenuploadmobile"   (click)="Uploadpostimage()" > Upload Photo </label>
+            <input #myInput (change)="storefile($event)" style="display: none;" type="file" id="uploadpic" />
+          </div>
+           <!-- <div  data-bs-dismiss="modal"  class="settinglinkslast" style="border-bottom-left-radius: 18px;border-bottom-right-radius: 18px;">Cancel</div> -->
         </div>
       </div>
     </div>

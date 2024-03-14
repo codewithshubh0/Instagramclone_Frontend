@@ -74,8 +74,8 @@
                 </div>
                 <div class="row likesandcommentmobile">
                   <div class="innerlikesandcommentmobile">
-                    <span (click)="savelikes(postdata.userid,postdata.imagename,postdata.index)" *ngIf="!postdata.liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
-                    <span (click)="dislike(postdata.userid,postdata.imagename,postdata.index)" *ngIf="postdata.liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
+                    <span (click)="savelikes(postdata.userid,postdata.imagename,i)" *ngIf="!postdata.liked"><i  class="fa-regular fa-heart menuiconpost"></i></span>
+                    <span (click)="dislike(postdata.userid,postdata.imagename,i)" *ngIf="postdata.liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
                     <span data-bs-toggle="modal" data-bs-target="#openpostmodalhomepagemobile" (click)="openpostmodal(postdata,i)"><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
                     <span ><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
                     <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;margin-right: -21px" class="fa-regular fa-bookmark menuiconpost"></i></span>
@@ -208,6 +208,49 @@
  </div>
 
 
+ <div class="modal fade" id="PostModalmobile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="width: 475px; margin: auto;border-radius: 18px;height: 73vh ">
+     <div style="font-size: 17px;
+     font-weight: 600;
+     cursor: auto;
+     border-bottom: 1px solid #c6c6c6;
+     width: 100%;
+     text-align: center;
+     border-top-left-radius: 18px;
+     border-top-right-radius: 18px;
+     padding: 11px;" class="settinglinks">Create new post <i data-bs-dismiss="modal" class="fa-solid fa-xmark" style="
+            float: right;
+            margin-top: -2px;
+            font-size: 28px;
+            margin-right: 10px;
+            cursor: pointer;
+        "></i></div>
+      <div class="modal-body">
+       
+        <div style="height: 236px;">
+           
+          
+           <div style="
+           width: 26%;
+           margin: 0 auto;
+           margin-top: 109px;
+       ">
+           <img src="../../assets/postmodalimage.png" style=" width: 115px;" />
+        </div>
+           <div  class="selectpost">
+             
+            <label style="cursor: pointer;" *ngIf="showupload" for="uploadpic"> Select from computer </label>
+            <label *ngIf="showsave" style="cursor: pointer;" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#openpostmodalwhenuploadmobile"   (click)="Uploadpostimage()" > Upload Photo </label>
+            <input #myInput (change)="storefile($event)" style="display: none;" type="file" id="uploadpic" />
+          </div>
+           <!-- <div  data-bs-dismiss="modal"  class="settinglinkslast" style="border-bottom-left-radius: 18px;border-bottom-right-radius: 18px;">Cancel</div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
  <div class="modal fade" id="openpostmodalhomepage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content" style="height: 636px ; margin: auto;">
@@ -219,7 +262,7 @@
                 <div style="border-bottom: 1px solid #e0e0e0;padding-bottom: 10px;" class="profilepicinpost">
                     <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
                     <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{postmodaltempdata?.username}}</span>
-                    <button *ngIf="isOwnPost" style="float: right;border: none;background: none;font-size: 19px;" data-bs-toggle="modal" data-bs-target="#postmoreoption" ><i  class="fa-solid fa-ellipsis"></i></button>
+                    <button *ngIf="isOwnPost" style="float: right;border: none;background: none;font-size: 19px;" data-bs-toggle="modal" data-bs-target="#postmoreoptionhomepage" ><i  class="fa-solid fa-ellipsis"></i></button>
                 </div>
                 <div style="padding-top: 5px;border-bottom: 1px solid #e1e1e1;margin-bottom: 12px;max-height: 142px;height: 140px;overflow-y: scroll;" class="profilepicinpost">
                   <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
@@ -233,8 +276,8 @@
                     <div style="padding-top: 0px; padding-bottom: 0px; " class="profilepicinpost">
                       <img [src]="commentdet?.imageurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
                       <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{commentdet?.username}}</span>
-                      <button *ngIf="commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#deletecommentmodal" (click)="opendeletecommentmodal(postmodaltempdata.userid,postmodaltempdata.imagename,commentdet.commenttext,postmodaltempdata.index)" style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
-                      <button *ngIf="!commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#reportcommentmodal"  style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
+                      <button *ngIf="commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#deletecommentmodalhomepage" (click)="opendeletecommentmodal(postmodaltempdata.userid,postmodaltempdata.imagename,commentdet.commenttext,postmodaltempdata.index)" style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
+                      <button *ngIf="!commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#reportcommentmodalhomepage"  style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
                       <span style="margin-left: 10px;max-width:200px;word-wrap:break-word;font-size: 13px">{{commentdet?.commenttext?.substring(0,30)}}</span>
                       <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;font-size: 13px">{{commentdet?.commenttext?.length>30?commentdet.commenttext.substring(30):""}}</p>
                       
@@ -265,7 +308,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="deletecommentmodal" style="background-color: rgb(25 25 25 / 78%);" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="deletecommentmodalhomepage" style="background-color: rgb(25 25 25 / 78%);" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" >
     <div class="modal-content" [ngStyle]="{'width': mobileview?'338px':'394px', 'margin': 'auto'}">
       <div class="modal-body" style="box-shadow: 0px 0px 24px #424242;">
@@ -278,7 +321,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="reportcommentmodal" style="background-color: rgb(25 25 25 / 78%);" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="reportcommentmodalhomepage" style="background-color: rgb(25 25 25 / 78%);" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" >
     <div class="modal-content" [ngStyle]="{'width': mobileview?'338px':'394px', 'margin': 'auto'}">
       <div class="modal-body" style="box-shadow: 0px 0px 24px #424242;">
@@ -291,7 +334,9 @@
   </div>
 </div>
 
-<div class="modal fade" id="postmoreoption" style="background-color: rgb(25 25 25 / 78%);" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+
+<div class="modal fade" id="postmoreoptionhomepage" style="background-color: rgb(25 25 25 / 78%);" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" >
     <div class="modal-content" style="width: 418px; margin: auto;">
       <div class="modal-body" style="box-shadow: 0px 0px 24px #424242;">
@@ -310,6 +355,10 @@
     </div>
   </div>
 </div>
+
+
+
+
 
  <div class="modal fade" id="openpostmodalwhenupload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
    <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -338,6 +387,41 @@
  </div>
 
 
+ <div class="modal fade" id="openpostmodalwhenuploadmobile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content" style="height: 526px ; margin: auto;width: 100%;">
+      <div class="modal-body">
+        <div class="row">
+          <div>  <i data-bs-dismiss="modal" class="fa-solid fa-xmark" style="
+            float: right;
+    margin-top: -9px;
+    font-size: 28px;
+    margin-right: -5px;
+    cursor: pointer;
+        "></i></div>
+           <div class="row" style="height: 353px;background-color: #f0f0f0fc;margin-top: 0%;margin-left: 0%;"><img style="max-width: 100%;height: 100%; object-fit: contain;display: block;margin: auto;"[src]="instantuploadedimgurl" /></div>
+           <div class="row" style="
+           margin-top: 15px;
+       ">
+            <div>
+                <div class="profilepicinpost">
+                    <img [src]="profilepicurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+                    <span style="font-weight: bold;margin-left: 18px;">{{AccountName}}</span>
+                    <button class="share" (click)="createpost()" data-bs-dismiss="modal" >Share</button>
+                </div>
+                <div style="margin-top: 22px;">
+                 <textarea class="captioninput" [(ngModel)]="caption" style="border: none;width: 100%;margin-top: -7px;" type="text" placeholder="Write a caption"></textarea>
+                </div>
+            </div>
+            <div></div>
+            <div></div>
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
  <div class="modal fade" id="openpostmodalhomepagemobile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content" style="height: 147vh ; margin: auto;">
@@ -361,7 +445,7 @@
               margin-left: -17px " class="profilepicinpost">
                 <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
                 <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{postmodaltempdata?.username}}</span>
-                <button style="float: right;border: none;background: none;font-size: 19px;" data-bs-toggle="modal" data-bs-target="#postmoreoption" ><i  class="fa-solid fa-ellipsis"></i></button>
+                <button style="float: right;border: none;background: none;font-size: 19px;" data-bs-toggle="modal" data-bs-target="#postmoreoptionhomepagemobile" ><i  class="fa-solid fa-ellipsis"></i></button>
             </div>
             <div style="padding-top: 5px;border-bottom: 1px solid #e1e1e1;margin-bottom: 12px;max-height: 142px;height: 140px;overflow-y: scroll;width: 114%;margin-left: -18px;" class="profilepicinpost">
               <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
@@ -376,8 +460,8 @@
                 <div style="padding-top: 0px; padding-bottom: 0px; " class="profilepicinpost">
                   <img [src]="commentdet?.imageurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
                   <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{commentdet?.username}}</span>
-                  <button *ngIf="commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#deletecommentmodal" (click)="opendeletecommentmodal(postmodaltempdata.userid,postmodaltempdata.imagename,commentdet.commenttext,postmodaltempdata.index)" style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
-                  <button *ngIf="!commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#reportcommentmodal"  style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
+                  <button *ngIf="commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#deletecommentmodalhomepagemobile" (click)="opendeletecommentmodal(postmodaltempdata.userid,postmodaltempdata.imagename,commentdet.commenttext,postmodaltempdata.index)" style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
+                  <button *ngIf="!commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#reportcommentmodalhomepagemobile"  style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
                   <span style="margin-left: 10px;max-width:200px;word-wrap:break-word;font-size: 13px">{{commentdet?.commenttext?.substring(0,30)}}</span>
                   <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;font-size: 13px">{{commentdet?.commenttext?.length>30?commentdet.commenttext.substring(30):""}}</p>
                   
@@ -408,13 +492,76 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="deletecommentmodalhomepagemobile" style="background-color: rgb(25 25 25 / 78%);" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" >
+    <div class="modal-content" [ngStyle]="{'width': mobileview?'338px':'394px', 'margin': 'auto'}">
+      <div class="modal-body" style="box-shadow: 0px 0px 24px #424242;">
+        <div style="height: 80px;">
+           <div class="settinglinks" style="color: red;padding: 11px;text-align: center;cursor: pointer;margin-top: -13px;border-bottom: 1px solid #d1d1d1;" data-bs-dismiss="modal" (click)="deletecomment(postuseridfordelcomment,imagenamefordelcomment,commentfordel,indextodel)">Delete</div>
+           <div  class="settinglinkslast" style="padding: 11px;text-align: center;cursor: pointer;" data-bs-dismiss="modal" >Cancel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="reportcommentmodalhomepagemobile" style="background-color: rgb(25 25 25 / 78%);" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" >
+    <div class="modal-content" [ngStyle]="{'width': mobileview?'338px':'394px', 'margin': 'auto'}">
+      <div class="modal-body" style="box-shadow: 0px 0px 24px #424242;">
+        <div style="height: 80px;">
+           <div class="settinglinks" (click)="reportpopup()" style="color: red;padding: 11px;text-align: center;cursor: pointer;margin-top: -13px;border-bottom: 1px solid #d1d1d1;" data-bs-dismiss="modal">Report</div>
+           <div  class="settinglinkslast" style="padding: 11px;text-align: center;cursor: pointer;" data-bs-dismiss="modal" >Cancel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="postmoreoptionhomepagemobile" style="background-color: rgb(25 25 25 / 78%);" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" >
+    <div class="modal-content" style="width: 418px; margin: auto;">
+      <div class="modal-body" style="box-shadow: 0px 0px 24px #424242;">
+        <div style="height: 461px;">
+           <div class="settinglinks" data-bs-dismiss="modal" (click)="deletepost(postmodaltempdata?.imagename)" style="color: red;">Delete</div>
+           <div  class="settinglinks">Edit</div>
+           <div  class="settinglinks">Hide like count to others</div>
+           <div  class="settinglinks">Turn off commenting</div>
+           <div  class="settinglinks">Go to post</div>
+           <div  class="settinglinks">Share to...</div>
+           <div  class="settinglinks">Copy link</div>
+           <div  class="settinglinks">Embeded</div>
+           <div  class="settinglinkslast" data-bs-dismiss="modal" >Cancel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- for responsive navbar menu  -->
 <nav *ngIf="navbarformobile" class="navbar fixed-bottom navbar-expand-lg" style="background-color: white;color: black;border-top: 1px solid rgb(228, 228, 228);">
    <div class="container-fluid">
      <div style="padding-left: 14px;" class="navbar-brand" (click)="showhomepage()" ><i class="fa-solid fa-house menuicon"></i></div>
-     <div class="navbar-brand" ><i class="fa-solid fa-magnifying-glass menuicon"></i></div>
-     <div class="navbar-brand" > <i class="fa-regular fa-square-plus menuicon"></i></div> 
+     <div class="navbar-brand"  (click)="showsearchformobile()" ><i class="fa-solid fa-magnifying-glass menuicon"></i></div>
+     <div class="navbar-brand"  data-bs-toggle="modal" data-bs-target="#PostModalmobile" (click)="create()"> <i class="fa-regular fa-square-plus menuicon"></i></div> 
      <div class="navbar-brand" ><i class="fa-brands fa-facebook-messenger menuicon"></i></div>
      <div class="navbar-brand" (click)="showprofilepage()" ><img [ngStyle]="{'border':profilepageselected?'2px solid black':'none'}" [src]="profilepicurl" class="profilepicmenu"/></div>
    </div>
  </nav>
+
+ <div *ngIf="searchselectedformobile" [ngStyle]="{'height': '200vh','margin-left':''}" class="col-6">
+ 
+
+  <div [ngStyle]="{'backgroundColor':isdark?'black':''}" class="dropdown-contentsearch">
+    <div [ngStyle]="{'backgroundColor':isdark?'black':''}" class="innerdropdownmobile">
+      <div style="font-size: 24px;font-weight: 600;" class="moremenu">Search</div>
+      <div class="moremenu"><input (keyup)="filterUser($event)" (keydown)="filterUser($event)" class="searchinput" type="text" placeholder="Search"/></div>
+      <div class="moremenu" *ngFor="let user of Allusersfilter">
+       <div (click)="openuserprofile(user.userid)">
+           <img [src]="user.imgurl" class="profilepicmenu2"><span>{{user.username}}</span>
+       </div>
+      </div>
+    </div>
+ </div>
+</div>

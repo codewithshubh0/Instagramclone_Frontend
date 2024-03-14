@@ -1,5 +1,5 @@
-<div style="width: 27%;margin: 30px auto;" class="row">
-    <div class="col">
+<div [ngStyle]="{'width': mobileview?'93%':'27%','margin': '30px auto'}" class="row">
+    <div class="col" style="margin-left: 5%;">
     <div style="
     width: 100%;
 " class="row">
@@ -8,7 +8,7 @@
         height: 72vh;
         border: 1px solid #c9c8c8;
     ">
-    <div> <img src="../../assets/loginlogo.png" style="height: 55px;padding-left: 25%;margin-top: 50px;margin-bottom: 22px;"/></div>
+    <div> <img src="../../assets/loginlogo.png" [ngStyle]="{'height': '55px','padding-left':mobileview?'19%':'25%','margin-top': '50px','margin-bottom': '22px'}"/></div>
    
          <form style="
          width: 90%;
@@ -49,9 +49,7 @@
     margin-top: 12px;
 " class="row">
 
-<p style="
-margin: 17px 89px;
-">Have an account?<a style="
+<p [ngStyle]="{'margin':mobileview?'17px 70px':'17px 89px'}">Have an account? <a style="
     text-decoration: none;
 " routerLink="/login"> Log in </a></p>
     </div>

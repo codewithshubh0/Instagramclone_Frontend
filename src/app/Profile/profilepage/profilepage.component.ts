@@ -6,13 +6,16 @@ import { ViewportScroller } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HostListener } from "@angular/core";
 import { DatePipe } from '@angular/common';
+import {  ModalDirective} from 'ngx-bootstrap/modal';
+import * as bootstrap from "bootstrap";
+import * as $ from 'jquery';
 @Component({
   selector: 'app-profilepage',
   templateUrl: './profilepage.component.html',
   styleUrls: ['./profilepage.component.css']
 })
 export class ProfilepageComponent implements OnInit {
-
+  @ViewChild('openpostmodal') public modal: ModalDirective;
 profileimgurl = "../assets/defaultprofilepic.png";
   defaultpicurl = "../assets/defaultprofilepic.png"
 file:any
@@ -31,7 +34,7 @@ profilehomepage = true;
 gender = ['Male','Female','Prefer not to say']
 savebiotext=''
 biodata:String[] = [];
-Userposts:Array<{userid:string,username:string,posturl:string,imagename:string,postcaption:string,likes:[String],commentdata:Array<{commentuserid:string,username:any,imageurl:any,commenttext:any}>}> = [];
+Userposts:Array<{userid:string,username:string,posturl:string,imagename:string,postcaption:string,likes:[],commentdata:Array<{commentuserid:string,username:any,imageurl:any,commenttext:any}>}> = [];
 commentarray:Array<{userid:any,commenttext:any}> = []
 commentdetails:Array<{commentuserid:string,username:any,imageurl:any,commenttext:any}> = []
 openimgurl = ''
@@ -55,6 +58,7 @@ showloaderforcommentload = false
 postuseridfordelcomment:any
 imagenamefordelcomment:any
 commentfordel:any
+hidepostmodal = false;
 constructor(private router:Router,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService,private datepipe:DatePipe){  
           this.onload();
           this.getScreenSize();
@@ -77,7 +81,10 @@ ngOnInit(): void {
           }
     }
   onload(){
+    if(this.Userposts.length==0){
+
     this.Userposts = []
+
     const userid = sessionStorage.getItem("userid");
     this.userdetail = this.service.getdetails();
   this.showloader = true;
@@ -137,7 +144,8 @@ ngOnInit(): void {
                }
             }
               this.showloader = false; 
-        
+              
+    }
   }
 
 logout(){
@@ -286,6 +294,14 @@ Uploadpostimage(){
 createpost(){
 
   const id = sessionStorage.getItem("userid");
+
+  var posturl='';
+  const reader = new FileReader();
+  reader.readAsDataURL(this.file); 
+  reader.onload = (_event) => { 
+     posturl =  reader.result.toString();          
+    }
+
   const formdata = new FormData();
   formdata.append("image",this.file);
   formdata.append("userid",id); 
@@ -296,9 +312,9 @@ createpost(){
   this.service.saveposts(formdata).subscribe({
     next:(data)=>{
           alert(data)
-           this.ngOnInit();
-        
-     //  console.log(data);
+        //   this.ngOnInit();
+        this.Userposts.unshift({userid:id,username:this.AccountName,posturl:posturl,imagename:this.file.name,postcaption:this.caption,likes:[],commentdata:[]});
+        //  console.log(data);
     },
     error:(error)=>{
    //   this.spinner.hide();
@@ -367,27 +383,44 @@ openpost(post:any){
    
 }
 
+
 deletepost(imagename:any){
- // this.spinner.show();
- this.showloader = true; 
- const id = sessionStorage.getItem("userid");
-  this.service.deleteposts(id,imagename).subscribe({
-    next:(data)=>{
-        if(data=='post deleted'){
-           alert("Successfully Deleted");
-           this.ngOnInit()
-           //this.spinner.hide();
-         this.showloader = false;
-          }
-      // console.log(data);
-    },
-    error:(error)=>{
-      //this.spinner.hide();
-      this.showloader = false;
-      alert("Something Went Wrong");
-    }
-  })
-}
+  // this.spinner.show();
+  this.showloader = true; 
+  const id = sessionStorage.getItem("userid");
+   this.service.deleteposts(id,imagename).subscribe({
+     next:(data)=>{
+         if(data=='post deleted'){
+            alert("Successfully Deleted");
+           // this.ngOnInit()
+ 
+           this.Userposts.forEach((el,ind)=>{
+             if(el.imagename==imagename){
+                
+                this.Userposts.splice(ind,1);
+              //  console.log(JSON.stringify(this.commentdetailsformodalpost)+" getting");
+             }
+          })
+ 
+ 
+         let el:HTMLElement = document.getElementById('cancelpostmodal');
+
+         el?.click();
+ 
+         let el2:HTMLElement = document.getElementById('cancelpostmodalmobile');
+         el2?.click();
+            //this.spinner.hide();
+          this.showloader = false;
+           }
+       // console.log(data);
+     },
+     error:(error)=>{
+       //this.spinner.hide();
+       this.showloader = false;
+       alert("Something Went Wrong");
+     }
+   })
+ }
 
 create(){
   this.showsave=false;
