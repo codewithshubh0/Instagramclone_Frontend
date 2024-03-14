@@ -14,7 +14,7 @@
     height: 75px;
     border-radius: 50%;
     border: 1px solid grey;
-    margin-top: 47px;
+    margin-top: 24px;
     cursor: pointer;
 }
 
@@ -117,8 +117,24 @@
     border-radius: 17px;
 }
 
+.editimgmobile{
+    background-color: #e8e8e8;
+    width: 84%;
+    margin: 0 auto;
+    margin-top: 45px;
+    padding: 17px;
+    border-radius: 17px 
+}
+
+
 .websitebox{
     width: 68%;
+    margin: 0 auto;
+    padding: 17px;
+    border-radius: 17px;
+}
+.websiteboxmobile{
+    width: 94%;
     margin: 0 auto;
     padding: 17px;
     border-radius: 17px;
@@ -130,8 +146,25 @@
     font-size: 20px;
     font-weight: bold;
 }
+
+
+
+    .profiletextmobile{
+        width: 85%;
+        margin: 0 auto;
+        margin-top: 52px;
+        font-size: 20px;
+        font-weight: bold;
+    }
 .websitetext{
     width: 64%;
+    margin: 0 auto;
+    margin-top: 26px;
+    font-size: 17px;
+    font-weight: bold;
+}
+.websitetextmobile{
+    width: 85%;
     margin: 0 auto;
     margin-top: 26px;
     font-size: 17px;
@@ -152,6 +185,13 @@
     font-size: 17px;
     font-weight: bold;
 }
+.biotextmobile{
+    width: 84%;
+    margin: 0 auto;
+    margin-top: -10px;
+    font-size: 17px;
+    font-weight: bold;
+}
 .bioinput{
     width: 100%;
     border-radius: 11px;
@@ -167,6 +207,12 @@
     padding: 17px;
     border-radius: 17px;
 }
+.bioboxmobile{
+    width: 96%;
+    margin: 0 auto;
+    padding: 17px;
+    border-radius: 17px;
+}
 .chooseimgbutton{
     background-color: #3d93ff;
     color: white;
@@ -174,6 +220,17 @@
     border-radius: 8px;
     margin-left: 235px;
     cursor: pointer;
+}
+
+
+.chooseimgbuttonmobile{
+    background-color: #3d93ff;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 8px;
+    margin-left: 53%;
+    cursor: pointer;
+    margin-top: 12px
 }
 
 .submiteditprofile{
@@ -186,6 +243,19 @@
     margin-right: 164px;
     text-align: center;
 }
+
+.submiteditprofilemobile{
+    background-color: #3d93ff;
+    color: white;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-left: 23%;
+    cursor: pointer;
+    margin-right: 94px;
+    text-align: center;
+    margin-bottom: 79px 
+}
+
 
 .chooseimgbutton:hover{
     background-color:rgb(17, 100, 224) ;

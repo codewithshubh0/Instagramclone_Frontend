@@ -49,7 +49,7 @@
           </div>
             <div style="display: flex;margin-left: 6px;margin-top: 32px;">
                 
-                <div class="editandviewmobile" (click)="editprofile()" *ngIf="!isfromSearch">Edit profile</div>
+                <div class="editandviewmobile" (click)="editprofilemobile()" *ngIf="!isfromSearch">Edit profile</div>
                 <div (click)="follow()" class="follow" *ngIf="isfromSearch && !isfollowing">Follow</div>
                 <div data-bs-toggle="modal" data-bs-target="#unfollowmodel" class="follow" *ngIf="isfromSearch && isfollowing">Following</div>
                 <div class="editandviewmobile">View archive</div>
@@ -59,6 +59,11 @@
         </div>
     </div>
 </div>
+
+
+ 
+
+
 
 
 <div *ngIf="!mobileview && Userposts.length!=0" style="width: 74%;margin: 0 auto;">
@@ -86,7 +91,7 @@
 </div>
 
 <div *ngIf="mobileview && Userposts.length!=0" style="margin: 0 auto;">
-  <div class="row" style="height: 25vh;border-bottom: 1px solid #d7d6d6;margin-left: 5px;margin-top: 78px">
+  <div class="row" style="height: 25vh;border-bottom: 1px solid #d7d6d6;margin-left: 5px;margin-top: 99px">
       <div class="col-3" >
          <!-- <img src="../../../assets/post1.jpg" style="width: 100px;height: 100px;border-radius: 50%;margin-top: 29px" /> -->
          <div class="mobilehighlightimage"><img style="
@@ -179,6 +184,34 @@
 
   </div>
 
+  <div *ngIf="editprofilepageformobile" class="col">
+    <div class="row">
+        <div class="col">
+             <div class="profiletextmobile">Edit profile</div>
+             <div class="editimgmobile">
+               <img [src]="profileimgurl" style="width: 55px;height: 55px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 16px #c8c5c5" />
+               <span style="font-weight: bold;margin-left: 18px;">{{AccountName}}</span>
+               <div  data-bs-toggle="modal" data-bs-target="#profilepicmodal" class="chooseimgbuttonmobile">Change photo</div>
+              </div>
+                <div class="websitetextmobile">Website</div>
+              <div  class="websiteboxmobile"><input placeholder="Website" class="websiteinput"  type="text" disabled/> 
+                  <p style="font-size: 12px;color: grey;margin-top: 6px ">Editing your links is only available on mobile. Visit the Instagram app and edit your profile to change the websites in your bio.</p>
+              </div> 
+              <div class="biotextmobile">Bio</div>
+              <div  class="bioboxmobile"><textarea [(ngModel)]="savebiotext" placeholder="Bio" style="overflow:hidden" class="bioinput"  type="text"></textarea> 
+              </div> 
+              <div  class="bioboxmobile"><select class="bioinput">
+               <option selected disabled >Select your gender</option>
+                  <option *ngFor="let g of gender">{{g}}</option>
+             </select> 
+                  <p style="font-size: 12px;color: grey;margin-top: 6px ">This won’t be part of your public profile.</p>
+              </div>
+              
+              <div (click)="editprofilesubmit()" style="margin-bottom: 100px;" class="submiteditprofilemobile">Submit</div>
+        </div>
+    </div>
+  </div>
+
   <div class="modal fade" id="profilepicmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" style="width: 432px; margin: auto;border-radius: 18px ">
@@ -219,7 +252,6 @@
              <div class="biotext">Bio</div>
              <div  class="biobox"><textarea [(ngModel)]="savebiotext" placeholder="Bio" style="overflow:hidden" class="bioinput"  type="text"></textarea> 
              </div> 
-             <div class="biotext">Bio</div>
              <div  class="biobox"><select class="bioinput">
               <option selected disabled >Select your gender</option>
                  <option *ngFor="let g of gender">{{g}}</option>

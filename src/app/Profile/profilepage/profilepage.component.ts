@@ -59,6 +59,7 @@ postuseridfordelcomment:any
 imagenamefordelcomment:any
 commentfordel:any
 hidepostmodal = false;
+editprofilepageformobile = false
 constructor(private router:Router,private service:ProfileService,private scroller:ViewportScroller,private spinner:NgxSpinnerService,private datepipe:DatePipe){  
           this.onload();
           this.getScreenSize();
@@ -249,6 +250,11 @@ unfollow(){
 editprofile(){
   this.profilehomepage = false
    this.editprofilepage = true;
+}
+
+editprofilemobile(){
+  this.profilehomepage = false
+   this.editprofilepageformobile = true;
 }
 
 editprofilesubmit(){
