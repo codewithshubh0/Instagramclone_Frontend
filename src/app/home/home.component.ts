@@ -84,14 +84,14 @@ seletedfile: ElementRef;
 //  this.scroller.scrollToPosition([0,0]);
   }
   ngOnInit(): void {
-    // this.service.gettotalpostcount().subscribe({
-    //   next:(data)=>{
-    //     this.totallength = data;
-    //   },
-    //   error:(error)=>{ 
+    this.service.gettotalpostcount().subscribe({
+      next:(data)=>{
+        this.totallength = data;
+      },
+      error:(error)=>{ 
         
-    //   }
-    // })
+      }
+    })
     this.Allusers = []
     this.showloader = true;
 
@@ -650,6 +650,7 @@ seletedfile: ElementRef;
     formdata.append("userid",id); 
     formdata.append("caption",this.caption);
     formdata.append("postdate",currdate);
+    formdata.append("username",this.AccountName);
     // formdata.append("commentedby",this.commentedby);
     // formdata.append("comment",this.comment);
     this.service.saveposts(formdata).subscribe({
@@ -830,6 +831,8 @@ seletedfile: ElementRef;
 
    onScroll(){
     this.page++;
+
+    if(this.page>this.totallength) return;
     console.log("scrolled "+ this.page);
     this.fetchingdata = true;
     this.spinner.show();
@@ -847,14 +850,14 @@ seletedfile: ElementRef;
              
              
              const profileurl = this.defaultpicurl
-             for(let post of dat?.posts){
-               var thumb = Buffer.from(post?.image?.data).toString('base64');
-               var url = "data:"+post?.image?.contentType+""+";base64,"+thumb;
-               const imgname = post?.name;
-               const postcaption = post?.postcaption
-               const likes = post?.likes.length;
 
-               var postingdate = this.datepipe.transform(post.postdate, 'yyyy-MM-dd hh:mm a')
+               var thumb = Buffer.from(dat?.image?.data).toString('base64');
+               var url = "data:"+dat?.image?.contentType+""+";base64,"+thumb;
+               const imgname = dat?.postname;
+               const postcaption = dat?.postcaption
+               const likes = dat?.likes.length;
+
+               var postingdate = this.datepipe.transform(dat.postdate, 'yyyy-MM-dd hh:mm a')
               var agedate  = this.calculateDiff(postingdate);
              // console.log(agedate);
               
@@ -866,7 +869,7 @@ seletedfile: ElementRef;
                    //calculate time diff
                    todaypost = true;
                    var currdate = new Date()
-                   var timediff = currdate.getTime()-new Date(post.postdate).getTime();
+                   var timediff = currdate.getTime()-new Date(dat.postdate).getTime();
                   // console.log((timediff/1000)/60+" minutes");
                    todaypostage = Math.floor(timediff/1000)>=0 && Math.floor(timediff/1000)<60?Math.floor(timediff/1000)+'s':
                             Math.floor(timediff/1000)>=60 && Math.floor(timediff/1000)<3600?Math.floor((timediff/1000)/60)+'m':
@@ -885,15 +888,15 @@ seletedfile: ElementRef;
 
               const id = sessionStorage.getItem("userid");
               var isliked = false;
-                 post.likes.forEach(item =>{
+                 dat.likes.forEach(item =>{
                    if( item.indexOf(id)>=0){
                      isliked = true;
                    }
                  });
              
                this.commentdetails = [] 
-               if(post?.comments!=null && post?.comments!=undefined){
-                   for(let cmt of post?.comments){
+               if(dat?.comments!=null && dat?.comments!=undefined){
+                   for(let cmt of dat?.postcomments){
 
                     const commentprofileimg =  this.defaultpicurl
                      this.commentdetails.unshift({username:cmt.username,imageurl:commentprofileimg,commenttext:cmt.commenttext,iscurrentusercomment:(cmt.userid==loggeduserid)});    
@@ -901,7 +904,7 @@ seletedfile: ElementRef;
                }
 
                 this.Randomposts.push({index:this.Randomposts.length,userid:userid,username:username,profileurl:this.defaultpicurl,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:this.commentdetails,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
-               }
+               
                
            }
            this.fetchingdata = false;

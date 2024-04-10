@@ -104,7 +104,7 @@
         <div style=" margin-top: 29px;" infiniteScroll
         [infiniteScrollDistance]="2"
         [infiniteScrollThrottle]="500"
-        (scrolled)="onScroll()">
+        (scrolled)="onScroll()" >
         
            <div class="postbox" [ngStyle]="{'margin-bottom': postdata.postcaption.length>100?'201px':'126px'}" *ngFor="let postdata of sortData(); index as i">
             <div class="row userdetail">
@@ -145,7 +145,7 @@
            
         </div>
 
-        <div *ngIf="fetchingdata">Loading</div>
+        <!-- <div *ngIf="fetchingdata">Loading</div> -->
         </div>
      </div>
 

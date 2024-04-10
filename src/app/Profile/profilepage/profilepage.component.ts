@@ -316,7 +316,7 @@ Uploadpostimage(){
 createpost(){
 
   const id = sessionStorage.getItem("userid");
-
+  var currdate = this.datepipe.transform(new Date(), 'yyyy-MM-dd hh:mm a')
   var posturl='';
   const reader = new FileReader();
   reader.readAsDataURL(this.file); 
@@ -328,6 +328,8 @@ createpost(){
   formdata.append("image",this.file);
   formdata.append("userid",id); 
   formdata.append("caption",this.caption);
+  formdata.append("postdate",currdate);
+  formdata.append("username",this.AccountName);
   // formdata.append("likes",this.likes.toString());
   // formdata.append("commentedby",this.commentedby);
   // formdata.append("comment",this.comment);
