@@ -7,9 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class ProfileService {
 
-  // private url = "http://localhost:8000";
+   private url = "http://localhost:8000";
 
-  private url = "https://instagram-backend-igfs.onrender.com"
+  //private url = "https://instagram-backend-igfs.onrender.com"
 
   userdetails = {};
   constructor(private http:HttpClient) { }
@@ -39,6 +39,10 @@ export class ProfileService {
      }
 
      
+   
+     getuserdetailsonscroll(userid:any):Observable<any>{
+      return this.http.get(this.url+"/users/getuserdetail/"+userid);
+     }
      savefollowactivity(useridfollowedby:any,useridfollowedto):Observable<any>{
         return this.http.post<any[]>(this.url+"/activity/savefollowactivity",{useridfollowedby:useridfollowedby,useridfollowedto:useridfollowedto});
     }
@@ -79,5 +83,15 @@ deletecomment(profileuserid:any,commentuserid:any,imagename:any,comment:any):Obs
 getalluserdetails():Observable<any>{
   return this.http.get(this.url+"/users/getalluserdetail");
  }
+
+ getuserpostbypage(page:any):Observable<any>{
+  return this.http.get(this.url+"/activity/getuserpost/"+page);
+ }
+
+ 
+ gettotalpostcount():Observable<any>{
+  return this.http.get(this.url+"/activity/gettotalpostcount");
+ }
+ 
 
 }

@@ -14,6 +14,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { DatePipe } from '@angular/common';
 import { PickerModule } from '@ctrl/ngx-emoji-mart'
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +32,8 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart'
     MatDialogModule,
     NgxSpinnerModule,
     MatProgressBarModule,
-    PickerModule
+    PickerModule,
+    InfiniteScrollModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

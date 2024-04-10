@@ -6,6 +6,7 @@ import { JsonPipe, ViewportScroller } from '@angular/common';
 import { HostListener } from "@angular/core";
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService} from 'ngx-spinner';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -46,6 +47,7 @@ seletedfile: ElementRef;
   commentedby=''
   comment=''
   screenHeight: number;
+  fetchingdata = false;
   screenWidth: number;
   navbarformobile = false;
   suggestionsforMobile = false;
@@ -64,6 +66,8 @@ seletedfile: ElementRef;
   imagenametofetch = '';
   indextofetch = -1;
   count=0;
+  page = -1;
+  totallength = 0;
   searchselectedformobile = false;
   Randomposts:Array<{index:number,userid:string,username:string,profileurl:string,posturl:string,imagename:string,postcaption:string,likes:number,commentdata:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}>,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}> = [];
   postmodaltempdata:{index:number,userid:string,username:string,profileurl:string,posturl:string,imagename:string,postcaption:string,likes:number,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}
@@ -80,6 +84,14 @@ seletedfile: ElementRef;
 //  this.scroller.scrollToPosition([0,0]);
   }
   ngOnInit(): void {
+    // this.service.gettotalpostcount().subscribe({
+    //   next:(data)=>{
+    //     this.totallength = data;
+    //   },
+    //   error:(error)=>{ 
+        
+    //   }
+    // })
     this.Allusers = []
     this.showloader = true;
 
@@ -136,31 +148,9 @@ seletedfile: ElementRef;
     this.homeoptionselected = true;
     this.usercomment = ''
     this.showpost = false
-    this.onloadhomepage()
-    
-  //   this.Randomposts.forEach((item)=>{
-  //     let userid = item.userid;
-  //  // console.log("working");
-    
-  //     this.service.getimage(userid).subscribe(
-  //       {
-  //         next:(data)=>{
-  //       //     console.log(item.profileurl);
-             
-  //             if(data!=null && data.image!=null){
-  //               var thumb = Buffer.from(data.image.data).toString('base64');
-  //               var url = "data:"+data.image.contentType+""+";base64,"+thumb;
-  //               item.profileurl = url;
-
-  //             }
-  //         },
-  //         error:(error)=>{
-  //            alert("something went wrong")
-  //         }
-  //       }
-  //     )
-    
-  //   })
+    //this.onloadhomepage()
+    this.onScroll();
+  
     
   }
   }
@@ -836,6 +826,96 @@ seletedfile: ElementRef;
     this.homeoptionselected  = false;
     this.profilepageselected = false;
     this.profilepageforsearch = false;
+   }
+
+   onScroll(){
+    this.page++;
+    console.log("scrolled "+ this.page);
+    this.fetchingdata = true;
+    this.spinner.show();
+    const loggeduserid = sessionStorage.getItem("userid");
+   
+    this.service.getuserpostbypage(this.page).subscribe({
+      next:(data)=>{
+          if(data){
+           
+           for(let dat of data){
+             
+             const userid = dat?.userid;
+             const username = dat?.username;
+             console.log(username+" username");
+             
+             
+             const profileurl = this.defaultpicurl
+             for(let post of dat?.posts){
+               var thumb = Buffer.from(post?.image?.data).toString('base64');
+               var url = "data:"+post?.image?.contentType+""+";base64,"+thumb;
+               const imgname = post?.name;
+               const postcaption = post?.postcaption
+               const likes = post?.likes.length;
+
+               var postingdate = this.datepipe.transform(post.postdate, 'yyyy-MM-dd hh:mm a')
+              var agedate  = this.calculateDiff(postingdate);
+             // console.log(agedate);
+              
+             // var agedate = this.calculateDiff(this.datepipe.transform('Mon Jan 08 2024 20:10:27 GMT+0530 (India Standard Time)', 'yyyy-MM-dd hh:mm'));
+               var ageofpost = ''
+               var todaypostage = ''
+               var todaypost = false;
+               if(agedate==0 ){
+                   //calculate time diff
+                   todaypost = true;
+                   var currdate = new Date()
+                   var timediff = currdate.getTime()-new Date(post.postdate).getTime();
+                  // console.log((timediff/1000)/60+" minutes");
+                   todaypostage = Math.floor(timediff/1000)>=0 && Math.floor(timediff/1000)<60?Math.floor(timediff/1000)+'s':
+                            Math.floor(timediff/1000)>=60 && Math.floor(timediff/1000)<3600?Math.floor((timediff/1000)/60)+'m':
+                            Math.floor(((timediff/1000)/60)/60)+'h';
+                   
+              }else
+              
+              if(agedate>0 && agedate<=30){
+                 ageofpost = (agedate)+'d' 
+              }
+              else if(agedate>30 && agedate<365){
+                  ageofpost = Math.floor(agedate/7)+'w' 
+              }else if(agedate>365){
+                   ageofpost = Math.floor(agedate/365)+'y'
+              }
+
+              const id = sessionStorage.getItem("userid");
+              var isliked = false;
+                 post.likes.forEach(item =>{
+                   if( item.indexOf(id)>=0){
+                     isliked = true;
+                   }
+                 });
+             
+               this.commentdetails = [] 
+               if(post?.comments!=null && post?.comments!=undefined){
+                   for(let cmt of post?.comments){
+
+                    const commentprofileimg =  this.defaultpicurl
+                     this.commentdetails.unshift({username:cmt.username,imageurl:commentprofileimg,commenttext:cmt.commenttext,iscurrentusercomment:(cmt.userid==loggeduserid)});    
+                   }
+               }
+
+                this.Randomposts.push({index:this.Randomposts.length,userid:userid,username:username,profileurl:this.defaultpicurl,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:this.commentdetails,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
+               }
+               
+           }
+           this.fetchingdata = false;
+             this.showloader = false;
+             this.spinner.hide();
+           
+          }
+      },
+      error:(error)=>{
+        this.fetchingdata = false;
+        this.showloader = false
+        this.spinner.hide();
+      }
+   })
    }
 
 }

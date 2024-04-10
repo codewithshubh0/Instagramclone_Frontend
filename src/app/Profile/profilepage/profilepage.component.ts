@@ -81,6 +81,22 @@ ngOnInit(): void {
             this.homepageformobile = false;
           }
     }
+
+    // openuserprofile(userid:any){
+
+    //   //this.spinner.show();
+    //   this.Userposts = []
+    //   //console.log(userid+" user");
+    //   this.service.getuserdetailsonscroll(userid,c).subscribe({
+    //     next:(data)=>{
+            
+    //     },
+    //     error:(error)=>{
+    //       //this.spinner.hide();
+    //       alert("Something Went Wrong");
+    //     }
+    //   })
+    // }
   onload(){
     if(this.Userposts.length==0){
 
