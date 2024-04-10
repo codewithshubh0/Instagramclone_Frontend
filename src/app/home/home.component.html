@@ -57,7 +57,10 @@
       </div>
    
       <div *ngIf="homeoptionselected && mobileview" [ngStyle]="{'height': '200vh','margin-left':!homepageformobile?'250px':''}" class="col-6">
-         <div style=" margin-top: 29px;" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="500" (scrolled)="onScroll()" [scrollWindow]="false">
+         <div style=" margin-top: 29px;" infiniteScroll
+         [infiniteScrollDistance]="2"
+         [infiniteScrollThrottle]="500"
+         (scrolled)="onScroll()" >
             <div class="postboxmobile" *ngFor="let postdata of sortData(); index as i" >
               <div class="row userdetail">
                 <div class="inneruserdetail" style="display: flex;">
