@@ -426,6 +426,7 @@ seletedfile: ElementRef;
     this.profilepageforsearch = false;
     this.searchselectedformobile = false
     this.ngOnInit()
+    window.location.reload();
   }
 
   getimage(userid:any){
