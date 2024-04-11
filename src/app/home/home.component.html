@@ -58,10 +58,10 @@
    
       <div *ngIf="homeoptionselected && mobileview" [ngStyle]="{'height': '200vh','margin-left':!homepageformobile?'250px':''}" class="col-6">
          <div style=" margin-top: 29px;" infiniteScroll
-         [infiniteScrollDistance]="3"
-         [infiniteScrollThrottle]="700"
+         [infiniteScrollDistance]="20"
+         [infiniteScrollThrottle]="2000"
          (scrolled)="onScroll()" >
-            <div class="postboxmobile" *ngFor="let postdata of sortData(); index as i" >
+            <div class="postboxmobile" *ngFor="let postdata of Randomposts; index as i" >
               <div class="row userdetail">
                 <div class="inneruserdetail" style="display: flex;">
                  <span><img [src]="postdata.profileurl" class="postsimage"></span>
@@ -108,11 +108,12 @@
 
       <div *ngIf="homeoptionselected && !mobileview" [ngStyle]="{'height': '200vh','margin-left':!homepageformobile?'250px':''}" class="col-6">
         <div style=" margin-top: 29px;" infiniteScroll
-        [infiniteScrollDistance]="2"
-        [infiniteScrollThrottle]="500"
+        [infiniteScrollDistance]="20"
+        [infiniteScrollThrottle]="2000"
+
         (scrolled)="onScroll()" >
         
-           <div class="postbox" [ngStyle]="{'margin-bottom': postdata.postcaption.length>100?'201px':'126px'}" *ngFor="let postdata of sortData(); index as i">
+           <div class="postbox" [ngStyle]="{'margin-bottom': postdata.postcaption.length>100?'201px':'126px'}" *ngFor="let postdata of Randomposts; index as i">
             <div class="row userdetail">
               <div class="inneruserdetail" style="display: flex;">
                <span><img [src]="postdata.profileurl" class="postsimage"></span>

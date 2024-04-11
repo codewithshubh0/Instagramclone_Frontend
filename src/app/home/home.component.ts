@@ -149,6 +149,7 @@ seletedfile: ElementRef;
     this.usercomment = ''
     this.showpost = false
     //this.onloadhomepage()
+    this.Randomposts = []
     this.onScroll();
   
     
@@ -756,9 +757,10 @@ getprofileimageforposts(userid:any):string{
     this.profilepageselected = false;
     this.profilepageforsearch = false;
    }
-
+   isfetching = false;
   onScroll(){
     this.page++;
+    this.isfetching=true;
     this.commentdetails = [] 
     if(this.page>this.totallength) return;
     //console.log("scrolled "+ this.page);
@@ -876,7 +878,7 @@ getprofileimageforposts(userid:any):string{
            this.fetchingdata = false;
              this.showloader = false;
              this.spinner.hide();
-           
+           this.isfetching = false
           }
       },
       error:(error)=>{
