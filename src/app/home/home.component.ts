@@ -317,71 +317,6 @@ seletedfile: ElementRef;
     this.showloader = false;
      
    }
-   //else{
-  //   //console.log("do this");
-  //  var commentdata = []
-  //  //console.log(this.indextofetch);
-  //  if(this.useridtofetch==''){
-  //    return;
-  //  }
-  //   this.service.getuserdetails(this.useridtofetch).subscribe({
-  //     next:(data)=>{
-  //    //  console.log(JSON.stringify(data)+" details");
-       
-  //      for(let post of data[0].posts){
-  //       // var thumb = Buffer.from(data[0]?.posts[i]?.image?.data).toString('base64');
-  //       // var url = "data:"+this.userdetail[0]?.posts[i]?.image?.contentType+""+";base64,"+thumb;
-  //       // var commentdata = []
-  //     // console.log("worked this time");
-        
-  //        if(post.name== this.imagenametofetch){
-         
-          
-  //         // var thumb = Buffer.from(post?.image?.data).toString('base64');
-  //         // var posturl = "data:"+post?.image?.contentType+""+";base64,"+thumb;
-          
-  //         for(let j=post?.comments?.length-1;j>=0;j--){
-  //            const commentuserid = post?.comments[j]?.userid
-  //            const commenttext =  post?.comments[j]?.commenttext;
- 
-  //            commentdata.push({commentuserid:commentuserid,username:commentuserid,imageurl:this.defaultpicurl,commenttext:commenttext})              
-  //          }
-
-  //          this.Randomposts[this.indextofetch].commentdata = commentdata;
-  //          this.Randomposts[this.indextofetch].likes = post?.likes?.length;
-  //          this.Randomposts[this.indextofetch].liked = !this.Randomposts[this.indextofetch].liked
-  //         // this.Randomposts.forEach((el,ind)=>{
-  //         //   if(el.imagename==post.name){
-
-  //         //     el.commentdata = commentdata;
-              
-              
-  //         //     el.likes = post?.likes?.length;
-  //         //     el.liked = !el.liked
-  //         //    // console.log(commentdata);
-  //         //    // console.log(el.likes);
-              
-  //         //   }
-  //         // }
-  //      //  )
-  //         // this.Randomposts.unshift({userid:data.userid,username:data.username,profileurl:this.defaultpicurl,posturl:posturl,imagename:post.name,postcaption:post.postcaption,likes:post?.likes?.length,commentdata:commentdata,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
-  //        }
-  //    }  
-
-
-
-
-
-    //      this.showloader = false;
-    //     //  },3000)
-    //   },
-    //   error:(error)=>{
-    //     //this.spinner.hide();
-    //     this.showloader = false;
-    //     alert("Something Went Wrong");
-    //   }
-    // })
-  // }
     
      }
 
@@ -395,36 +330,10 @@ seletedfile: ElementRef;
         next:(data)=>{
         //  console.log("like saved");
         if(data){
-          // this.router.navigate(['/home'])
-          // window.location.reload();
-          // if(this.postmodaltempdata!=undefined && this.postmodaltempdata!=null){
-          //     this.postmodaltempdata.liked = true;
-          //     this.postmodaltempdata.likes++;
-          // }
-          //this.ngOnInit();
-
-
-              // this.Randomposts.find(e=>{e.userid==userid && e.imagename==e.imagename}).likes++;
-              // this.Randomposts[index].liked = true;
-
-              // console.log(this.Randomposts[index].likes+" after like at index "+index);
-
-            //  console.log(this.sortData()[index].likes+" before like at "+index);
-
-
-              //  this.sortData().map((el,ind)=>{
-              //    if(ind==index){
-              //       el.likes++;
-              //       el.liked = true;
-              //    }
-              //  })
+       
               this.sortData()[index].likes++;
               this.sortData()[index].liked = true;
 
-           //   console.log(this.sortData()[index].likes+" after like at "+index);
-             
-           //   this.Randomposts= Object.assign([], this.Randomposts);
-           
         }
      this.showloader = false;
         },
@@ -536,7 +445,26 @@ seletedfile: ElementRef;
     )
   }
 //for returning the url
+getprofileimageforposts(userid:any):string{
+  //const userid = sessionStorage.getItem("userid");
+  var urlofprofile = "../assets/defaultprofilepic.png";
+  this.service.getimage(userid).subscribe(
+    {
+      next:(data)=>{
+         // console.log(data);
 
+            var thumb = Buffer.from(data.image.data).toString('base64');
+          urlofprofile = "data:"+data.image.contentType+""+";base64,"+thumb;
+          
+      },
+      error:(error)=>{
+         alert("something went wrong")
+      }
+    }
+    
+  )
+  return urlofprofile;
+}
 
   changemode(){
 
@@ -829,7 +757,7 @@ seletedfile: ElementRef;
     this.profilepageforsearch = false;
    }
 
-   onScroll(){
+    onScroll(){
     this.page++;
 
     if(this.page>this.totallength) return;
@@ -849,7 +777,36 @@ seletedfile: ElementRef;
              console.log(username+" username");
              
              
-             const profileurl = this.defaultpicurl
+             var profileurl = ''
+            //  this.service.getimage(userid).subscribe({
+            //    next:(data)=>{
+            //       if(data!=null && data.image!=null){
+            //         var thumb = Buffer.from(data.image.data).toString('base64');
+            //         profileurl = "data:"+data.image.contentType+""+";base64,"+thumb;
+            //       }
+            //    }
+            //  })
+             
+            //  this.service.getimage(dat?.userid).subscribe(
+            //   {
+            //     next:(data)=>{
+            //         console.log(data.name);
+                    
+            //           var thumb = Buffer.from(data.image.data).toString('base64');
+            //           var url = "data:"+data.image.contentType+""+";base64,"+thumb;
+            //           profileurl = url;
+                  
+            //         //this.showloader = false;
+            //     },
+            //     error:(error)=>{
+            //       this.showloader = false
+            //        alert("something went wrong")
+            //     }
+            //   }
+            // )
+            
+              console.log(dat?.userid,profileurl);
+              
 
                var thumb = Buffer.from(dat?.image?.data).toString('base64');
                var url = "data:"+dat?.image?.contentType+""+";base64,"+thumb;
@@ -895,15 +852,15 @@ seletedfile: ElementRef;
                  });
              
                this.commentdetails = [] 
-               if(dat?.comments!=null && dat?.comments!=undefined){
+               if(dat?.postcomments!=null && dat?.postcomments!=undefined){
                    for(let cmt of dat?.postcomments){
 
-                    const commentprofileimg =  this.defaultpicurl
+                    const commentprofileimg =  this.getprofileimageforposts(cmt?.userid)
                      this.commentdetails.unshift({username:cmt.username,imageurl:commentprofileimg,commenttext:cmt.commenttext,iscurrentusercomment:(cmt.userid==loggeduserid)});    
                    }
                }
-
-                this.Randomposts.push({index:this.Randomposts.length,userid:userid,username:username,profileurl:this.defaultpicurl,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:this.commentdetails,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
+               
+                this.Randomposts.push({index:this.Randomposts.length,userid:userid,username:username,profileurl:this.getprofileimageforposts(dat?.userid),posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:this.commentdetails,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
                
                
            }
