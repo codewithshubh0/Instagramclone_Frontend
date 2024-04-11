@@ -1,6 +1,6 @@
 <mat-progress-bar *ngIf="showloader" style="top:0;position: fixed;" mode="indeterminate" color="accent"></mat-progress-bar>
-<div >
-    <div class="row" [ngStyle]="{'backgroundColor':isdark?'black':'white','color':isdark?'white':'black'}">
+<div  [ngStyle]="{'backgroundColor':isdark?'black':'white','color':isdark?'white':'black'}">
+    <div class="row" [ngStyle]="{'backgroundColor':isdark?'black':'white','color':isdark?'white':'black','width':'100%'}">
        
       <div *ngIf="!navbarformobile" style="height: 100vh; border: 1px solid #c9c8c8;position: fixed;border-top: none;" class="col-2">
         <img  [ngStyle]="{'filter':isdark?'invert(1)':'none'}" style="height: 35px;margin-top: 40px;margin-bottom: 22px;margin-left: 18px;" src="../../assets/loginlogo.png"/>
@@ -59,7 +59,7 @@
       <div *ngIf="homeoptionselected && mobileview" [ngStyle]="{'height': '200vh','margin-left':!homepageformobile?'250px':''}" class="col-6">
          <div style=" margin-top: 29px;" infiniteScroll
          [infiniteScrollDistance]="3"
-         [infiniteScrollThrottle]="500"
+         [infiniteScrollThrottle]="700"
          (scrolled)="onScroll()" >
             <div class="postboxmobile" *ngFor="let postdata of sortData(); index as i" >
               <div class="row userdetail">
@@ -72,8 +72,11 @@
                  <span style="margin-left: 2px; color: #009cf6;font-weight: 500;"> Follow</span>
                 </div>
               </div>
-                <div class="row postmobile">
-                  <img [src]="postdata.posturl"/>
+                <div class="row postmobile" style="
+                border: 1px solid #dfdfdf;
+                border-radius: 5px; width: 104.7%;
+            ">
+                  <img style="padding: 0px;border-radius: 3px;" [src]="postdata.posturl"/>
                 </div>
                 <div class="row likesandcommentmobile">
                   <div class="innerlikesandcommentmobile">
@@ -81,8 +84,8 @@
                     <span (click)="dislike(postdata.userid,postdata.imagename,i)" *ngIf="postdata.liked"><i class="fa-solid fa-heart menuiconpost" style="color: #ff0000;"></i></span>
                     <span data-bs-toggle="modal" data-bs-target="#openpostmodalhomepagemobile" (click)="openpostmodal(postdata,i)"><i style="transform: scaleX(-1);" class="fa-regular fa-comment menuiconpost"></i></span>
                     <span ><i style="rotate: 24deg;" class="fa-regular fa-paper-plane menuiconpost"></i></span>
-                    <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;margin-right: -21px" class="fa-regular fa-bookmark menuiconpost"></i></span>
-                    <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;margin-right: -21px" class="fa-solid fa-bookmark menuiconpost"></i></span>
+                    <span (click)="bookmark()" *ngIf="!showbookmark"><i style="float: right;margin-right: -44px" class="fa-regular fa-bookmark menuiconpost"></i></span>
+                    <span (click)="bookmark()" *ngIf="showbookmark"><i style="float: right;margin-right: -44px" class="fa-solid fa-bookmark menuiconpost"></i></span>
                     
                   </div>
                   <p *ngIf="postdata.likes>0" style="margin-top: 10px;font-weight: 600;">{{(postdata.likes)}} likes</p>
@@ -105,7 +108,7 @@
 
       <div *ngIf="homeoptionselected && !mobileview" [ngStyle]="{'height': '200vh','margin-left':!homepageformobile?'250px':''}" class="col-6">
         <div style=" margin-top: 29px;" infiniteScroll
-        [infiniteScrollDistance]="5"
+        [infiniteScrollDistance]="2"
         [infiniteScrollThrottle]="500"
         (scrolled)="onScroll()" >
         
@@ -120,8 +123,12 @@
                <span style="margin-left: 2px; color: #009cf6;font-weight: 500;"> Follow</span>
               </div>
             </div>
-            <div class="row">
-               <img style="max-width: 104%;" [src]="postdata.posturl"/>
+            <div class="row" style="
+            border: 1px solid #dfdfdf;
+            border-radius: 5px;
+        ">
+               <img style="max-width: 104%;padding: 0px 0px;
+               border-radius: 5px;" [src]="postdata.posturl"/>
             </div>
             <div style="width: 100%;" class="row likesandcomment">
               <div class="innerlikesandcomment">
@@ -549,7 +556,7 @@
   </div>
 </div>
 <!-- for responsive navbar menu  -->
-<nav *ngIf="navbarformobile" class="navbar fixed-bottom navbar-expand-lg" style="background-color: white;color: black;border-top: 1px solid rgb(228, 228, 228);">
+<nav *ngIf="navbarformobile" class="navbar fixed-bottom navbar-expand-lg" style="background-color: white;color: black;border-top: 1px solid rgb(228, 228, 228);width: 100%;">
    <div class="container-fluid">
      <div style="padding-left: 14px;" class="navbar-brand" (click)="showhomepage()" ><i class="fa-solid fa-house menuicon"></i></div>
      <div class="navbar-brand"  (click)="showsearchformobile()" ><i class="fa-solid fa-magnifying-glass menuicon"></i></div>

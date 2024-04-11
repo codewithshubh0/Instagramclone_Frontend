@@ -759,7 +759,7 @@ getprofileimageforposts(userid:any):string{
 
   onScroll(){
     this.page++;
-
+    this.commentdetails = [] 
     if(this.page>this.totallength) return;
     //console.log("scrolled "+ this.page);
     this.fetchingdata = true;
@@ -771,7 +771,7 @@ getprofileimageforposts(userid:any):string{
           if(data){
            
            for(let dat of data){
-         
+            this.commentdetails = [] 
              this.service.getimage(dat?.userid).subscribe(
               {
                 next:(data)=>{
@@ -826,8 +826,9 @@ getprofileimageforposts(userid:any):string{
                             }
                           });
     
-                            this.commentdetails = [] 
+                          this.commentdetails = [] 
                             for(let cmt of dat?.postcomments){
+
                               this.showloader = true;
                                 this.service.getimage(cmt.userid).subscribe(
                                   {
