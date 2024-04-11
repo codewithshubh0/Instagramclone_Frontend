@@ -44,7 +44,7 @@ export class SignupComponent {
 
           if(data=="1"){
             alert("User Sucessfully Created");
-            this.sendmail(this.fullname,this.email)
+            //this.sendmail(this.fullname,this.email)
             this.spinner.hide();
             this.router.navigate(["/login"]);
           }else{
