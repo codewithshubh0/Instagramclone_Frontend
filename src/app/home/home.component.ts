@@ -69,7 +69,7 @@ seletedfile: ElementRef;
   page = -1;
   totallength = 0;
   searchselectedformobile = false;
-  Randomposts:Array<{index:number,userid:string,username:string,profileurl:string,posturl:string,imagename:string,postcaption:string,likes:number,commentdata:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}>,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}> = [];
+  Randomposts:Array<{index:number,userid:string,username:string,profileurl:string,posturl:string,imagename:string,postcaption:string,likes:number,commentdata:Array<{userid:any,commenttext:any}>,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}> = [];
   postmodaltempdata:{index:number,userid:string,username:string,profileurl:string,posturl:string,imagename:string,postcaption:string,likes:number,ageofpost:string,postdate:string,todaypostage:string,liked:boolean,istodayspost:boolean}
   commentdetails:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}> = []
   commentdetailsformodalpost:Array<{username:any,imageurl:any,commenttext:any,iscurrentusercomment:boolean}> = []
@@ -258,7 +258,7 @@ seletedfile: ElementRef;
                     }
                 }
 
-                 this.Randomposts.unshift({index:this.Randomposts.length,userid:userid,username:username,profileurl:this.defaultpicurl,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:this.commentdetails,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
+                 this.Randomposts.unshift({index:this.Randomposts.length,userid:userid,username:username,profileurl:this.defaultpicurl,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:[],ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
                 }
                 
             }
@@ -596,22 +596,7 @@ getprofileimageforposts(userid:any):string{
     })
   }
 
-  openpostmodal(postdata:any,index:number){
-   // this.postmodaltempdata.posturl = postdata?.posturl
-   this.commentdetailsformodalpost = []
-  // console.log(postdata);
-  postdata.index = index;
-   this.postmodaltempdata = postdata
-   this.commentdetailsformodalpost = postdata.commentdata
-   const id = sessionStorage.getItem("userid");
-   this.isOwnPost = postdata.userid==id
-    // this.postmodaltempdata.username = postdata?.username;
-    // this.postmodaltempdata.likes = postdata?.likes
-    // this.postmodaltempdata.profileurl = postdata?.profileurl
-    // this.postmodaltempdata.postcaption = postdata?.postcaption
-    // this.postmodaltempdata.imagename = postdata?.imagename
-    // this.postmodaltempdata.username = postdata?.username
-  }
+  
 
 
   deletepost(imagename:any){
@@ -665,15 +650,15 @@ getprofileimageforposts(userid:any):string{
                     if(data!=null && data.image!=null){
                       var thumb = Buffer.from(data.image.data).toString('base64');
                       var imgurl = "data:"+data.image.contentType+""+";base64,"+thumb;
-                     // this.commentdetailsformodalpost.unshift({username:data.username,imageurl:imgurl,commenttext:this.usercomment,iscurrentusercomment:true})
+                      this.commentdetailsformodalpost.unshift({username:data.username,imageurl:imgurl,commenttext:this.usercomment,iscurrentusercomment:true})
                       
-                      this.sortData()[index].commentdata.unshift({username:data.username,imageurl:imgurl,commenttext:this.usercomment,iscurrentusercomment:true})
+                      //this.sortData()[index].commentdata.unshift({username:data.username,imageurl:imgurl,commenttext:this.usercomment,iscurrentusercomment:true})
                      
                     //  this.ngOnInit();
                       this.usercomment = "";
                     }else{
-                     // this.commentdetailsformodalpost.unshift({username:data.username,imageurl:this.defaultpicurl,commenttext:this.usercomment,iscurrentusercomment:true})
-                      this.sortData()[index].commentdata.unshift({username:data.username,imageurl:this.defaultpicurl,commenttext:this.usercomment,iscurrentusercomment:true})
+                      this.commentdetailsformodalpost.unshift({username:data.username,imageurl:this.defaultpicurl,commenttext:this.usercomment,iscurrentusercomment:true})
+                    //  this.sortData()[index].commentdata.unshift({username:data.username,imageurl:this.defaultpicurl,commenttext:this.usercomment,iscurrentusercomment:true})
                    //   this.ngOnInit();
                       this.usercomment = "";
                     }
@@ -718,13 +703,13 @@ getprofileimageforposts(userid:any):string{
              
           // this.commentdetailsformodalpost = tempdata.splice(tempdata.findIndex(item=>{item.commenttext == comment}),1);          
            
-            this.sortData()[this.indextodel].commentdata.forEach((el,ind)=>{
-               if(el.commenttext==comment){
+            // this.sortData()[this.indextodel].commentdata.forEach((el,ind)=>{
+            //    if(el.commenttext==comment){
                   
-                  this.sortData()[this.indextodel].commentdata.splice(ind,1);
-                //  console.log(JSON.stringify(this.commentdetailsformodalpost)+" getting");
-               }
-            })
+            //       this.sortData()[this.indextodel].commentdata.splice(ind,1);
+            //     //  console.log(JSON.stringify(this.commentdetailsformodalpost)+" getting");
+            //    }
+            // })
            // this.ngOnInit()
            this.showpost = false;
           }
@@ -759,6 +744,7 @@ getprofileimageforposts(userid:any):string{
     this.profilepageforsearch = false;
    }
    isfetching = false;
+   Storecommentdata:Array<{commenttext:string,userid:string}> = []
   onScroll(){
     this.page++;
     this.isfetching=true;
@@ -767,7 +753,7 @@ getprofileimageforposts(userid:any):string{
     //console.log("scrolled "+ this.page);
     this.fetchingdata = true;
     this.spinner.show();
-    const loggeduserid = sessionStorage.getItem("userid");
+    
    
     this.service.getuserpostbypage(this.page).subscribe({
       next:(data)=>{
@@ -828,43 +814,10 @@ getprofileimageforposts(userid:any):string{
                               isliked = true;
                             }
                           });
-    
-                          this.commentdetails = [] 
-                            for(let cmt of dat?.postcomments){
-
-                              this.showloader = true;
-                                this.service.getimage(cmt.userid).subscribe(
-                                  {
-                                    next:(data)=>{
-                                      // console.log(data);
-                                    
-                                        if(data!=null && data.image!=null){
-                                          var thumb = Buffer.from(data.image.data).toString('base64');
-                                          var commentprofileurl = "data:"+data.image.contentType+""+";base64,"+thumb;
-                                          this.commentdetails.unshift({username:data?.username,imageurl:commentprofileurl,commenttext:cmt.commenttext,iscurrentusercomment:(cmt.userid==loggeduserid)});    
-                                         }else{
-                                          this.commentdetails.unshift({username:data?.username,imageurl:this.defaultpicurl,commenttext:cmt.commenttext,iscurrentusercomment:(cmt.userid==loggeduserid)})
-                                         }
-
-                                         
-                                         this.showloader=false;
-                                        //this.spinner.hide();
-                                        //this.showloaderforcommentload = false;
-                                      },
-                                    error:(error)=>{
-                                      //this.spinner.hide();
-                                      this.showloader = false;
-                                      alert("something went wrong")
-                                    }
-                                  }
-                                )
-                                
-                                
-                             }
-                        
+                         console.log(JSON.stringify(dat.postcomments.length)+" commentdata");
+                         this.Storecommentdata.push(dat.postcomments);
                     
-                    
-                        this.Randomposts.push({index:this.Randomposts.length,userid:userid,username:username,profileurl:url1,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:this.commentdetails,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
+                        this.Randomposts.push({index:this.Randomposts.length,userid:userid,username:username,profileurl:url1,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:dat.postcomments,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
                      
                       //this.showloader = false;
                 },
@@ -889,5 +842,130 @@ getprofileimageforposts(userid:any):string{
       }
    })
    }
+
+   openpostmodal(postdata:any,index:number){
+    // this.postmodaltempdata.posturl = postdata?.posturl
+    this.commentdetailsformodalpost = []
+   // console.log(postdata);
+   postdata.index = index;
+    this.postmodaltempdata = postdata
+    // this.commentdetailsformodalpost = postdata.commentdata
+    const id = sessionStorage.getItem("userid");
+    this.isOwnPost = postdata.userid==id
+    const loggeduserid = sessionStorage.getItem("userid");
+    
+ 
+    this.commentdetails = [] 
+    //console.log(JSON.stringify(this.Storecommentdata[index])+" cmtdata");
+    
+     var tempcmtdata = this.Randomposts[index].commentdata
+      console.log(JSON.stringify(tempcmtdata)+" cmtdata");
+    
+      for(let cmt of tempcmtdata){
+         
+        this.showloader = true;
+           this.service.getimage(cmt.userid).subscribe(
+               {
+                 next:(data)=>{
+                   // console.log(data);
+                 
+                     if(data!=null && data.image!=null){
+                       var thumb = Buffer.from(data.image.data).toString('base64');
+                       var commentprofileurl = "data:"+data.image.contentType+""+";base64,"+thumb;
+                       this.commentdetailsformodalpost.unshift({username:data?.username,imageurl:commentprofileurl,commenttext:cmt.commenttext,iscurrentusercomment:(cmt["userid"]==loggeduserid)});    
+                      }else{
+                       this.commentdetailsformodalpost.unshift({username:data?.username,imageurl:this.defaultpicurl,commenttext:cmt.commenttext,iscurrentusercomment:(cmt["userid"]==loggeduserid)})
+                      }
+                      console.log(JSON.stringify(this.commentdetailsformodalpost));
+                      
+                      this.showloader=false;
+                     //this.spinner.hide();
+                     //this.showloaderforcommentload = false;
+                   },
+                 error:(error)=>{
+                   //this.spinner.hide();
+                   this.showloader = false;
+                   alert("something went wrong")
+                 }
+               }
+             )
+
+
+      }
+
+    //  tempcmtdata.forEach(element => {
+      
+    //  });((e,ind)=>{
+    //    console.log("coming here");
+       
+    //    this.showloader = true;
+    //      this.service.getimage(cmt.userid).subscribe(
+    //        {
+    //          next:(data)=>{
+    //            // console.log(data);
+             
+    //              if(data!=null && data.image!=null){
+    //                var thumb = Buffer.from(data.image.data).toString('base64');
+    //                var commentprofileurl = "data:"+data.image.contentType+""+";base64,"+thumb;
+    //                this.commentdetailsformodalpost.unshift({username:data?.username,imageurl:commentprofileurl,commenttext:cmt["commenttext"],iscurrentusercomment:(cmt["userid"]==loggeduserid)});    
+    //               }else{
+    //                this.commentdetailsformodalpost.unshift({username:data?.username,imageurl:this.defaultpicurl,commenttext:cmt["commenttext"],iscurrentusercomment:(cmt["userid"]==loggeduserid)})
+    //               }
+    //               console.log(JSON.stringify(this.commentdetailsformodalpost));
+                  
+    //               this.showloader=false;
+    //              //this.spinner.hide();
+    //              //this.showloaderforcommentload = false;
+    //            },
+    //          error:(error)=>{
+    //            //this.spinner.hide();
+    //            this.showloader = false;
+    //            alert("something went wrong")
+    //          }
+    //        }
+    //      )
+         
+         
+    //   })
+
+     
+      
+   }
+
+
+  //  addcommentsdata(){
+  //   this.commentdetails = [] 
+  //   for(let cmt of dat?.postcomments){
+
+  //     this.showloader = true;
+  //       this.service.getimage(cmt.userid).subscribe(
+  //         {
+  //           next:(data)=>{
+  //             // console.log(data);
+            
+  //               if(data!=null && data.image!=null){
+  //                 var thumb = Buffer.from(data.image.data).toString('base64');
+  //                 var commentprofileurl = "data:"+data.image.contentType+""+";base64,"+thumb;
+  //                 this.commentdetails.unshift({username:data?.username,imageurl:commentprofileurl,commenttext:cmt.commenttext,iscurrentusercomment:(cmt.userid==loggeduserid)});    
+  //                }else{
+  //                 this.commentdetails.unshift({username:data?.username,imageurl:this.defaultpicurl,commenttext:cmt.commenttext,iscurrentusercomment:(cmt.userid==loggeduserid)})
+  //                }
+
+                 
+  //                this.showloader=false;
+  //               //this.spinner.hide();
+  //               //this.showloaderforcommentload = false;
+  //             },
+  //           error:(error)=>{
+  //             //this.spinner.hide();
+  //             this.showloader = false;
+  //             alert("something went wrong")
+  //           }
+  //         }
+  //       )
+        
+        
+  //    }
+  //  }
 
 }

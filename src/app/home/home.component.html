@@ -2,7 +2,7 @@
 <div  [ngStyle]="{'backgroundColor':isdark?'black':'white','color':isdark?'white':'black'}">
     <div class="row" [ngStyle]="{'backgroundColor':isdark?'black':'white','color':isdark?'white':'black','width':'100%'}">
        
-      <div *ngIf="!navbarformobile" style="height: 100vh; border: 1px solid #c9c8c8;position: fixed;border-top: none;" class="col-2">
+      <div *ngIf="!navbarformobile" [ngStyle]="{'background-color':isdark?'black':''}" style="height: 100vh; border: 1px solid #c9c8c8;position: fixed;border-top: none;" class="col-2">
         <img  [ngStyle]="{'filter':isdark?'invert(1)':'none'}" style="height: 35px;margin-top: 40px;margin-bottom: 22px;margin-left: 18px;" src="../../assets/loginlogo.png"/>
         <div style="width: 97%;margin: 10px auto;height: 100vh;margin-left: 10px">
             <div [ngStyle]="{'backgroundColor':homeoptionselected && !Searchpageselected?isdark?'#282828':'rgb(233, 233, 233)':'','fontWeight':homeoptionselected && !Searchpageselected?'bold':'','color':homeoptionselected?isdark?'white':'':''}" class="menu" (click)="showhomepage()"><i class="fa-solid fa-house menuicon"></i><span>Home</span></div>
@@ -57,7 +57,7 @@
       </div>
    
       <div *ngIf="homeoptionselected && mobileview" [ngStyle]="{'height': '200vh','margin-left':!homepageformobile?'250px':''}" class="col-6">
-         <div style=" margin-top: 29px;" infiniteScroll
+         <div [ngStyle]="{'backgroundColor':isdark?'black':'white','color':isdark?'white':'black','margin-top':'29px','padding-bottom': '100px','width':'230%'}" infiniteScroll
          [infiniteScrollDistance]="20"
          [infiniteScrollThrottle]="2000"
          (scrolled)="onScroll()" >
@@ -74,7 +74,7 @@
               </div>
                 <div class="row postmobile" style="
                 border: 1px solid #dfdfdf;
-                border-radius: 5px; width: 104.7%;
+                border-radius: 5px; width: 103.7%;
             ">
                   <img style="padding: 0px;border-radius: 3px;" [src]="postdata.posturl"/>
                 </div>
@@ -94,8 +94,8 @@
                       <p style="margin-top: -4px;font-weight: 600; ">{{postdata?.username}}</p><span style="margin-top: -4px ;margin-left: 10px;max-width:200px;word-wrap:break-word;">{{postdata.postcaption?.substring(0,30)}}</span>
                    </div>
                   <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;">{{postdata.postcaption?.length>30?postdata.postcaption.substring(30):""}}</p>
-                  <p style="margin-top: -12px;margin-bottom: 5px;cursor: pointer;color: grey;" *ngIf="postdata?.commentdata?.length>0" data-bs-toggle="modal" data-bs-target="#openpostmodalhomepagemobile" (click)="openpostmodal(postdata,i)">View all {{postdata?.commentdata?.length}} comments</p>
-                  <div style="border-bottom: 1px solid #e2e2e2;margin-left: 11px;"><textarea class="commentinput" style="border: none;width: 90%;height: 48px;margin-left: -8px "  (keyup)="addcomment()" [(ngModel)]="usercomment" type="text" placeholder="Add a comment..."></textarea>
+                  <p style="margin-top: -12px;margin-bottom: 5px;cursor: pointer;color: grey;" *ngIf="postdata?.commentdata.length>0" data-bs-toggle="modal" data-bs-target="#openpostmodalhomepagemobile" (click)="openpostmodal(postdata,i)">View all {{postdata?.commentdata.length}} comments</p>
+                  <div style="border-bottom: 1px solid #e2e2e2;margin-left: 11px;"><textarea [ngStyle]="{'background-color':isdark?'black':'white'}" class="commentinput" style="border: none;width: 90%;height: 48px;margin-left: -8px "  (keyup)="addcomment()" [(ngModel)]="usercomment" type="text" placeholder="Add a comment..."></textarea>
                    <span  (click)="postcomment(postdata?.userid,postdata?.imagename,i)" *ngIf="showpost" style="color: rgb(9 179 255);float: right;font-size: 16px;font-weight: 500;margin-top: 19px;cursor: pointer;">Post</span></div>
                 </div>
                
@@ -107,9 +107,9 @@
 
 
       <div *ngIf="homeoptionselected && !mobileview" [ngStyle]="{'height': '200vh','margin-left':!homepageformobile?'250px':''}" class="col-6">
-        <div style=" margin-top: 29px;" infiniteScroll
-        [infiniteScrollDistance]="20"
-        [infiniteScrollThrottle]="2000"
+        <div [ngStyle]="{'backgroundColor':isdark?'black':'white','color':isdark?'white':'black','margin-top':'29px','margin-left':'-10px','padding-bottom': '100px'}" infiniteScroll
+        [infiniteScrollDistance]="10"
+        [infiniteScrollThrottle]="1000"
 
         (scrolled)="onScroll()" >
         
@@ -147,8 +147,8 @@
                    <p style="margin-top: -4px;font-weight: 600; ">{{postdata?.username}}</p><span style="margin-top: -4px ;margin-left: 10px;max-width:200px;word-wrap:break-word;">{{postdata.postcaption?.substring(0,30)}}</span>
                 </div>
                <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;">{{postdata.postcaption?.length>30?postdata.postcaption.substring(30):""}}</p>
-               <p style="margin-top: -12px;margin-bottom: 5px;cursor: pointer;color: grey;" *ngIf="postdata?.commentdata?.length>0" data-bs-toggle="modal" data-bs-target="#openpostmodalhomepage" (click)="openpostmodal(postdata,i)">View all {{postdata?.commentdata?.length}} comments</p>
-               <div style="border-bottom: 1px solid #e2e2e2;margin-left: 11px;"><textarea class="commentinput" style="border: none;width: 386px;height: 48px;margin-left: -8px "  (keyup)="addcomment()" [(ngModel)]="usercomment" type="text" placeholder="Add a comment..."></textarea>
+               <p style="margin-top: -12px;margin-bottom: 5px;cursor: pointer;color: grey;" *ngIf="postdata?.commentdata.length>0" data-bs-toggle="modal" data-bs-target="#openpostmodalhomepage" (click)="openpostmodal(postdata,i)">View all {{postdata?.commentdata.length}} comments</p>
+               <div style="border-bottom: 1px solid #e2e2e2;margin-left: 11px;"><textarea class="commentinput" [ngStyle]="{'background-color':isdark?'black':'white'}" style="border: none;width: 386px;height: 48px;margin-left: -8px "  (keyup)="addcomment()" [(ngModel)]="usercomment" type="text" placeholder="Add a comment..."></textarea>
                 <span  (click)="postcomment(postdata?.userid,postdata?.imagename,i)" *ngIf="showpost" style="color: rgb(9 179 255);float: right;font-size: 16px;margin-right: 20px;font-weight: 500;margin-top: 19px;cursor: pointer;">Post</span></div>
                 <!-- <emoji-mart class="emoji-mart" set="google" *ngIf="showEmojiPicker" (emojiSelect)="addEmoji($event)" title="Pick your emoji…"></emoji-mart> -->
              

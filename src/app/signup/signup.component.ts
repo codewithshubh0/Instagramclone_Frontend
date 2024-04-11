@@ -3,6 +3,7 @@ import { LoginsignupService } from '../Services/loginsignup.service';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HostListener } from "@angular/core";
+import emailjs, { type EmailJSResponseStatus } from '@emailjs/browser';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -43,6 +44,7 @@ export class SignupComponent {
 
           if(data=="1"){
             alert("User Sucessfully Created");
+            this.sendmail(this.fullname,this.email)
             this.spinner.hide();
             this.router.navigate(["/login"]);
           }else{
@@ -56,5 +58,16 @@ export class SignupComponent {
           alert("something went wrong");
         }
       })
+  }
+
+  async sendmail(fullname,email){
+    emailjs.init("rYrzzDbs-2U3DdD6h")
+   let response = await emailjs.send("service_idlugib","template_rniu8go",{
+      from_name: "Anjani Sharma",
+      to_name: fullname,
+      message: "welcome "+fullname +", Start Exploring My Istagram world. Thank you for Joining",
+      reply_to: email
+    });
+
   }
 }

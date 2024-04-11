@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ProfileService {
 
-  // private url = "http://localhost:8000";
+//private url = "http://localhost:8000";
 
   private url = "https://instagram-backend-igfs.onrender.com"
 

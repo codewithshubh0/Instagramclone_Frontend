@@ -37,7 +37,7 @@
           
           </div>
           <div class="col">
-            <div  style="display: flex;margin-left: 40px;margin-top: 78px;">
+            <div  style="display: flex;margin-left: 32px;margin-top: 78px;">
               <div style="margin-right: 16px;"><p style="font-weight: bold;margin-bottom: 0px;text-align: center;">{{post}}</p> Posts</div>
               <div style="margin-right: 16px;"><p style="font-weight: bold;margin-bottom: 0px;text-align: center;">{{follower}}</p> Followers</div>
               <div style="margin-right: 16px;"><p style="font-weight: bold;margin-bottom: 0px;text-align: center;">{{following}}</p> Following</div>
@@ -47,7 +47,7 @@
           <div style="margin-left: 13px;" *ngFor="let d of biodata" >
             <div>{{d}}</div>
           </div>
-            <div style="display: flex;margin-left: 6px;margin-top: 32px;">
+            <div style="display: flex;margin-left: 6px;margin-top: 32px;width: 103%;">
                 
                 <div class="editandviewmobile" (click)="editprofilemobile()" *ngIf="!isfromSearch">Edit profile</div>
                 <div (click)="follow()" class="follow" *ngIf="isfromSearch && !isfollowing">Follow</div>
@@ -124,7 +124,7 @@
     </div>
 </div>
 
-<div *ngIf="mobileview" style="margin-top: 23px; width: 105%;;margin: 58px auto;">
+<div *ngIf="mobileview" style="margin-top: 23px; width: 114%;;margin: 58px auto;">
   <div class="row" style="height: 31vh;width: 95%;" >
     <div *ngIf="Userposts.length==0">
        <div style="width: 231px;margin: 0 auto;margin-top: 93px ">
