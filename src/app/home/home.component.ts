@@ -757,11 +757,11 @@ getprofileimageforposts(userid:any):string{
     this.profilepageforsearch = false;
    }
 
-    onScroll(){
+  onScroll(){
     this.page++;
 
     if(this.page>this.totallength) return;
-    console.log("scrolled "+ this.page);
+    //console.log("scrolled "+ this.page);
     this.fetchingdata = true;
     this.spinner.show();
     const loggeduserid = sessionStorage.getItem("userid");
@@ -771,97 +771,105 @@ getprofileimageforposts(userid:any):string{
           if(data){
            
            for(let dat of data){
-             
-             const userid = dat?.userid;
-             const username = dat?.username;
-             console.log(username+" username");
-             
-             
-             var profileurl = ''
-            //  this.service.getimage(userid).subscribe({
-            //    next:(data)=>{
-            //       if(data!=null && data.image!=null){
-            //         var thumb = Buffer.from(data.image.data).toString('base64');
-            //         profileurl = "data:"+data.image.contentType+""+";base64,"+thumb;
-            //       }
-            //    }
-            //  })
-             
-            //  this.service.getimage(dat?.userid).subscribe(
-            //   {
-            //     next:(data)=>{
-            //         console.log(data.name);
+         
+             this.service.getimage(dat?.userid).subscribe(
+              {
+                next:(data)=>{
+                  //  console.log(data.name);
                     
-            //           var thumb = Buffer.from(data.image.data).toString('base64');
-            //           var url = "data:"+data.image.contentType+""+";base64,"+thumb;
-            //           profileurl = url;
-                  
-            //         //this.showloader = false;
-            //     },
-            //     error:(error)=>{
-            //       this.showloader = false
-            //        alert("something went wrong")
-            //     }
-            //   }
-            // )
-            
-              console.log(dat?.userid,profileurl);
-              
+                      var thumb = Buffer.from(data.image.data).toString('base64');
+                      var url1 = "data:"+data.image.contentType+""+";base64,"+thumb;
+                      profileurl = url1;
+   
+                      const userid = dat?.userid;
+                      const username = dat?.username;
+         
+                      var profileurl = ''
+                        var thumb = Buffer.from(dat?.image?.data).toString('base64');
+                        var url = "data:"+dat?.image?.contentType+""+";base64,"+thumb;
+                        const imgname = dat?.postname;
+                        const postcaption = dat?.postcaption
+                        const likes = dat?.likes.length;
+         
+                        var postingdate = this.datepipe.transform(dat.postdate, 'yyyy-MM-dd hh:mm a')
+                       var agedate  = this.calculateDiff(postingdate);
+         
+                        var ageofpost = ''
+                        var todaypostage = ''
+                        var todaypost = false;
+                        if(agedate==0 ){
+                            //calculate time diff
+                            todaypost = true;
+                            var currdate = new Date()
+                            var timediff = currdate.getTime()-new Date(dat.postdate).getTime();
+                           // console.log((timediff/1000)/60+" minutes");
+                            todaypostage = Math.floor(timediff/1000)>=0 && Math.floor(timediff/1000)<60?Math.floor(timediff/1000)+'s':
+                                     Math.floor(timediff/1000)>=60 && Math.floor(timediff/1000)<3600?Math.floor((timediff/1000)/60)+'m':
+                                     Math.floor(((timediff/1000)/60)/60)+'h';
+                            
+                       }else
+                       
+                       if(agedate>0 && agedate<=30){
+                          ageofpost = (agedate)+'d' 
+                       }
+                       else if(agedate>30 && agedate<365){
+                           ageofpost = Math.floor(agedate/7)+'w' 
+                       }else if(agedate>365){
+                            ageofpost = Math.floor(agedate/365)+'y'
+                       }
+         
+                       const id = sessionStorage.getItem("userid");
+                       var isliked = false;
+                          dat.likes.forEach(item =>{
+                            if( item.indexOf(id)>=0){
+                              isliked = true;
+                            }
+                          });
+    
+                            this.commentdetails = [] 
+                            for(let cmt of dat?.postcomments){
+                              this.showloader = true;
+                                this.service.getimage(cmt.userid).subscribe(
+                                  {
+                                    next:(data)=>{
+                                      // console.log(data);
+                                    
+                                        if(data!=null && data.image!=null){
+                                          var thumb = Buffer.from(data.image.data).toString('base64');
+                                          var commentprofileurl = "data:"+data.image.contentType+""+";base64,"+thumb;
+                                          this.commentdetails.unshift({username:data?.username,imageurl:commentprofileurl,commenttext:cmt.commenttext,iscurrentusercomment:(cmt.userid==loggeduserid)});    
+                                         }else{
+                                          this.commentdetails.unshift({username:data?.username,imageurl:this.defaultpicurl,commenttext:cmt.commenttext,iscurrentusercomment:(cmt.userid==loggeduserid)})
+                                         }
 
-               var thumb = Buffer.from(dat?.image?.data).toString('base64');
-               var url = "data:"+dat?.image?.contentType+""+";base64,"+thumb;
-               const imgname = dat?.postname;
-               const postcaption = dat?.postcaption
-               const likes = dat?.likes.length;
-
-               var postingdate = this.datepipe.transform(dat.postdate, 'yyyy-MM-dd hh:mm a')
-              var agedate  = this.calculateDiff(postingdate);
-             // console.log(agedate);
-              
-             // var agedate = this.calculateDiff(this.datepipe.transform('Mon Jan 08 2024 20:10:27 GMT+0530 (India Standard Time)', 'yyyy-MM-dd hh:mm'));
-               var ageofpost = ''
-               var todaypostage = ''
-               var todaypost = false;
-               if(agedate==0 ){
-                   //calculate time diff
-                   todaypost = true;
-                   var currdate = new Date()
-                   var timediff = currdate.getTime()-new Date(dat.postdate).getTime();
-                  // console.log((timediff/1000)/60+" minutes");
-                   todaypostage = Math.floor(timediff/1000)>=0 && Math.floor(timediff/1000)<60?Math.floor(timediff/1000)+'s':
-                            Math.floor(timediff/1000)>=60 && Math.floor(timediff/1000)<3600?Math.floor((timediff/1000)/60)+'m':
-                            Math.floor(((timediff/1000)/60)/60)+'h';
-                   
-              }else
-              
-              if(agedate>0 && agedate<=30){
-                 ageofpost = (agedate)+'d' 
+                                         
+                                         this.showloader=false;
+                                        //this.spinner.hide();
+                                        //this.showloaderforcommentload = false;
+                                      },
+                                    error:(error)=>{
+                                      //this.spinner.hide();
+                                      this.showloader = false;
+                                      alert("something went wrong")
+                                    }
+                                  }
+                                )
+                                
+                                
+                             }
+                        
+                    
+                    
+                        this.Randomposts.push({index:this.Randomposts.length,userid:userid,username:username,profileurl:url1,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:this.commentdetails,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
+                     
+                      //this.showloader = false;
+                },
+                error:(error)=>{
+                  this.showloader = false
+                   alert("something went wrong")
+                }
               }
-              else if(agedate>30 && agedate<365){
-                  ageofpost = Math.floor(agedate/7)+'w' 
-              }else if(agedate>365){
-                   ageofpost = Math.floor(agedate/365)+'y'
-              }
-
-              const id = sessionStorage.getItem("userid");
-              var isliked = false;
-                 dat.likes.forEach(item =>{
-                   if( item.indexOf(id)>=0){
-                     isliked = true;
-                   }
-                 });
-             
-               this.commentdetails = [] 
-               if(dat?.postcomments!=null && dat?.postcomments!=undefined){
-                   for(let cmt of dat?.postcomments){
-
-                    const commentprofileimg =  this.getprofileimageforposts(cmt?.userid)
-                     this.commentdetails.unshift({username:cmt.username,imageurl:commentprofileimg,commenttext:cmt.commenttext,iscurrentusercomment:(cmt.userid==loggeduserid)});    
-                   }
-               }
-               
-                this.Randomposts.push({index:this.Randomposts.length,userid:userid,username:username,profileurl:this.getprofileimageforposts(dat?.userid),posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:this.commentdetails,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
-               
+            )
                
            }
            this.fetchingdata = false;
