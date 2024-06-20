@@ -766,12 +766,11 @@ getprofileimageforposts(userid:any):string{
               {
                 next:(dataimg)=>{
                   //  console.log(data.name);
+                  var dpurl=this.defaultpicurl;
                     if(dataimg.image){
                       var thumb = Buffer.from(dataimg?.image?.data).toString('base64');
                       var url1 = "data:"+dataimg?.image?.contentType+""+";base64,"+thumb;
-                      profileurl = url1;
-                    }else{
-                      profileurl = this.defaultpicurl;
+                      dpurl = url1;
                     }
                       
    
@@ -822,7 +821,7 @@ getprofileimageforposts(userid:any):string{
                          console.log(JSON.stringify(dat.postcomments.length)+" commentdata");
                          this.Storecommentdata.push(dat.postcomments);
                     
-                        this.Randomposts.push({index:this.Randomposts.length,userid:userid,username:username,profileurl:url1,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:dat.postcomments,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
+                        this.Randomposts.push({index:this.Randomposts.length,userid:userid,username:username,profileurl:dpurl,posturl:url,imagename:imgname,postcaption:postcaption,likes:likes,commentdata:dat.postcomments,ageofpost:ageofpost,postdate:postingdate,todaypostage:todaypostage,liked:isliked,istodayspost:todaypost});
                      
                       //this.showloader = false;
                 },
