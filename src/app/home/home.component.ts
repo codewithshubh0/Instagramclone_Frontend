@@ -761,14 +761,19 @@ getprofileimageforposts(userid:any):string{
            
            for(let dat of data){
             this.commentdetails = [] 
+            
              this.service.getimage(dat?.userid).subscribe(
               {
-                next:(data)=>{
+                next:(dataimg)=>{
                   //  console.log(data.name);
-                    
-                      var thumb = Buffer.from(data.image.data).toString('base64');
-                      var url1 = "data:"+data.image.contentType+""+";base64,"+thumb;
+                    if(dataimg.image){
+                      var thumb = Buffer.from(dataimg?.image?.data).toString('base64');
+                      var url1 = "data:"+dataimg?.image?.contentType+""+";base64,"+thumb;
                       profileurl = url1;
+                    }else{
+                      profileurl = this.defaultpicurl;
+                    }
+                      
    
                       const userid = dat?.userid;
                       const username = dat?.username;
