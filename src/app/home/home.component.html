@@ -65,9 +65,9 @@
               <div class="row userdetail">
                 <div class="inneruserdetail" style="display: flex;">
                  <span><img [src]="postdata.profileurl" class="postsimage"></span>
-                 <span style="margin-right: 4px;">{{postdata.username}}</span>
-                 <span *ngIf="!postdata.istodayspost" style="margin-left: 2px;margin-right: 2px;">&#8231; {{postdata.ageofpost}} &#8231;</span>
-                 <span *ngIf="postdata.istodayspost" style="margin-left: 2px;margin-right: 2px;">&#8231; {{postdata.todaypostage}} &#8231;</span>
+                 <span style="margin-right: 4px;font-weight: 500;">{{postdata.username}}</span>
+                 <span *ngIf="!postdata.istodayspost" style="margin-left: 2px;margin-right: 2px;color: #7d7c7c;">&#8231; {{postdata.ageofpost}} &#8231;</span>
+                 <span *ngIf="postdata.istodayspost" style="margin-left: 2px;margin-right: 2px;color: #7d7c7c;">&#8231; {{postdata.todaypostage}} &#8231;</span>
             
                  <span style="margin-left: 2px; color: #009cf6;font-weight: 500;"> Follow</span>
                 </div>
@@ -117,9 +117,9 @@
             <div class="row userdetail">
               <div class="inneruserdetail" style="display: flex;">
                <span><img [src]="postdata.profileurl" class="postsimage"></span>
-               <span (click)="openuserprofile(postdata.userid)" style="margin-right: 4px;cursor: pointer;">{{postdata.username}}</span>
-               <span *ngIf="!postdata.istodayspost" style="margin-left: 2px;margin-right: 2px;">&#8231; {{postdata.ageofpost}} &#8231;</span>
-               <span *ngIf="postdata.istodayspost" style="margin-left: 2px;margin-right: 2px;">&#8231; {{postdata.todaypostage}} &#8231;</span>
+               <span (click)="openuserprofile(postdata.userid)" style="margin-right: 4px;cursor: pointer;font-weight: 500;">{{postdata.username}}</span>
+               <span *ngIf="!postdata.istodayspost" style="margin-left: 2px;margin-right: 2px;color: #7d7c7c;">&#8231; {{postdata.ageofpost}} &#8231;</span>
+               <span *ngIf="postdata.istodayspost" style="margin-left: 2px;margin-right: 2px;color: #7d7c7c;">&#8231; {{postdata.todaypostage}} &#8231;</span>
           
                <span style="margin-left: 2px; color: #009cf6;font-weight: 500;"> Follow</span>
               </div>
