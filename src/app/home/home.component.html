@@ -277,12 +277,12 @@
            <div class="col">
             <div>
                 <div style="border-bottom: 1px solid #e0e0e0;padding-bottom: 10px;" class="profilepicinpost">
-                    <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+                    <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;object-fit: contain;" />
                     <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{postmodaltempdata?.username}}</span>
                     <button *ngIf="isOwnPost" style="float: right;border: none;background: none;font-size: 19px;" data-bs-toggle="modal" data-bs-target="#postmoreoptionhomepage" ><i  class="fa-solid fa-ellipsis"></i></button>
                 </div>
                 <div style="padding-top: 5px;border-bottom: 1px solid #e1e1e1;margin-bottom: 12px;max-height: 142px;height: 140px;overflow-y: scroll;" class="profilepicinpost">
-                  <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+                  <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;object-fit: contain;" />
                   <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{postmodaltempdata?.username}}</span>
                   <span style="margin-left: 10px;max-width:200px;word-wrap:break-word;">{{postmodaltempdata?.postcaption?.substring(0,20)}}</span>
                   <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;">{{postmodaltempdata?.postcaption?.length>20?postmodaltempdata?.postcaption?.substring(20):""}}</p>
@@ -291,7 +291,7 @@
                   <mat-progress-bar *ngIf="showloader" mode="indeterminate" color="accent"></mat-progress-bar>
                   <div style="margin-top: 10px;" *ngFor="let commentdet of commentdetailsformodalpost">
                     <div style="padding-top: 0px; padding-bottom: 0px; " class="profilepicinpost">
-                      <img [src]="commentdet?.imageurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+                      <img [src]="commentdet?.imageurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;object-fit: contain;" />
                       <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{commentdet?.username}}</span>
                       <button *ngIf="commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#deletecommentmodalhomepage" (click)="opendeletecommentmodal(postmodaltempdata.userid,postmodaltempdata.imagename,commentdet.commenttext,postmodaltempdata.index)" style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
                       <button *ngIf="!commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#reportcommentmodalhomepage"  style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
@@ -460,12 +460,12 @@
             <div>
               <div style="border-bottom: 1px solid #e0e0e0;padding-bottom: 10px;width: 111%;
               margin-left: -17px " class="profilepicinpost">
-                <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+                <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;object-fit: contain;" />
                 <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{postmodaltempdata?.username}}</span>
                 <button style="float: right;border: none;background: none;font-size: 19px;" data-bs-toggle="modal" data-bs-target="#postmoreoptionhomepagemobile" ><i  class="fa-solid fa-ellipsis"></i></button>
             </div>
             <div style="padding-top: 5px;border-bottom: 1px solid #e1e1e1;margin-bottom: 12px;max-height: 142px;height: 140px;overflow-y: scroll;width: 114%;margin-left: -18px;" class="profilepicinpost">
-              <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+              <img [src]="postmodaltempdata?.profileurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;object-fit: contain;" />
               <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{postmodaltempdata?.username}}</span>
               <span style="margin-left: 10px;max-width:200px;word-wrap:break-word;">{{postmodaltempdata?.postcaption?.substring(0,20)}}</span>
               <p style="margin-left: 10px;max-width:349px;word-wrap:break-word;">{{postmodaltempdata?.postcaption?.length>20?postmodaltempdata?.postcaption?.substring(20):""}}</p>
@@ -475,7 +475,7 @@
               <mat-progress-bar *ngIf="showloader" mode="indeterminate" color="accent"></mat-progress-bar>
               <div style="margin-top: 10px;" *ngFor="let commentdet of commentdetailsformodalpost">
                 <div style="padding-top: 0px; padding-bottom: 0px; " class="profilepicinpost">
-                  <img [src]="commentdet?.imageurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;" />
+                  <img [src]="commentdet?.imageurl" style="width: 34px;height: 34px;border-radius: 50%;cursor: pointer;box-shadow: 0px 0px 1px #b2b1b1;object-fit: contain;" />
                   <span style="font-weight: 600;margin-left: 18px;font-size: 13px;">{{commentdet?.username}}</span>
                   <button *ngIf="commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#deletecommentmodalhomepagemobile" (click)="opendeletecommentmodal(postmodaltempdata.userid,postmodaltempdata.imagename,commentdet.commenttext,postmodaltempdata.index)" style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
                   <button *ngIf="!commentdet.iscurrentusercomment" data-bs-toggle="modal" data-bs-target="#reportcommentmodalhomepagemobile"  style="float: right;border: none;background: none;font-size: 19px;" ><i  class="fa-solid fa-ellipsis"></i></button>
