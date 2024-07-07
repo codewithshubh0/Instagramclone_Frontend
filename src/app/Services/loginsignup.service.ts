@@ -9,7 +9,7 @@ export class LoginsignupService {
 
   //private url = "http://localhost:8000";
 
-  private url = "https://instagram-backend-igfs.onrender.com"
+  private url = "https://instagram-api-16u6.onrender.com"
 
   constructor(private http:HttpClient) { }
   

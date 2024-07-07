@@ -9,7 +9,7 @@ export class ProfileService {
 
    //private url = "http://localhost:8000";
 
-  private url = "https://instagram-backend-igfs.onrender.com"
+  private url = "https://instagram-api-16u6.onrender.com"
 
   userdetails = {};
   constructor(private http:HttpClient) { }
